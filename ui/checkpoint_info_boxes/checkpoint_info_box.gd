@@ -16,6 +16,7 @@ func _ready():
 	
 func initialize(_checkpoint : NoteCheckpoint):
 	checkpoint = _checkpoint
+	checkpoint.on_checkpoint_ui_needs_update.connect(update)
 	update()
 	
 func update():

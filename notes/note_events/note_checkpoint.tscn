@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://6xa2kl78865d"]
+
+[ext_resource type="Script" path="res://notes/note_checkpoint.gd" id="1_7kayq"]
+[ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_0o8fb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nvqme"]
+size = Vector2(40, 40)
+
+[node name="NoteCheckpoint" type="Node2D" node_paths=PackedStringArray("click_area")]
+script = ExtResource("1_7kayq")
+click_area = NodePath("Area2D")
+
+[node name="Visual" type="Sprite2D" parent="."]
+modulate = Color(0.662745, 1, 1, 0.792157)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_0o8fb")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_nvqme")

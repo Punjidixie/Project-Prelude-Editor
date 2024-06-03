@@ -29,10 +29,6 @@ func connect_checkpoint(checkpoint: NoteCheckpoint):
 func connect_event(event: NoteEvent):
 	event.on_event_updated.connect(update)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
 func get_note_checkpoints() -> Array:
 	var note_checkpoints = checkpoints_container.get_children()
 	

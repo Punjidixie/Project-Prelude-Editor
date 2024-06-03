@@ -50,19 +50,15 @@ func on_start_checkpoint_updated():
 	pass
 
 func connect_start_checkpoint():
-	start_checkpoint.on_checkpoint_dragged.connect(on_start_checkpoint_updated)
 	start_checkpoint.on_checkpoint_updated.connect(on_start_checkpoint_updated)
 
 func connect_destination_checkpoint():
-	destination_checkpoint.on_checkpoint_dragged.connect(on_destination_checkpoint_updated)
 	destination_checkpoint.on_checkpoint_updated.connect(on_destination_checkpoint_updated)
 	
 func disconnect_start_checkpoint():
-	start_checkpoint.on_checkpoint_dragged.disconnect(on_start_checkpoint_updated)
 	start_checkpoint.on_checkpoint_updated.disconnect(on_start_checkpoint_updated)
 
 func disconnect_destination_checkpoint():
-	destination_checkpoint.on_checkpoint_dragged.disconnect(on_destination_checkpoint_updated)
 	destination_checkpoint.on_checkpoint_updated.disconnect(on_destination_checkpoint_updated)
 
 

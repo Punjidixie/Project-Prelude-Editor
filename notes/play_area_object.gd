@@ -1,4 +1,4 @@
-extends Sprite2D
+extends Node2D
 
 class_name PlayAreaObject
 
@@ -20,9 +20,15 @@ func set_play_position(new_play_position : Vector2):
 	play_position = new_play_position
 	update_world_position()
 
+func set_world_position(new_world_position : Vector2):
+	position = new_world_position
+	update_play_position()
 
 func update_world_position():
 	position = PlayAreaUtils.get_world_position(play_position)
+
+func update_play_position():
+	play_position = PlayAreaUtils.get_play_position(position)
 
 	
 	
