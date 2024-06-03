@@ -1,0 +1,10 @@
+extends EventInfoBox
+
+class_name AppearEventInfoBox
+
+@export var time_label: Label
+
+func update():
+	super.update()
+	var appear_event := event as AppearEvent
+	time_label.text = str(appear_event.start_time)

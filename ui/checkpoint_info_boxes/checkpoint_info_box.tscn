@@ -1,0 +1,96 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr6bcduruusil"]
+
+[ext_resource type="Script" path="res://ui/checkpoint_info_boxes/checkpoint_info_box.gd" id="1_wnjw8"]
+[ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_q42yw"]
+
+[node name="CheckpointInfoBox" type="ColorRect" node_paths=PackedStringArray("checkpoint_name_label", "time_input_box", "x_input_box", "y_input_box")]
+custom_minimum_size = Vector2(0, 100)
+color = Color(0.321569, 0.321569, 0.321569, 0)
+script = ExtResource("1_wnjw8")
+checkpoint_name_label = NodePath("CheckpointName")
+time_input_box = NodePath("TimeInputBox")
+x_input_box = NodePath("xInputBox")
+y_input_box = NodePath("yInputbox")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.364711, 0.364711, 0.364711, 1)
+
+[node name="Button" type="Button" parent="."]
+modulate = Color(0.486694, 1, 0.998044, 0.721569)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CheckpointName" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Checkpoint name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="x" type="Label" parent="."]
+layout_mode = 1
+offset_top = 32.0
+offset_right = 25.0
+offset_bottom = 55.0
+text = "x"
+label_settings = ExtResource("2_q42yw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="y" type="Label" parent="."]
+layout_mode = 1
+offset_top = 70.0
+offset_right = 25.0
+offset_bottom = 93.0
+text = "y"
+label_settings = ExtResource("2_q42yw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="time" type="Label" parent="."]
+layout_mode = 1
+offset_left = 106.0
+offset_top = 52.0
+offset_right = 140.0
+offset_bottom = 75.0
+text = "Time"
+label_settings = ExtResource("2_q42yw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="xInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 30.0
+offset_right = 93.0625
+offset_bottom = 61.0
+
+[node name="yInputbox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 68.0
+offset_right = 93.0625
+offset_bottom = 99.0
+
+[node name="TimeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 149.0
+offset_top = 49.0
+offset_right = 236.0
+offset_bottom = 80.0

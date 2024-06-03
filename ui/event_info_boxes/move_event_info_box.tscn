@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch30r4xi4g3yp"]
+
+[ext_resource type="Script" path="res://ui/event_info_boxes/move_event_info_box.gd" id="1_7cu3j"]
+[ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_tumwp"]
+
+[node name="MoveEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_input_box", "event_name_label")]
+custom_minimum_size = Vector2(0, 60)
+color = Color(0.321569, 0.321569, 0.321569, 0)
+script = ExtResource("1_7cu3j")
+time_input_box = NodePath("time_input_box")
+event_name_label = NodePath("EventName")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.364711, 0.364711, 0.364711, 1)
+
+[node name="Button" type="Button" parent="."]
+modulate = Color(0.486694, 1, 0.998044, 0.721569)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EventName" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Appear"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="time" type="Label" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 29.0
+offset_right = 78.0
+offset_bottom = 52.0
+text = "Start time"
+label_settings = ExtResource("2_tumwp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="time_input_box" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 25.0
+offset_right = 188.0
+offset_bottom = 56.0
