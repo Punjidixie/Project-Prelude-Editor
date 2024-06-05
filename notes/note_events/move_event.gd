@@ -44,10 +44,14 @@ func on_viewport_size_changed():
 	redraw_curve()
 
 func on_destination_checkpoint_updated():
-	pass
+	# Update the last point of the path
+	path.set_point_position(path.point_count - 1, destination_checkpoint.play_position)
+	redraw_curve()
 
 func on_start_checkpoint_updated():
-	pass
+	# Update the first point of the path
+	path.set_point_position(0, start_checkpoint.play_position)
+	redraw_curve()
 
 func connect_start_checkpoint():
 	start_checkpoint.on_checkpoint_updated.connect(on_start_checkpoint_updated)

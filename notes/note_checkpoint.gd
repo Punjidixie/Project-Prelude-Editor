@@ -15,9 +15,10 @@ signal on_checkpoint_updated()
 # Local time
 @export var target_time : float
 @export var checkpoint_name : String
-@export var click_area : Area2D
+@export var click_area : Control
 
-var draggable = false
+var following_mouse = false
+var mouse_in = false # to be able to start following mouse
 var drag_position : Vector2
 
 func _ready():
@@ -26,13 +27,15 @@ func _ready():
 	click_area.mouse_exited.connect(on_mouse_exited)
 
 func _process(delta):
-	if draggable:
+	if mouse_in:
 		if Input.is_action_just_pressed("left_click"):
 			drag_position = get_local_mouse_position()
-		elif Input.is_action_pressed("left_click"):
-			set_world_position(get_global_mouse_position())
-			on_checkpoint_updated.emit()
-			on_checkpoint_ui_needs_update.emit()
+			following_mouse = true
+
+	if following_mouse:
+		follow_mouse()
+		if Input.is_action_just_released("left_click"):
+			following_mouse = false
 			
 		
 func get_and_initialize_info_box() -> CheckpointInfoBox:
@@ -48,10 +51,15 @@ func load_info_from_info_box(info_box : CheckpointInfoBox) -> void:
 	target_time = float(info_box.time_input_box.text)
 	on_checkpoint_updated.emit()
 
+func follow_mouse():
+	set_world_position(get_global_mouse_position() - drag_position)
+	on_checkpoint_updated.emit()
+	on_checkpoint_ui_needs_update.emit()
+	
 func on_mouse_entered():
-	draggable = true
-
+	mouse_in = true
+	
 func on_mouse_exited():
-	draggable = false
+	mouse_in = false
 
 

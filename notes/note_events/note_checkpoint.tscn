@@ -8,7 +8,7 @@ size = Vector2(40, 40)
 
 [node name="NoteCheckpoint" type="Node2D" node_paths=PackedStringArray("click_area")]
 script = ExtResource("1_7kayq")
-click_area = NodePath("Area2D")
+click_area = NodePath("DragArea")
 
 [node name="Visual" type="Sprite2D" parent="."]
 modulate = Color(0.662745, 1, 1, 0.792157)
@@ -16,6 +16,37 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_0o8fb")
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_nvqme")
+
+[node name="DragArea" type="Control" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="DragArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.0901961)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0

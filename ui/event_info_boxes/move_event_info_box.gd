@@ -18,3 +18,7 @@ func on_time_input_box_updated(new_string: String):
 		load_info_to_checkpoint()
 	else:
 		update() # Reset text box
+
+func on_edit_curve_button_pressed():
+	var move_event := event as MoveEvent
+	# move_event.show_path_points
