@@ -8,7 +8,7 @@ enum EVENT_TYPE { MOVE, APPEAR, FINAL_MOVE, END }
 @export var start_time : float
 @export var event_type = EVENT_TYPE.APPEAR
 
-signal on_event_updated()
+signal on_event_updated(e: NoteEvent)
 signal on_event_ui_needs_update()
 signal on_event_deleted()
 
@@ -22,6 +22,10 @@ func get_and_initialize_info_box():
 
 # Called from info box when it changes. Override in inherited classes.
 func load_info_from_info_box(info_box: EventInfoBox):
+	pass
+
+# Called from note when a checkpoint changes (and move_all is active)
+func move_by(delta_position: Vector2) -> void:
 	pass
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=18 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://ui/pause_button.gd" id="10_64sur"]
 [ext_resource type="Script" path="res://ui/time_text.gd" id="10_u0ths"]
 [ext_resource type="Script" path="res://ui/ui_controller.gd" id="14_bthse"]
+[ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 
 [sub_resource type="Curve2D" id="Curve2D_gaqnd"]
 bake_interval = 1.0
@@ -22,23 +23,26 @@ _data = {
 }
 point_count = 3
 
-[sub_resource type="Curve2D" id="Curve2D_sla4g"]
+[sub_resource type="Curve2D" id="Curve2D_acccc"]
 _data = {
-"points": PackedVector2Array(65.4959, -49.1219, -65.4959, 49.1219, 198, 256, 0, 31.111, 56.2173, -31.1105, 256, 296, 0, 0, 0, 0, 280, 380)
+"points": PackedVector2Array(0, 0, 0, 0, 423.192, 286.837, 0, 0, 0, 0, 222.229, 232.767, 0, 0, 0, 0, 247.458, 170.849, 0, 0, 0, 0, 397.093, 124.628)
 }
-point_count = 3
+point_count = 4
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_pmpl2")
 
 [node name="Notes" type="Node" parent="."]
 
-[node name="Note" type="Node" parent="Notes" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container")]
+[node name="Note" type="Node" parent="Notes" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "end_checkpoint", "appear_event", "end_event")]
 script = ExtResource("2_lkwxi")
 start_time = 0.5
 note_body = NodePath("NoteBody")
 checkpoints_container = NodePath("Checkpoints")
 note_events_container = NodePath("NoteEvents")
+end_checkpoint = NodePath("Checkpoints/EndCheckpoint")
+appear_event = NodePath("NoteEvents/AppearEvent")
+end_event = NodePath("NoteEvents/EndEvent")
 
 [node name="Checkpoints" type="Node" parent="Notes/Note"]
 
@@ -57,7 +61,7 @@ play_position = Vector2(80, 0)
 script = ExtResource("5_s85vc")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 
-[node name="FinalMoveEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint", "visual_curve")]
+[node name="MoveEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint", "visual_curve")]
 script = ExtResource("5_vyj42")
 path = SubResource("Curve2D_gaqnd")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
@@ -65,7 +69,7 @@ destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 visual_curve = NodePath("WorldLine")
 start_time = 1.0
 
-[node name="WorldLine" type="Line2D" parent="Notes/Note/NoteEvents/FinalMoveEvent"]
+[node name="WorldLine" type="Line2D" parent="Notes/Note/NoteEvents/MoveEvent"]
 
 [node name="EndEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
 script = ExtResource("6_klw7q")
@@ -80,8 +84,9 @@ modulate = Color(1, 1, 1, 0.858824)
 texture = ExtResource("2_ypqv5")
 
 [node name="Path2D" type="Path2D" parent="Notes"]
-visible = false
-curve = SubResource("Curve2D_sla4g")
+position = Vector2(-29.4448, -34.9067)
+scale = Vector2(1.14947, 1.14667)
+curve = SubResource("Curve2D_acccc")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -118,13 +123,14 @@ size_flags_horizontal = 3
 [node name="TopInfo" type="VBoxContainer" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo"]
 layout_mode = 2
 
-[node name="TopInfoBox" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo" node_paths=PackedStringArray("name_label", "time_input_box")]
-custom_minimum_size = Vector2(0, 70)
+[node name="TopInfoBox" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo" node_paths=PackedStringArray("name_label", "start_time_input_box", "end_time_input_box")]
+custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 color = Color(0.321569, 0.321569, 0.321569, 0)
 script = ExtResource("10_0fada")
 name_label = NodePath("NameLabel")
-time_input_box = NodePath("TimeInputBox")
+start_time_input_box = NodePath("StartTimeInputBox")
+end_time_input_box = NodePath("EndTimeInputBox")
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
 layout_mode = 1
@@ -145,7 +151,7 @@ text = "Note #1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="time" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="StartTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
 layout_mode = 1
 offset_left = 18.0
 offset_top = 34.0
@@ -156,12 +162,30 @@ label_settings = ExtResource("9_hav3n")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="EndTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+layout_mode = 1
+offset_left = 19.0
+offset_top = 71.0
+offset_right = 87.0
+offset_bottom = 94.0
+text = "End time"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
 layout_mode = 0
 offset_left = 105.0
 offset_top = 31.0
 offset_right = 192.0
 offset_bottom = 62.0
+
+[node name="EndTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 69.0
+offset_right = 192.0
+offset_bottom = 100.0
 
 [node name="Checkpoints Label" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo"]
 custom_minimum_size = Vector2(0, 30)
@@ -240,16 +264,17 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -308.0
-offset_bottom = -111.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control/Control"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = -1
+anchor_left = 0.00698324
+anchor_top = 0.0466667
+anchor_right = 1.05726
+anchor_bottom = 0.731667
 offset_left = 50.0
 offset_top = 33.0
 offset_right = -41.0
@@ -273,7 +298,21 @@ grow_vertical = 0
 text = ">"
 script = ExtResource("10_64sur")
 
+[node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 158.0
+offset_top = -88.0
+offset_right = 271.0
+offset_bottom = -57.0
+grow_vertical = 0
+text = "Move all"
+script = ExtResource("15_3rhpp")
+
 [connection signal="drag_ended" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_ended"]
 [connection signal="drag_started" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_started"]
 [connection signal="value_changed" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_value_changed"]
 [connection signal="pressed" from="CanvasLayer/Control/PauseButton" to="CanvasLayer/Control/PauseButton" method="_on_pressed"]
+[connection signal="toggled" from="CanvasLayer/Control/CheckButton" to="CanvasLayer/Control/CheckButton" method="_on_toggled"]

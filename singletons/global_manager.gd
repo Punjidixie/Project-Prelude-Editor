@@ -8,3 +8,5 @@ var play_area : Control
 
 var selected_note : Note
 
+var move_all : bool = false
+

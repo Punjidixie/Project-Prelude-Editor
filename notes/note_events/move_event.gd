@@ -30,7 +30,18 @@ func get_and_initialize_info_box():
 func load_info_from_info_box(info_box: EventInfoBox):
 	var move_event_box := info_box as MoveEventInfoBox
 	start_time = float(move_event_box.time_input_box.text)
-	on_event_updated.emit()
+	on_event_updated.emit(self)
+
+func move_by(delta_position: Vector2) -> void:
+	# UI doesn't need to be updated. Note knows already (because that's who called this).
+	# The signals don't need to be emitted.
+	for i in range(path.point_count):
+		var new_point_position = path.get_point_position(i) + delta_position
+		path.set_point_position(i, new_point_position)
+	redraw_curve()
+
+func spawn_path_points():
+	pass		
 
 func redraw_curve():
 	visual_curve.clear_points()
@@ -38,20 +49,22 @@ func redraw_curve():
 	visual_curve.width = 1.5
 	for point in path.get_baked_points():  
 		visual_curve.add_point(PlayAreaUtils.get_world_position(point))
-	on_event_updated.emit()
 		
 func on_viewport_size_changed():
 	redraw_curve()
+	#on_event_updated.emit(self)
 
-func on_destination_checkpoint_updated():
+func on_destination_checkpoint_updated(_c):
 	# Update the last point of the path
 	path.set_point_position(path.point_count - 1, destination_checkpoint.play_position)
 	redraw_curve()
+	on_event_updated.emit(self)
 
-func on_start_checkpoint_updated():
+func on_start_checkpoint_updated(_c):
 	# Update the first point of the path
 	path.set_point_position(0, start_checkpoint.play_position)
 	redraw_curve()
+	on_event_updated.emit(self)
 
 func connect_start_checkpoint():
 	start_checkpoint.on_checkpoint_updated.connect(on_start_checkpoint_updated)
