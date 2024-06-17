@@ -13,3 +13,7 @@ func get_play_position(world_position: Vector2) -> Vector2:
 	var relative_world_pos_y_inv = Vector2(1, -1) * relative_world_pos
 	return (relative_world_pos_y_inv / GlobalManager.play_area.size) * scale_factor
 
+func get_delta_play_position(delta_world_position: Vector2) -> Vector2:
+	var delta_world_position_y_inv = Vector2(1, -1) * delta_world_position
+	return (delta_world_position_y_inv / GlobalManager.play_area.size) * scale_factor
+

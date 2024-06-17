@@ -31,7 +31,7 @@ func populate_note_ui(note: Note) -> void:
 		event_container.add_child(info_box)
 
 func clear_note_ui() -> void:
-	GodotUtils.delete_children(checkpoint_container)
-	GodotUtils.delete_children(event_container)
+	GodotUtils.delete_all_children(checkpoint_container)
+	GodotUtils.delete_all_children(event_container)
 
 

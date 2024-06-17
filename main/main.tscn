@@ -61,15 +61,19 @@ play_position = Vector2(80, 0)
 script = ExtResource("5_s85vc")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 
-[node name="MoveEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint", "visual_curve")]
+[node name="MoveEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint", "visual_curve", "path_points")]
 script = ExtResource("5_vyj42")
 path = SubResource("Curve2D_gaqnd")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 visual_curve = NodePath("WorldLine")
+path_points = NodePath("PathPoints")
 start_time = 1.0
+event_type = null
 
 [node name="WorldLine" type="Line2D" parent="Notes/Note/NoteEvents/MoveEvent"]
+
+[node name="PathPoints" type="Node" parent="Notes/Note/NoteEvents/MoveEvent"]
 
 [node name="EndEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
 script = ExtResource("6_klw7q")
@@ -84,6 +88,7 @@ modulate = Color(1, 1, 1, 0.858824)
 texture = ExtResource("2_ypqv5")
 
 [node name="Path2D" type="Path2D" parent="Notes"]
+visible = false
 position = Vector2(-29.4448, -34.9067)
 scale = Vector2(1.14947, 1.14667)
 curve = SubResource("Curve2D_acccc")

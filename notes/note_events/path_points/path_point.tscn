@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cilx0w1l1ji7m"]
+
+[ext_resource type="Script" path="res://notes/note_events/path_points/path_point.gd" id="1_3teka"]
+[ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_4cnet"]
+[ext_resource type="Script" path="res://notes/drag_detector.gd" id="3_loxqh"]
+
+[node name="PathPoint" type="Node2D" node_paths=PackedStringArray("drag_detector")]
+script = ExtResource("1_3teka")
+drag_detector = NodePath("DragDetector")
+
+[node name="Visual" type="Sprite2D" parent="."]
+modulate = Color(0.662745, 1, 1, 0.792157)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_4cnet")
+
+[node name="DragDetector" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+script = ExtResource("3_loxqh")

@@ -9,7 +9,7 @@ func _ready():
 	GlobalManager.play_area = play_area
 	SignalManager.on_time_slider_drag_started.connect(on_time_slider_drag_started)
 	SignalManager.on_pause_button_pressed.connect(on_pause_button_pressed)
-	
+
 	SignalManager.on_time_auto_updated.emit() # tell everything that time is now 0
 	
 	# tell all PlayAreaObjects to update world position because GlobalManager.play_area is ready.

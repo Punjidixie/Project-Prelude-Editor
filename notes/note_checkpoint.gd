@@ -17,7 +17,8 @@ signal on_checkpoint_clicked()
 # Local time
 @export var target_time : float
 @export var checkpoint_name : String
-@export var click_area : Control
+@export var drag_detector: DragDetector
+
 
 var following_mouse = false
 var mouse_in = false # to be able to start following mouse
@@ -25,20 +26,11 @@ var drag_position : Vector2
 
 func _ready():
 	super._ready()
-	click_area.mouse_entered.connect(on_mouse_entered)
-	click_area.mouse_exited.connect(on_mouse_exited)
+	drag_detector.on_dragged.connect(on_dragged)
+	drag_detector.on_clicked.connect(on_clicked)
 
 func _process(delta):
-	if mouse_in:
-		if Input.is_action_just_pressed("left_click"):
-			drag_position = get_local_mouse_position()
-			following_mouse = true
-			on_checkpoint_clicked.emit()
-
-	if following_mouse:
-		follow_mouse()
-		if Input.is_action_just_released("left_click"):
-			following_mouse = false
+	pass
 			
 		
 func get_and_initialize_info_box() -> CheckpointInfoBox:
@@ -55,15 +47,14 @@ func load_info_from_info_box(info_box : CheckpointInfoBox) -> void:
 	on_checkpoint_updated.emit(self)
 
 # Change 2 : Called from being dragged from its sprite
-func follow_mouse():
-	var new_world_position = get_global_mouse_position() - drag_position
-	var new_play_position = PlayAreaUtils.get_play_position(new_world_position)
+func on_dragged(amount: Vector2):
 	if GlobalManager.move_all == true:
-		# Tell the note to move everything
-		SignalManager.move_all_by.emit(new_play_position - play_position)
+		# Move self, then tell the note to move everything except self by the same amount
+		set_world_position(position + amount)
+		SignalManager.move_all_by.emit(self, PlayAreaUtils.get_delta_play_position(amount))
 	else:
-		# Move itself and tell related events
-		set_world_position(new_world_position)
+		# Move self and tell related events
+		set_world_position(position + amount)
 		on_checkpoint_updated.emit(self)
 		
 	on_checkpoint_ui_needs_update.emit()
@@ -81,10 +72,5 @@ func move_by(delta_position: Vector2) -> void:
 	# No need to emit checkpoint_updated. Connected events will move by the same amount. 
 	on_checkpoint_ui_needs_update.emit()
 	
-func on_mouse_entered():
-	mouse_in = true
-	
-func on_mouse_exited():
-	mouse_in = false
-
-
+func on_clicked():
+	on_checkpoint_clicked.emit()

@@ -1,14 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://6xa2kl78865d"]
+[gd_scene load_steps=5 format=3 uid="uid://6xa2kl78865d"]
 
 [ext_resource type="Script" path="res://notes/note_checkpoint.gd" id="1_7kayq"]
 [ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_0o8fb"]
+[ext_resource type="Script" path="res://notes/drag_detector.gd" id="3_cnygx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvqme"]
 size = Vector2(40, 40)
 
-[node name="NoteCheckpoint" type="Node2D" node_paths=PackedStringArray("click_area")]
+[node name="NoteCheckpoint" type="Node2D" node_paths=PackedStringArray("drag_detector")]
 script = ExtResource("1_7kayq")
-click_area = NodePath("DragArea")
+drag_detector = NodePath("DragDetector")
 
 [node name="Visual" type="Sprite2D" parent="."]
 modulate = Color(0.662745, 1, 1, 0.792157)
@@ -21,7 +22,7 @@ visible = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_nvqme")
 
-[node name="DragArea" type="Control" parent="."]
+[node name="DragDetector" type="Control" parent="."]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 3
 anchors_preset = 8
@@ -29,14 +30,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_cnygx")
 
-[node name="ColorRect" type="ColorRect" parent="DragArea"]
+[node name="ColorRect" type="ColorRect" parent="DragDetector"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
