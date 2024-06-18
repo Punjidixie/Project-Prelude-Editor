@@ -66,12 +66,10 @@ func on_event_updated(event: NoteEvent):
 func on_checkpoint_clicked(): 
 	SignalManager.on_note_selected.emit(self) # Tell the UI manager to spawn UIs
 
-func on_move_all(caller: NoteCheckpoint, amount: Vector2):
+func on_move_all(amount: Vector2):
 	var checkpoints = get_note_checkpoints()
 	var events = get_note_events()
-	for checkpoint: NoteCheckpoint in checkpoints: 
-		if checkpoint != caller:
-			checkpoint.move_by(amount)
+	for checkpoint: NoteCheckpoint in checkpoints: checkpoint.move_by(amount)
 	for event: NoteEvent in events: event.move_by(amount)
 	update()
 

@@ -50,8 +50,8 @@ func load_info_from_info_box(info_box : CheckpointInfoBox) -> void:
 func on_dragged(amount: Vector2):
 	if GlobalManager.move_all == true:
 		# Move self, then tell the note to move everything except self by the same amount
-		set_world_position(position + amount)
-		SignalManager.move_all_by.emit(self, PlayAreaUtils.get_delta_play_position(amount))
+		#set_world_position(position + amount)
+		SignalManager.move_all_by.emit(PlayAreaUtils.get_delta_play_position(amount))
 	else:
 		# Move self and tell related events
 		set_world_position(position + amount)
