@@ -3,11 +3,15 @@
 [ext_resource type="Script" path="res://ui/event_info_boxes/move_event_info_box.gd" id="1_7cu3j"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_tumwp"]
 
-[node name="MoveEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_input_box", "event_name_label")]
-custom_minimum_size = Vector2(0, 60)
+[node name="MoveEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_input_box", "start_dropdown", "destination_dropdown", "event_name_label")]
+custom_minimum_size = Vector2(0, 125)
+offset_right = 238.0
+offset_bottom = 100.0
 color = Color(0.321569, 0.321569, 0.321569, 0)
 script = ExtResource("1_7cu3j")
 time_input_box = NodePath("time_input_box")
+start_dropdown = NodePath("StartDropdown")
+destination_dropdown = NodePath("DestinationDropdown")
 event_name_label = NodePath("EventName")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -26,8 +30,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_right = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -37,11 +39,11 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
-text = "Appear"
+text = "Move"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="time" type="Label" parent="."]
+[node name="TimeLabel" type="Label" parent="."]
 layout_mode = 1
 offset_left = 10.0
 offset_top = 29.0
@@ -54,7 +56,41 @@ vertical_alignment = 1
 
 [node name="time_input_box" type="LineEdit" parent="."]
 layout_mode = 0
-offset_left = 84.0
+offset_left = 88.0
 offset_top = 25.0
-offset_right = 188.0
+offset_right = 192.0
 offset_bottom = 56.0
+
+[node name="StartCheckpointLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 9.0
+offset_top = 64.0
+offset_right = 120.0
+offset_bottom = 87.0
+text = "Start from"
+label_settings = ExtResource("2_tumwp")
+vertical_alignment = 1
+
+[node name="StartDropdown" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 60.0
+offset_right = 180.0
+offset_bottom = 85.0
+
+[node name="DestinationLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 9.0
+offset_top = 93.0
+offset_right = 120.0
+offset_bottom = 116.0
+text = "Destination"
+label_settings = ExtResource("2_tumwp")
+vertical_alignment = 1
+
+[node name="DestinationDropdown" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 94.0
+offset_right = 180.0
+offset_bottom = 117.0

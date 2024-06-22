@@ -10,7 +10,7 @@ class_name NoteCheckpoint
 signal on_checkpoint_ui_needs_update() 
 
 # For general purposes ; synchonizing other nodes. Update events and its note.
-signal on_checkpoint_updated(c: NoteCheckpoint)
+signal on_checkpoint_updated()
 
 signal on_checkpoint_clicked()
 
@@ -18,7 +18,7 @@ signal on_checkpoint_clicked()
 @export var target_time : float
 @export var checkpoint_name : String
 @export var drag_detector: DragDetector
-
+@export var mouse_follower: MouseFollower
 
 var following_mouse = false
 var mouse_in = false # to be able to start following mouse
@@ -28,9 +28,22 @@ func _ready():
 	super._ready()
 	drag_detector.on_dragged.connect(on_dragged)
 	drag_detector.on_clicked.connect(on_clicked)
+	
+	mouse_follower.on_cancelled.connect(on_creation_cancelled)
+	mouse_follower.on_confirmed.connect(on_creation_confirmed)
+	mouse_follower.on_moved.connect(waiting_move_by)
+	
+	go_regular_mode()
 
-func _process(delta):
-	pass
+# Creation mode: following mouse waiting for being added to the note
+func go_creation_mode():
+	drag_detector.process_mode = Node.PROCESS_MODE_DISABLED
+	mouse_follower.process_mode = Node.PROCESS_MODE_INHERIT
+
+# Regular mode: editor
+func go_regular_mode():
+	drag_detector.process_mode = Node.PROCESS_MODE_INHERIT
+	mouse_follower.process_mode = Node.PROCESS_MODE_DISABLED
 			
 		
 func get_and_initialize_info_box() -> CheckpointInfoBox:
@@ -44,7 +57,7 @@ func load_info_from_info_box(info_box : CheckpointInfoBox) -> void:
 	set_play_position(new_play_position)
 	
 	target_time = float(info_box.time_input_box.text)
-	on_checkpoint_updated.emit(self)
+	on_checkpoint_updated.emit()
 
 # Change 2 : Called from being dragged from its sprite
 func on_dragged(amount: Vector2):
@@ -55,14 +68,14 @@ func on_dragged(amount: Vector2):
 	else:
 		# Move self and tell related events
 		set_world_position(position + amount)
-		on_checkpoint_updated.emit(self)
+		on_checkpoint_updated.emit()
 		
 	on_checkpoint_ui_needs_update.emit()
 	
 # Change 3 : Called from note when note UI changes (only end checkpoints)
 func load_time_from_note(new_time: float) -> void:
 	target_time = new_time
-	on_checkpoint_updated.emit(self)
+	on_checkpoint_updated.emit()
 	on_checkpoint_ui_needs_update.emit()
 
 # Change 4: Called from note when another checkpoint changes (and move_all is active)
@@ -71,6 +84,22 @@ func move_by(delta_position: Vector2) -> void:
 	
 	# No need to emit checkpoint_updated. Connected events will move by the same amount. 
 	on_checkpoint_ui_needs_update.emit()
+
+# Change 5: Called from mouse follower.
+func waiting_move_by(amount: Vector2) -> void:
+	set_world_position(position + amount)
+
+func rename(new_name: String) -> void:
+	checkpoint_name = new_name
+	#on_checkpoint_updated.emit() # Names are significant too
 	
+# Connected to the drag detector
 func on_clicked():
 	on_checkpoint_clicked.emit()
+
+func on_creation_confirmed():
+	GlobalManager.selected_note.add_checkpoint(self)
+	go_regular_mode()
+
+func on_creation_cancelled():
+	queue_free()

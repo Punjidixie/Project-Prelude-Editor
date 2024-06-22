@@ -1,11 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=19 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
 [ext_resource type="Script" path="res://notes/play_area_object.gd" id="2_g6me1"]
 [ext_resource type="Script" path="res://notes/note.gd" id="2_lkwxi"]
 [ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_ypqv5"]
-[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_events/note_checkpoint.tscn" id="3_q76ka"]
+[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="3_q76ka"]
 [ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="5_s85vc"]
 [ext_resource type="Script" path="res://notes/note_events/move_event.gd" id="5_vyj42"]
 [ext_resource type="Script" path="res://notes/note_events/end_event.gd" id="6_klw7q"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://ui/time_text.gd" id="10_u0ths"]
 [ext_resource type="Script" path="res://ui/ui_controller.gd" id="14_bthse"]
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
+[ext_resource type="Script" path="res://main/add_checkpoint_button.gd" id="16_ccpcj"]
 
 [sub_resource type="Curve2D" id="Curve2D_gaqnd"]
 bake_interval = 1.0
@@ -69,7 +70,6 @@ destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 visual_curve = NodePath("WorldLine")
 path_points = NodePath("PathPoints")
 start_time = 1.0
-event_type = null
 
 [node name="WorldLine" type="Line2D" parent="Notes/Note/NoteEvents/MoveEvent"]
 
@@ -110,7 +110,7 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -261.0
+offset_left = -291.0
 offset_top = 10.0
 offset_right = -9.0
 grow_horizontal = 0
@@ -315,6 +315,15 @@ offset_bottom = -57.0
 grow_vertical = 0
 text = "Move all"
 script = ExtResource("15_3rhpp")
+
+[node name="Button" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 1
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 140.0
+offset_bottom = 37.0
+text = "New checkpoint"
+script = ExtResource("16_ccpcj")
 
 [connection signal="drag_ended" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_ended"]
 [connection signal="drag_started" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_started"]

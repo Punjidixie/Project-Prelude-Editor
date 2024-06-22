@@ -66,13 +66,13 @@ func on_viewport_size_changed():
 	redraw_curve()
 	#on_event_updated.emit(self)
 
-func on_destination_checkpoint_updated(_c):
+func on_destination_checkpoint_updated():
 	# Update the last point of the path
 	path.set_point_position(path.point_count - 1, destination_checkpoint.play_position)
 	redraw_curve()
 	on_event_updated.emit(self)
 
-func on_start_checkpoint_updated(_c):
+func on_start_checkpoint_updated():
 	# Update the first point of the path
 	path.set_point_position(0, start_checkpoint.play_position)
 	redraw_curve()

@@ -31,12 +31,13 @@ func initialize_connections():
 func connect_checkpoint(checkpoint: NoteCheckpoint):
 	# Checkpoints are only there to be used by events.
 	# Checkpoint changes will be picked up by events, and events will update accordingly then emit signals.
-	#checkpoint.on_checkpoint_updated.connect(on_checkpoint_updated)
+	# checkpoint.on_checkpoint_updated.connect(on_checkpoint_updated)
 	
 	checkpoint.on_checkpoint_clicked.connect(on_checkpoint_clicked)
 
 func connect_event(event: NoteEvent):
 	event.on_event_updated.connect(on_event_updated)
+	event.note = self
 
 func on_time_updated():
 	update()
@@ -54,9 +55,8 @@ func load_info_from_info_box(info_box : TopInfoBox) -> void:
 	var relative_end_time = float(info_box.end_time_input_box.text) - start_time
 	
 	end_checkpoint.load_time_from_note(relative_end_time)
-	
 	#update() 
-	# No need, because end_checkpoint.load_time_from_note will have emitted the change signal anyway
+	# No need, eventually it will reach the event and will be picked up.
 
 func on_event_updated(event: NoteEvent):
 	if event == end_event:
@@ -65,6 +65,18 @@ func on_event_updated(event: NoteEvent):
 
 func on_checkpoint_clicked(): 
 	SignalManager.on_note_selected.emit(self) # Tell the UI manager to spawn UIs
+	GlobalManager.selected_note = self
+
+# Called from the add checkpoint button. Provide a place for the checkpoint to rent.
+func add_temporary_checkpoint(checkpoint: NoteCheckpoint):
+	checkpoints_container.add_child(checkpoint)
+	checkpoint.go_creation_mode() # Can now go creation mode, as _ready() has been called over there.
+
+func add_checkpoint(checkpoint: NoteCheckpoint):
+	checkpoint.go_regular_mode()
+	name_all_checkpoints()
+	SignalManager.on_note_selected.emit(self) # Tell the UI manager to respawn UIs
+	connect_checkpoint(checkpoint)
 
 func on_move_all(amount: Vector2):
 	var checkpoints = get_note_checkpoints()
@@ -72,6 +84,15 @@ func on_move_all(amount: Vector2):
 	for checkpoint: NoteCheckpoint in checkpoints: checkpoint.move_by(amount)
 	for event: NoteEvent in events: event.move_by(amount)
 	update()
+
+func name_all_checkpoints():
+	var checkpoints = get_note_checkpoints()
+	for i in range(checkpoints.size()):
+		var checkpoint: NoteCheckpoint = checkpoints[i]
+		if checkpoint.checkpoint_name != "Start" and checkpoint.checkpoint_name != "End":
+			checkpoint.checkpoint_name = "Checkpoint %s" % i
+			print(checkpoint.checkpoint_name)
+		
 
 func get_event_at_time(time: float):
 	var local_time = time - start_time
