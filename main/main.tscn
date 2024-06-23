@@ -6,8 +6,8 @@
 [ext_resource type="Script" path="res://notes/note.gd" id="2_lkwxi"]
 [ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_ypqv5"]
 [ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="3_q76ka"]
+[ext_resource type="PackedScene" uid="uid://diyjao2akicpk" path="res://notes/note_events/move_event.tscn" id="5_fimjw"]
 [ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="5_s85vc"]
-[ext_resource type="Script" path="res://notes/note_events/move_event.gd" id="5_vyj42"]
 [ext_resource type="Script" path="res://notes/note_events/end_event.gd" id="6_klw7q"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="9_hav3n"]
 [ext_resource type="Script" path="res://ui/top_info_box.gd" id="10_0fada"]
@@ -15,14 +15,8 @@
 [ext_resource type="Script" path="res://ui/time_text.gd" id="10_u0ths"]
 [ext_resource type="Script" path="res://ui/ui_controller.gd" id="14_bthse"]
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
-[ext_resource type="Script" path="res://main/add_checkpoint_button.gd" id="16_ccpcj"]
-
-[sub_resource type="Curve2D" id="Curve2D_gaqnd"]
-bake_interval = 1.0
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 20, 100, -30, -10, 30, 10, 50, 70, 0, 0, 0, 0, 80, 0)
-}
-point_count = 3
+[ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
+[ext_resource type="Script" path="res://main/add_move_event_checkpoint.gd" id="17_8s8e5"]
 
 [sub_resource type="Curve2D" id="Curve2D_acccc"]
 _data = {
@@ -61,24 +55,16 @@ play_position = Vector2(80, 0)
 [node name="AppearEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint")]
 script = ExtResource("5_s85vc")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
+event_name = "Appear Event"
 
-[node name="MoveEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint", "visual_curve", "path_points")]
-script = ExtResource("5_vyj42")
-path = SubResource("Curve2D_gaqnd")
+[node name="MoveEvent" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint") instance=ExtResource("5_fimjw")]
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
-visual_curve = NodePath("WorldLine")
-path_points = NodePath("PathPoints")
-start_time = 1.0
-
-[node name="WorldLine" type="Line2D" parent="Notes/Note/NoteEvents/MoveEvent"]
-
-[node name="PathPoints" type="Node" parent="Notes/Note/NoteEvents/MoveEvent"]
 
 [node name="EndEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
 script = ExtResource("6_klw7q")
 end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
-event_type = 3
+event_name = "End Event"
 
 [node name="NoteBody" type="Node2D" parent="Notes/Note"]
 script = ExtResource("2_g6me1")
@@ -104,7 +90,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="NoteInfoUI" type="ScrollContainer" parent="CanvasLayer/Control" node_paths=PackedStringArray("checkpoint_container", "event_container", "top_info_box", "sample_note")]
+[node name="NoteInfoUI" type="ScrollContainer" parent="CanvasLayer/Control" node_paths=PackedStringArray("checkpoint_container", "event_container", "top_info_box")]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -119,7 +105,6 @@ script = ExtResource("14_bthse")
 checkpoint_container = NodePath("NoteInfo/Checkpoints/VBoxContainer")
 event_container = NodePath("NoteInfo/Events/VBoxContainer")
 top_info_box = NodePath("NoteInfo/TopInfo/TopInfoBox")
-sample_note = NodePath("../../../Notes/Note")
 
 [node name="NoteInfo" type="VBoxContainer" parent="CanvasLayer/Control/NoteInfoUI"]
 layout_mode = 2
@@ -316,7 +301,7 @@ grow_vertical = 0
 text = "Move all"
 script = ExtResource("15_3rhpp")
 
-[node name="Button" type="Button" parent="CanvasLayer/Control"]
+[node name="NewCheckpoint" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 1
 offset_left = 7.0
 offset_top = 6.0
@@ -324,6 +309,15 @@ offset_right = 140.0
 offset_bottom = 37.0
 text = "New checkpoint"
 script = ExtResource("16_ccpcj")
+
+[node name="NewMoveEvent" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 1
+offset_left = 162.0
+offset_top = 7.0
+offset_right = 295.0
+offset_bottom = 38.0
+text = "New move event"
+script = ExtResource("17_8s8e5")
 
 [connection signal="drag_ended" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_ended"]
 [connection signal="drag_started" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_started"]

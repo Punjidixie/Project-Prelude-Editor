@@ -19,6 +19,7 @@ func update():
 func on_time_input_box_updated(new_string: String):
 	if new_string.is_valid_float():
 		load_info_to_checkpoint()
+		SignalManager.on_event_info_boxes_need_reordering.emit()
 	else:
 		update() # Reset text box
 

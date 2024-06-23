@@ -16,6 +16,7 @@ func get_and_initialize_info_box():
 	info_box.initialize(self)
 	return info_box
 
+# Unused. AppearEventInfoBox is not editable.
 func load_info_from_info_box(info_box: EventInfoBox):
 	var appear_info_box := info_box as AppearEventInfoBox
 	start_time = float(appear_info_box.time_label.text)

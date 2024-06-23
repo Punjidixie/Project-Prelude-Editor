@@ -14,7 +14,7 @@ func initialize(_event: NoteEvent):
 	
 # Load data from the event. Override this in inherited classes.
 func update():
-	event_name_label.text = event.name
+	event_name_label.text = event.event_name
 
 # Called when the manual changes to the info box are made.
 # Call this in inherited classes.

@@ -14,6 +14,7 @@ signal on_checkpoint_updated()
 
 signal on_checkpoint_clicked()
 
+
 # Local time
 @export var target_time : float
 @export var checkpoint_name : String
@@ -23,6 +24,8 @@ signal on_checkpoint_clicked()
 var following_mouse = false
 var mouse_in = false # to be able to start following mouse
 var drag_position : Vector2
+
+var note: Note
 
 func _ready():
 	super._ready()
@@ -35,12 +38,12 @@ func _ready():
 	
 	go_regular_mode()
 
-# Creation mode: following mouse waiting for being added to the note
+# Creation mode: following the cursor, waiting to be added to the note
 func go_creation_mode():
 	drag_detector.process_mode = Node.PROCESS_MODE_DISABLED
 	mouse_follower.process_mode = Node.PROCESS_MODE_INHERIT
 
-# Regular mode: editor
+# Regular mode: editor, ready to be dragged
 func go_regular_mode():
 	drag_detector.process_mode = Node.PROCESS_MODE_INHERIT
 	mouse_follower.process_mode = Node.PROCESS_MODE_DISABLED
@@ -54,51 +57,59 @@ func get_and_initialize_info_box() -> CheckpointInfoBox:
 # Change 1 : Called from info box when it changes
 func load_info_from_info_box(info_box : CheckpointInfoBox) -> void:
 	var new_play_position = Vector2(float(info_box.x_input_box.text), float(info_box.y_input_box.text))
-	set_play_position(new_play_position)
+	var delta_play_position = new_play_position - play_position
+	var time = float(info_box.time_input_box.text) # Cache here first, because move_all will change it
 	
-	target_time = float(info_box.time_input_box.text)
-	on_checkpoint_updated.emit()
+	# Dealing with position
+	if GlobalManager.move_all == true:
+		# Move everything
+		note.move_all(delta_play_position) 
+	else:
+		# Move self
+		set_play_position(play_position + delta_play_position)
+			
+	target_time = time
+	note.name_all_checkpoints() # Because the time order might have changed.
+	on_checkpoint_updated.emit() # Required for !move_all. For move_all, time and name might have changed anyway.
 
 # Change 2 : Called from being dragged from its sprite
 func on_dragged(amount: Vector2):
+	var delta_play_position = PlayAreaUtils.get_delta_play_position(amount)
 	if GlobalManager.move_all == true:
-		# Move self, then tell the note to move everything except self by the same amount
-		#set_world_position(position + amount)
-		SignalManager.move_all_by.emit(PlayAreaUtils.get_delta_play_position(amount))
+		# Move everything
+		note.move_all(delta_play_position) 
 	else:
 		# Move self and tell related events
-		set_world_position(position + amount)
+		set_play_position(play_position + delta_play_position)
 		on_checkpoint_updated.emit()
+		on_checkpoint_ui_needs_update.emit()
 		
+# Called from note.move_all() when another checkpoint changes (and move_all is active)
+func move_by(delta_position: Vector2) -> void:
+	set_play_position(play_position + delta_position)
+	# No need to emit checkpoint_updated. Connected events will move by the same amount. 
 	on_checkpoint_ui_needs_update.emit()
 	
-# Change 3 : Called from note when note UI changes (only end checkpoints)
+# Change 3 : Called from note when note's top UI changes (only end checkpoints)
 func load_time_from_note(new_time: float) -> void:
 	target_time = new_time
 	on_checkpoint_updated.emit()
 	on_checkpoint_ui_needs_update.emit()
 
-# Change 4: Called from note when another checkpoint changes (and move_all is active)
-func move_by(delta_position: Vector2) -> void:
-	set_play_position(play_position + delta_position)
-	
-	# No need to emit checkpoint_updated. Connected events will move by the same amount. 
-	on_checkpoint_ui_needs_update.emit()
-
-# Change 5: Called from mouse follower.
+# Change 4: Called from mouse follower.
 func waiting_move_by(amount: Vector2) -> void:
 	set_world_position(position + amount)
 
 func rename(new_name: String) -> void:
 	checkpoint_name = new_name
-	#on_checkpoint_updated.emit() # Names are significant too
-	
+	on_checkpoint_ui_needs_update.emit() # UI needs to know about the name change.
+
 # Connected to the drag detector
 func on_clicked():
-	on_checkpoint_clicked.emit()
+	note.on_checkpoint_clicked()
 
 func on_creation_confirmed():
-	GlobalManager.selected_note.add_checkpoint(self)
+	note.add_checkpoint(self)
 	go_regular_mode()
 
 func on_creation_cancelled():

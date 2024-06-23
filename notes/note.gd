@@ -18,7 +18,6 @@ class_name Note
 func _ready():
 	SignalManager.on_time_auto_updated.connect(on_time_updated)
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
-	SignalManager.move_all_by.connect(on_move_all)
 	
 	initialize_connections()
 	
@@ -32,8 +31,7 @@ func connect_checkpoint(checkpoint: NoteCheckpoint):
 	# Checkpoints are only there to be used by events.
 	# Checkpoint changes will be picked up by events, and events will update accordingly then emit signals.
 	# checkpoint.on_checkpoint_updated.connect(on_checkpoint_updated)
-	
-	checkpoint.on_checkpoint_clicked.connect(on_checkpoint_clicked)
+	checkpoint.note = self
 
 func connect_event(event: NoteEvent):
 	event.on_event_updated.connect(on_event_updated)
@@ -63,36 +61,55 @@ func on_event_updated(event: NoteEvent):
 		SignalManager.on_top_ui_needs_update.emit()
 	update()
 
-func on_checkpoint_clicked(): 
-	SignalManager.on_note_selected.emit(self) # Tell the UI manager to spawn UIs
-	GlobalManager.selected_note = self
+func on_checkpoint_clicked():
+	if GlobalManager.selected_note != self:
+		SignalManager.on_note_selected.emit(self) # Tell the UI manager to spawn UIs
+		GlobalManager.selected_note = self
 
-# Called from the add checkpoint button. Provide a place for the checkpoint to rent.
-func add_temporary_checkpoint(checkpoint: NoteCheckpoint):
-	checkpoints_container.add_child(checkpoint)
-	checkpoint.go_creation_mode() # Can now go creation mode, as _ready() has been called over there.
-
-func add_checkpoint(checkpoint: NoteCheckpoint):
-	checkpoint.go_regular_mode()
-	name_all_checkpoints()
-	SignalManager.on_note_selected.emit(self) # Tell the UI manager to respawn UIs
-	connect_checkpoint(checkpoint)
-
-func on_move_all(amount: Vector2):
+# Called from a checkpoint when it moves
+func move_all(amount: Vector2):
 	var checkpoints = get_note_checkpoints()
 	var events = get_note_events()
 	for checkpoint: NoteCheckpoint in checkpoints: checkpoint.move_by(amount)
 	for event: NoteEvent in events: event.move_by(amount)
 	update()
 
+# Called from the add checkpoint button. Provide a place for the checkpoint to rent.
+func add_temporary_checkpoint(checkpoint: NoteCheckpoint):
+	connect_checkpoint(checkpoint)
+	checkpoints_container.add_child(checkpoint)
+	checkpoint.go_creation_mode() # Can now go creation mode, as _ready() has been called over there.
+
+func add_checkpoint(checkpoint: NoteCheckpoint):
+	checkpoint.go_regular_mode()
+	
+	# Add info box
+	var new_info_box = checkpoint.get_and_initialize_info_box()
+	SignalManager.on_new_checkpoint_info_box_added.emit(new_info_box)
+	
+	name_all_checkpoints() # Will emit reordering too
+
+func add_event(event: MoveEvent):
+	connect_event(event)
+	note_events_container.add_child(event)
+	
+	# Add info box
+	var new_info_box = event.get_and_initialize_info_box()
+	SignalManager.on_new_event_info_box_added.emit(new_info_box)
+	SignalManager.on_event_info_boxes_need_reordering.emit()
+
+# Rename and reorder info boxes
 func name_all_checkpoints():
 	var checkpoints = get_note_checkpoints()
 	for i in range(checkpoints.size()):
 		var checkpoint: NoteCheckpoint = checkpoints[i]
 		if checkpoint.checkpoint_name != "Start" and checkpoint.checkpoint_name != "End":
-			checkpoint.checkpoint_name = "Checkpoint %s" % i
-			print(checkpoint.checkpoint_name)
+			checkpoint.rename("Checkpoint %s" % i) # Will emit the info box update signal too
+	
+	# Emit here rather than from the info boxes so it gets emitted only once.
+	SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
 		
+### UTILITY FUNCTIONS BELOW ###
 
 func get_event_at_time(time: float):
 	var local_time = time - start_time

@@ -9,4 +9,5 @@ const move_event_info_box = preload("res://ui/event_info_boxes/move_event_info_b
 const end_event_info_box = preload("res://ui/event_info_boxes/end_event_info_box.tscn")
 
 const note_checkpoint = preload("res://notes/note_checkpoint.tscn")
+const move_event = preload("res://notes/note_events/move_event.tscn")
 const path_point = preload("res://notes/note_events/path_points/path_point.tscn")

@@ -2,11 +2,11 @@ extends Node
 
 class_name NoteEvent
 
-enum EVENT_TYPE { MOVE, APPEAR, FINAL_MOVE, END }
+
 
 # Local time
-@export var start_time : float
-@export var event_type = EVENT_TYPE.APPEAR
+@export var start_time: float
+@export var event_name: String
 
 signal on_event_updated(e: NoteEvent)
 signal on_event_ui_needs_update()

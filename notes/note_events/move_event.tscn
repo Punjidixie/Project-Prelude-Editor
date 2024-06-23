@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://diyjao2akicpk"]
+
+[ext_resource type="Script" path="res://notes/note_events/move_event.gd" id="1_m5eqg"]
+
+[sub_resource type="Curve2D" id="Curve2D_meiol"]
+resource_local_to_scene = true
+bake_interval = 1.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 20, 100, -30, -10, 30, 10, 50, 70, 0, 0, 0, 0, 80, 0)
+}
+point_count = 3
+
+[node name="MoveEvent" type="Node" node_paths=PackedStringArray("visual_curve", "path_points")]
+script = ExtResource("1_m5eqg")
+path = SubResource("Curve2D_meiol")
+visual_curve = NodePath("WorldLine")
+path_points = NodePath("PathPoints")
+start_time = 1.0
+event_name = "Move Event"
+
+[node name="WorldLine" type="Line2D" parent="."]
+
+[node name="PathPoints" type="Node" parent="."]

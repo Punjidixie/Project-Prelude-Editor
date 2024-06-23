@@ -85,10 +85,12 @@ func on_path_point_dragged(index: int, amount: Vector2):
 	redraw_curve()
 
 func connect_start_checkpoint():
-	start_checkpoint.on_checkpoint_updated.connect(on_start_checkpoint_updated)
+	if is_instance_valid(start_checkpoint):
+		start_checkpoint.on_checkpoint_updated.connect(on_start_checkpoint_updated)
 
 func connect_destination_checkpoint():
-	destination_checkpoint.on_checkpoint_updated.connect(on_destination_checkpoint_updated)
+	if is_instance_valid(destination_checkpoint):
+		destination_checkpoint.on_checkpoint_updated.connect(on_destination_checkpoint_updated)
 	
 func disconnect_start_checkpoint():
 	start_checkpoint.on_checkpoint_updated.disconnect(on_start_checkpoint_updated)
