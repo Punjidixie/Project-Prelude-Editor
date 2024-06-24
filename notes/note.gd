@@ -92,6 +92,7 @@ func add_checkpoint(checkpoint: NoteCheckpoint):
 func add_event(event: MoveEvent):
 	connect_event(event)
 	note_events_container.add_child(event)
+	event.redraw_curve()
 	
 	# Add info box
 	var new_info_box = event.get_and_initialize_info_box()
@@ -123,7 +124,7 @@ func get_event_at_time(time: float):
 	
 func get_note_checkpoints() -> Array:
 	var note_checkpoints = checkpoints_container.get_children()
-	
+	print(note_checkpoints.size())
 	note_checkpoints.sort_custom(SortingFunctions.compare_note_checkpoints)
 	return note_checkpoints
 

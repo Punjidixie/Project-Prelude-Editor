@@ -15,6 +15,7 @@ func _ready():
 	get_tree().get_root().size_changed.connect(on_viewport_size_changed)
 	connect_start_checkpoint()
 	connect_destination_checkpoint()
+	
 
 func _process(delta):
 	if Input.is_key_pressed(KEY_W):

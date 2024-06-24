@@ -17,8 +17,9 @@ func _ready():
 func initialize(_checkpoint : NoteCheckpoint):
 	checkpoint = _checkpoint
 	checkpoint.on_checkpoint_ui_needs_update.connect(update)
+	checkpoint.on_checkpoint_renamed.connect(rename)
 	update()
-	
+
 func update():
 	checkpoint_name_label.text = checkpoint.checkpoint_name
 	time_input_box.text = str(checkpoint.target_time)
@@ -27,6 +28,9 @@ func update():
 
 func load_info_to_checkpoint() -> void:
 	checkpoint.load_info_from_info_box(self)
+
+func rename():
+	checkpoint_name_label.text = checkpoint.checkpoint_name
 
 func on_float_input_box_updated(new_string : String) -> void:
 	if new_string.is_valid_float():

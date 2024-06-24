@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=20 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -17,6 +17,14 @@
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
 [ext_resource type="Script" path="res://main/add_move_event_checkpoint.gd" id="17_8s8e5"]
+
+[sub_resource type="Curve2D" id="Curve2D_df42i"]
+resource_local_to_scene = true
+bake_interval = 1.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 20, 100, -30, -10, 30, 10, 50, 70, 0, 0, 0, 0, 80, 0)
+}
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_acccc"]
 _data = {
@@ -58,6 +66,7 @@ start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 event_name = "Appear Event"
 
 [node name="MoveEvent" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint") instance=ExtResource("5_fimjw")]
+path = SubResource("Curve2D_df42i")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 
