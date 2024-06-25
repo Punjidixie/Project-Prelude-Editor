@@ -2,8 +2,8 @@ extends Node
 
 func compare_note_checkpoints(a: NoteCheckpoint, b: NoteCheckpoint):
 	if a.target_time == b.target_time:
-		if a.checkpoint_name == "Start": return true
-		elif a.checkpoint_name == "End": return false
+		if a.checkpoint_name == "Start" || b.checkpoint_name == "End": return true
+		elif a.checkpoint_name == "End" || b.checkpoint_name == "Start": return false
 		else: return false
 			
 	return a.target_time < b.target_time

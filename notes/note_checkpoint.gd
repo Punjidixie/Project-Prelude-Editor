@@ -69,9 +69,9 @@ func load_info_from_info_box(info_box : CheckpointInfoBox) -> void:
 		# Move self
 		set_play_position(play_position + delta_play_position)
 			
-
 	note.name_all_checkpoints() # Because the time order might have changed.
 	on_checkpoint_updated.emit() # In any case, time might have changed.
+
 
 # Change 2 : Called from being dragged from its sprite
 func on_dragged(amount: Vector2):

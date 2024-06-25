@@ -86,8 +86,9 @@ func add_checkpoint(checkpoint: NoteCheckpoint):
 	# Add info box
 	var new_info_box = checkpoint.get_and_initialize_info_box()
 	SignalManager.on_new_checkpoint_info_box_added.emit(new_info_box)
+	SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
 	
-	name_all_checkpoints() # Will emit reordering too
+	name_all_checkpoints()
 
 func add_event(event: MoveEvent):
 	connect_event(event)
@@ -99,16 +100,13 @@ func add_event(event: MoveEvent):
 	SignalManager.on_new_event_info_box_added.emit(new_info_box)
 	SignalManager.on_event_info_boxes_need_reordering.emit()
 
-# Rename and reorder info boxes
+# Rename all checkpoints
 func name_all_checkpoints():
 	var checkpoints = get_note_checkpoints()
 	for i in range(checkpoints.size()):
 		var checkpoint: NoteCheckpoint = checkpoints[i]
 		if checkpoint.checkpoint_name != "Start" and checkpoint.checkpoint_name != "End":
 			checkpoint.rename("Checkpoint %s" % i) # Will emit the info box update signal too
-	
-	# Emit here rather than from the info boxes so it gets emitted only once.
-	SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
 		
 ### UTILITY FUNCTIONS BELOW ###
 
@@ -124,7 +122,6 @@ func get_event_at_time(time: float):
 	
 func get_note_checkpoints() -> Array:
 	var note_checkpoints = checkpoints_container.get_children()
-	print(note_checkpoints.size())
 	note_checkpoints.sort_custom(SortingFunctions.compare_note_checkpoints)
 	return note_checkpoints
 

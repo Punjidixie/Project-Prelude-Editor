@@ -12,7 +12,8 @@ func _ready():
 
 	SignalManager.on_time_auto_updated.emit() # tell everything that time is now 0
 	
-	# tell all PlayAreaObjects to update world position because GlobalManager.play_area is ready.
+	# after the children are all ready
+	# tell all PlayAreaObject children to update world position because GlobalManager.play_area is ready.
 	get_tree().get_root().size_changed.emit() 
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.

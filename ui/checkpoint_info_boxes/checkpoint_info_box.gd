@@ -25,6 +25,8 @@ func update():
 	time_input_box.text = str(checkpoint.target_time)
 	x_input_box.text = str(checkpoint.play_position.x)
 	y_input_box.text = str(checkpoint.play_position.y)
+	
+	SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
 
 func load_info_to_checkpoint() -> void:
 	checkpoint.load_info_from_info_box(self)
@@ -35,6 +37,7 @@ func rename():
 func on_float_input_box_updated(new_string : String) -> void:
 	if new_string.is_valid_float():
 		load_info_to_checkpoint()
+		SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
 	else:
 		update()
 	

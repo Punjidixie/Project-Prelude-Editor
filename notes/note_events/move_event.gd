@@ -29,7 +29,7 @@ func get_notebody_play_position(local_time: float):
 	return path.sample_baked(path.get_baked_length() * progress_ratio)
 
 func get_and_initialize_info_box():
-	var info_box : EventInfoBox = ScenePreloader.move_event_info_box.instantiate()
+	var info_box : MoveEventInfoBox = ScenePreloader.move_event_info_box.instantiate()
 	info_box.initialize(self)
 	return info_box
 
@@ -88,10 +88,12 @@ func on_path_point_dragged(index: int, amount: Vector2):
 func connect_start_checkpoint():
 	if is_instance_valid(start_checkpoint):
 		start_checkpoint.on_checkpoint_updated.connect(on_start_checkpoint_updated)
+		start_checkpoint.on_checkpoint_renamed.connect(on_start_checkpoint_updated)
 
 func connect_destination_checkpoint():
 	if is_instance_valid(destination_checkpoint):
 		destination_checkpoint.on_checkpoint_updated.connect(on_destination_checkpoint_updated)
+		destination_checkpoint.on_checkpoint_renamed.connect(on_destination_checkpoint_updated)
 	
 func disconnect_start_checkpoint():
 	start_checkpoint.on_checkpoint_updated.disconnect(on_start_checkpoint_updated)
