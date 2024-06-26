@@ -22,11 +22,14 @@ func initialize(_checkpoint : NoteCheckpoint):
 
 func update():
 	checkpoint_name_label.text = checkpoint.checkpoint_name
-	time_input_box.text = str(checkpoint.target_time)
+	
+	if time_input_box.text != str(checkpoint.target_time):
+		time_input_box.text = str(checkpoint.target_time)
+		SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
+
 	x_input_box.text = str(checkpoint.play_position.x)
 	y_input_box.text = str(checkpoint.play_position.y)
 	
-	SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
 
 func load_info_to_checkpoint() -> void:
 	checkpoint.load_info_from_info_box(self)

@@ -9,11 +9,12 @@ class_name NoteCheckpoint
 # I don't want the info box to receive that signal because the checkpoint was already updated from the info box itself...
 signal on_checkpoint_ui_needs_update() 
 
-# For general purposes ; synchonizing other nodes. Update events and its note.
+# Tell connected events. They will modify themselves and emit update signals.
 signal on_checkpoint_updated()
 
 signal on_checkpoint_clicked()
 
+# Tell UI and connected events to just update the names. Appearance-related only.
 signal on_checkpoint_renamed()
 
 # Local time

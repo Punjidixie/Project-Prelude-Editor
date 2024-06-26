@@ -10,3 +10,5 @@ func sort_children(node: Node, sorting_func: Callable):
 	children.sort_custom(sorting_func)
 	for child in children: node.remove_child(child)
 	for child in children: node.add_child(child)
+
+
