@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://ui/event_info_boxes/move_event_info_box.gd" id="1_7cu3j"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_tumwp"]
 
-[node name="MoveEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_input_box", "start_dropdown", "destination_dropdown", "event_name_label")]
+[node name="MoveEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_input_box", "start_dropdown", "destination_dropdown", "button", "event_name_label")]
 custom_minimum_size = Vector2(0, 125)
 offset_right = 238.0
 offset_bottom = 100.0
@@ -12,6 +12,7 @@ script = ExtResource("1_7cu3j")
 time_input_box = NodePath("time_input_box")
 start_dropdown = NodePath("StartDropdown")
 destination_dropdown = NodePath("DestinationDropdown")
+button = NodePath("Button")
 event_name_label = NodePath("EventName")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -32,6 +33,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+toggle_mode = true
 
 [node name="EventName" type="Label" parent="."]
 layout_mode = 1

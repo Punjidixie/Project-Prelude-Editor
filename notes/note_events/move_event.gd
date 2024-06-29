@@ -46,6 +46,9 @@ func move_by(delta_position: Vector2) -> void:
 		var new_point_position = path.get_point_position(i) + delta_position
 		path.set_point_position(i, new_point_position)
 	redraw_curve()
+	
+	for path_point: PathPoint in path_points.get_children():
+		path_point.update()
 
 func on_viewport_size_changed():
 	redraw_curve()
@@ -89,27 +92,30 @@ func on_start_checkpoint_updated():
 func on_checkpoints_renamed():
 	on_event_ui_needs_update.emit()
 
+### PATH POINTS UPDATED ###
+func load_info_from_path_point(path_point: PathPoint):
+	path.set_point_position(path_point.index, path_point.play_position)
+	path.set_point_in(path_point.index, path_point.in_point.play_position)
+	path.set_point_out(path_point.index, path_point.out_point.play_position)
+	redraw_curve()
+	
+### ESSENTIALS ###
 func redraw_curve():
 	visual_curve.clear_points()
-	visual_curve.default_color = Color(1,1,1,0.5)  
-	visual_curve.width = 1.5
 	for point in path.get_baked_points():  
 		visual_curve.add_point(PlayAreaUtils.get_world_position(point))
-
-func on_path_point_dragged(index: int, amount: Vector2):
-	var new_world_position = PlayAreaUtils.get_world_position(path.get_point_position(index)) + amount
-	var new_play_position = PlayAreaUtils.get_play_position(new_world_position)
-	path.set_point_position(index, new_play_position)
-	redraw_curve()
 
 func spawn_path_points():
 	GodotUtils.delete_all_children(path_points)
 	
 	for i in range(path.point_count):
-		var path_point: PathPoint = ScenePreloader.path_point.instantiate()
-		path_point.initialize(self, i)
-		path_points.add_child(path_point)
-		
+		if i != path.point_count - 1 and i != 0:
+			var path_point: PathPoint = ScenePreloader.path_point.instantiate()
+			path_point.initialize(self, i)
+			path_points.add_child(path_point)
+
+func despawn_path_points():
+	GodotUtils.delete_all_children(path_points)
 		
 func connect_start_checkpoint():
 	if is_instance_valid(start_checkpoint):

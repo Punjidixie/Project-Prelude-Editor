@@ -1,19 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://cilx0w1l1ji7m"]
+[gd_scene load_steps=5 format=3 uid="uid://cilx0w1l1ji7m"]
 
 [ext_resource type="Script" path="res://notes/note_events/path_points/path_point.gd" id="1_3teka"]
 [ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_4cnet"]
 [ext_resource type="Script" path="res://notes/drag_detector.gd" id="3_loxqh"]
+[ext_resource type="Script" path="res://notes/play_area_object.gd" id="3_twijn"]
 
-[node name="PathPoint" type="Node2D" node_paths=PackedStringArray("drag_detector")]
+[node name="PathPoint" type="Node2D" node_paths=PackedStringArray("left_click_drag_detector", "right_click_drag_detector", "in_point", "out_point", "control_line")]
 script = ExtResource("1_3teka")
-drag_detector = NodePath("DragDetector")
+left_click_drag_detector = NodePath("LeftClickDragDetector")
+right_click_drag_detector = NodePath("LeftClickDragDetector/RightClickDragDetector")
+in_point = NodePath("InPoint")
+out_point = NodePath("OutPoint")
+control_line = NodePath("ControlLine")
 
-[node name="Visual" type="Sprite2D" parent="."]
-modulate = Color(0.662745, 1, 1, 0.792157)
+[node name="ControlLine" type="Line2D" parent="."]
+width = 1.5
+default_color = Color(1, 0.835294, 1, 1)
+
+[node name="MainVisual" type="Sprite2D" parent="."]
+modulate = Color(0, 0.870588, 0.878431, 1)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_4cnet")
 
-[node name="DragDetector" type="Control" parent="."]
+[node name="InPoint" type="Sprite2D" parent="."]
+modulate = Color(0.212245, 0.844326, 0.101258, 1)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_4cnet")
+script = ExtResource("3_twijn")
+coordinate_mode = 1
+
+[node name="OutPoint" type="Sprite2D" parent="."]
+modulate = Color(0.728832, 0.736492, 1, 1)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_4cnet")
+script = ExtResource("3_twijn")
+coordinate_mode = 1
+
+[node name="LeftClickDragDetector" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -10.0
@@ -21,3 +44,12 @@ offset_top = -10.0
 offset_right = 10.0
 offset_bottom = 10.0
 script = ExtResource("3_loxqh")
+
+[node name="RightClickDragDetector" type="Control" parent="LeftClickDragDetector"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 1
+script = ExtResource("3_loxqh")
+action_name = "right_click"

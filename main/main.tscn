@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=22 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -17,6 +17,8 @@
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
 [ext_resource type="Script" path="res://main/add_move_event_checkpoint.gd" id="17_8s8e5"]
+[ext_resource type="Script" path="res://ui/curve_editor.gd" id="18_ie2ek"]
+[ext_resource type="Script" path="res://ui/event_info_boxes/path_point_info_boxes/path_point_info_box.gd" id="18_lej63"]
 
 [sub_resource type="Curve2D" id="Curve2D_df42i"]
 resource_local_to_scene = true
@@ -69,6 +71,7 @@ event_name = "Appear Event"
 path = SubResource("Curve2D_df42i")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
+start_time = 1.0
 
 [node name="EndEvent" type="Node" parent="Notes/Note/NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
 script = ExtResource("6_klw7q")
@@ -105,24 +108,19 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -291.0
-offset_top = 10.0
-offset_right = -9.0
+offset_left = -287.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("14_bthse")
 checkpoint_container = NodePath("NoteInfo/Checkpoints/VBoxContainer")
 event_container = NodePath("NoteInfo/Events/VBoxContainer")
-top_info_box = NodePath("NoteInfo/TopInfo/TopInfoBox")
+top_info_box = NodePath("NoteInfo/TopInfoBox")
 
 [node name="NoteInfo" type="VBoxContainer" parent="CanvasLayer/Control/NoteInfoUI"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TopInfo" type="VBoxContainer" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo"]
-layout_mode = 2
-
-[node name="TopInfoBox" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo" node_paths=PackedStringArray("name_label", "start_time_input_box", "end_time_input_box")]
+[node name="TopInfoBox" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo" node_paths=PackedStringArray("name_label", "start_time_input_box", "end_time_input_box")]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 color = Color(0.321569, 0.321569, 0.321569, 0)
@@ -131,7 +129,7 @@ name_label = NodePath("NameLabel")
 start_time_input_box = NodePath("StartTimeInputBox")
 end_time_input_box = NodePath("EndTimeInputBox")
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -140,7 +138,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.364711, 0.364711, 0.364711, 1)
 
-[node name="NameLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="NameLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -150,7 +148,7 @@ text = "Note #1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StartTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="StartTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
 layout_mode = 1
 offset_left = 18.0
 offset_top = 34.0
@@ -161,7 +159,7 @@ label_settings = ExtResource("9_hav3n")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="EndTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="EndTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
 layout_mode = 1
 offset_left = 19.0
 offset_top = 71.0
@@ -172,14 +170,14 @@ label_settings = ExtResource("9_hav3n")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StartTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="StartTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
 layout_mode = 0
 offset_left = 105.0
 offset_top = 31.0
 offset_right = 192.0
 offset_bottom = 62.0
 
-[node name="EndTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfo/TopInfoBox"]
+[node name="EndTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
 layout_mode = 0
 offset_left = 105.0
 offset_top = 69.0
@@ -232,29 +230,22 @@ layout_mode = 2
 
 [node name="TimeText" type="RichTextLabel" parent="CanvasLayer/Control"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = -89.0
-offset_right = 168.0
-offset_bottom = -49.0
-grow_vertical = 0
+offset_left = 13.0
+offset_top = 84.0
+offset_right = 157.0
+offset_bottom = 124.0
 text = "0"
 script = ExtResource("10_u0ths")
 
 [node name="TimeSlider" type="HSlider" parent="CanvasLayer/Control"]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 66.0
-offset_top = -39.0
-offset_right = -333.0
-offset_bottom = -23.0
+offset_left = 51.0
+offset_top = 130.0
+offset_right = -309.0
+offset_bottom = 146.0
 grow_horizontal = 2
-grow_vertical = 0
 script = ExtResource("2_0fta8")
 
 [node name="Control" type="Control" parent="CanvasLayer/Control"]
@@ -270,10 +261,10 @@ mouse_filter = 2
 [node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control/Control"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.00698324
-anchor_top = 0.0466667
-anchor_right = 1.05726
-anchor_bottom = 0.731667
+anchor_left = 0.0181564
+anchor_top = 0.194286
+anchor_right = 1.00279
+anchor_bottom = 0.752857
 offset_left = 50.0
 offset_top = 33.0
 offset_right = -41.0
@@ -286,47 +277,179 @@ metadata/_edit_use_anchors_ = true
 
 [node name="PauseButton" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 14.0
-offset_top = -49.0
-offset_right = 51.0
-offset_bottom = -13.0
-grow_vertical = 0
+offset_left = 5.0
+offset_top = 117.0
+offset_right = 42.0
+offset_bottom = 153.0
 text = ">"
 script = ExtResource("10_64sur")
 
 [node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 158.0
-offset_top = -88.0
-offset_right = 271.0
-offset_bottom = -57.0
-grow_vertical = 0
+offset_left = 80.0
+offset_top = 90.0
+offset_right = 193.0
+offset_bottom = 121.0
 text = "Move all"
 script = ExtResource("15_3rhpp")
 
 [node name="NewCheckpoint" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 1
-offset_left = 7.0
-offset_top = 6.0
-offset_right = 140.0
-offset_bottom = 37.0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 139.0
+offset_bottom = 36.0
 text = "New checkpoint"
 script = ExtResource("16_ccpcj")
 
 [node name="NewMoveEvent" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 1
-offset_left = 162.0
-offset_top = 7.0
-offset_right = 295.0
-offset_bottom = 38.0
+offset_left = 5.0
+offset_top = 46.0
+offset_right = 143.0
+offset_bottom = 77.0
 text = "New move event"
 script = ExtResource("17_8s8e5")
+
+[node name="CurveEditor" type="ColorRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 27.0
+offset_top = -128.0
+offset_right = -341.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(1, 0.87451, 1, 0.0980392)
+script = ExtResource("18_ie2ek")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/CurveEditor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 138.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/CurveEditor/ScrollContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PathPointInfoBox" type="ColorRect" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 0)
+script = ExtResource("18_lej63")
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+modulate = Color(0.486275, 1, 1, 0.721569)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PointName" type="Label" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 1
+offset_right = 54.0
+offset_bottom = 23.0
+text = "Point 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="x" type="Label" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 32.0
+offset_right = 19.0
+offset_bottom = 55.0
+text = "x"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="y" type="Label" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 71.0
+offset_right = 19.0
+offset_bottom = 94.0
+text = "y"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="x_input" type="LineEdit" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 29.0
+offset_right = 91.0625
+offset_bottom = 60.0
+
+[node name="y_input" type="LineEdit" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 69.0
+offset_right = 91.0625
+offset_bottom = 100.0
+
+[node name="PointName2" type="Label" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = 96.0
+offset_right = 150.0
+offset_bottom = 23.0
+text = "Control"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="x2" type="Label" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 33.0
+offset_right = 112.0
+offset_bottom = 56.0
+text = "x"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="y2" type="Label" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 72.0
+offset_right = 112.0
+offset_bottom = 95.0
+text = "y"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="x_in_input" type="LineEdit" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = 117.0
+offset_top = 30.0
+offset_right = 184.062
+offset_bottom = 61.0
+
+[node name="y_in_input" type="LineEdit" parent="CanvasLayer/Control/CurveEditor/ScrollContainer/HBoxContainer/PathPointInfoBox"]
+layout_mode = 0
+offset_left = 117.0
+offset_top = 70.0
+offset_right = 184.062
+offset_bottom = 101.0
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/CurveEditor"]
+layout_mode = 1
+offset_left = 11.0
+offset_top = 12.0
+offset_right = 95.0
+offset_bottom = 43.0
+text = "Add point"
 
 [connection signal="drag_ended" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_ended"]
 [connection signal="drag_started" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_started"]

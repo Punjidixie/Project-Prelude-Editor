@@ -26,8 +26,8 @@ ScenePreloader="*res://singletons/scene_preloader.gd"
 
 [display]
 
-window/size/viewport_width=1024
-window/size/viewport_height=700
+window/size/viewport_width=1300
+window/size/viewport_height=800
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/dpi/allow_hidpi=false

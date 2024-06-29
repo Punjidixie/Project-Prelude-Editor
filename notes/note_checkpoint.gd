@@ -50,7 +50,6 @@ func go_regular_mode():
 	drag_detector.process_mode = Node.PROCESS_MODE_INHERIT
 	mouse_follower.process_mode = Node.PROCESS_MODE_DISABLED
 			
-		
 func get_and_initialize_info_box() -> CheckpointInfoBox:
 	var info_box = ScenePreloader.checkpoint_info_box.instantiate()
 	info_box.initialize(self)
@@ -59,16 +58,16 @@ func get_and_initialize_info_box() -> CheckpointInfoBox:
 # Change 1 : Called from info box when it changes
 func load_info_from_info_box(info_box : CheckpointInfoBox) -> void:
 	var new_play_position = Vector2(float(info_box.x_input_box.text), float(info_box.y_input_box.text))
-	var delta_play_position = new_play_position - play_position
 	target_time = float(info_box.time_input_box.text)
 	
 	# Dealing with position
 	if GlobalManager.move_all == true:
 		# Move everything
+		var delta_play_position = new_play_position - play_position
 		note.move_all(delta_play_position) 
 	else:
 		# Move self
-		set_play_position(play_position + delta_play_position)
+		set_play_position(new_play_position)
 			
 	note.name_all_checkpoints() # Because the time order might have changed.
 	on_checkpoint_updated.emit() # In any case, time might have changed.
@@ -86,26 +85,26 @@ func on_dragged(amount: Vector2):
 		on_checkpoint_updated.emit()
 		on_checkpoint_ui_needs_update.emit()
 		
-# Called from note.move_all() when another checkpoint changes (and move_all is active)
+# Change 3 : Called from note.move_all() when another checkpoint changes (and move_all is active)
 func move_by(delta_position: Vector2) -> void:
 	set_play_position(play_position + delta_position)
 	# No need to emit checkpoint_updated. 
 	# Only the position changes, connected events will move by the same amount. 
 	on_checkpoint_ui_needs_update.emit()
 	
-# Change 3 : Called from note when note's top UI changes (only end checkpoints)
+# Change 4 : Called from note when note's top UI changes (only end checkpoints)
 func load_time_from_note(new_time: float) -> void:
 	target_time = new_time
 	on_checkpoint_updated.emit()
 	on_checkpoint_ui_needs_update.emit()
 
-# Change 4: Called from mouse follower.
+# Change 5 : Called from mouse follower.
 func waiting_move_by(amount: Vector2) -> void:
 	set_world_position(position + amount)
 
 func rename(new_name: String) -> void:
 	checkpoint_name = new_name
-	on_checkpoint_renamed.emit() # UI needs to know about the name change.
+	on_checkpoint_renamed.emit()
 
 # Connected to the drag detector
 func on_clicked():

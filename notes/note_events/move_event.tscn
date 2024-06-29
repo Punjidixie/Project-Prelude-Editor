@@ -15,9 +15,10 @@ script = ExtResource("1_m5eqg")
 path = SubResource("Curve2D_meiol")
 visual_curve = NodePath("WorldLine")
 path_points = NodePath("PathPoints")
-start_time = 1.0
 event_name = "Move Event"
 
 [node name="WorldLine" type="Line2D" parent="."]
+width = 2.0
+default_color = Color(1, 1, 1, 0.713726)
 
 [node name="PathPoints" type="Node" parent="."]

@@ -5,6 +5,7 @@ class_name MoveEventInfoBox
 @export var time_input_box: LineEdit
 @export var start_dropdown: OptionButton
 @export var destination_dropdown: OptionButton
+@export var button: Button
 
 # Personal connections
 func _ready():
@@ -15,6 +16,7 @@ func _ready():
 	
 	start_dropdown.item_selected.connect(on_start_dropdown_selected)
 	destination_dropdown.item_selected.connect(on_destination_dropdown_selected)
+	button.toggled.connect(on_button_toggled)
 
 func update():
 	super.update()
@@ -65,4 +67,10 @@ func on_destination_dropdown_selected(index: int):
 		var checkpoints: Array = event.note.get_note_checkpoints()
 		move_event.change_destination_checkpoint(checkpoints[index - 1])
 
+func on_button_toggled(toggle_on: bool):
+	var move_event := event as MoveEvent
+	if toggle_on == true:
+		move_event.spawn_path_points()
+	else:
+		move_event.despawn_path_points()
 
