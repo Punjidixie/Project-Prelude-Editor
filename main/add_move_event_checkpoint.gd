@@ -5,6 +5,6 @@ func _ready():
 	pressed.connect(on_pressed)
 
 func on_pressed():
-	var event = ScenePreloader.move_event.instantiate()
-	GlobalManager.selected_note.add_event(event)
+	var event: MoveEvent = ScenePreloader.move_event.instantiate()
+	GlobalManager.selected_note.add_move_event(event)
 	

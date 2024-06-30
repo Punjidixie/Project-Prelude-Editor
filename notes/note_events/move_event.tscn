@@ -6,9 +6,9 @@
 resource_local_to_scene = true
 bake_interval = 1.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 20, 100, -30, -10, 30, 10, 50, 70, 0, 0, 0, 0, 80, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 50, 100, 0, 0, 30, 10, 50, 0)
 }
-point_count = 3
+point_count = 2
 
 [node name="MoveEvent" type="Node" node_paths=PackedStringArray("visual_curve", "path_points")]
 script = ExtResource("1_m5eqg")

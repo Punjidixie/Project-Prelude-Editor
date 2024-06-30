@@ -18,5 +18,5 @@ func update():
 
 # Called when the manual changes to the info box are made.
 # Call this in inherited classes.
-func load_info_to_checkpoint() -> void:
+func load_info_to_event() -> void:
 	event.load_info_from_info_box(self)

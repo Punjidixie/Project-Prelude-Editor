@@ -27,7 +27,7 @@ func update():
 
 func on_time_input_box_updated(new_string: String):
 	if new_string.is_valid_float():
-		load_info_to_checkpoint()
+		load_info_to_event()
 		SignalManager.on_event_info_boxes_need_reordering.emit()
 	else:
 		update() # Reset text box
@@ -67,10 +67,9 @@ func on_destination_dropdown_selected(index: int):
 		var checkpoints: Array = event.note.get_note_checkpoints()
 		move_event.change_destination_checkpoint(checkpoints[index - 1])
 
-func on_button_toggled(toggle_on: bool):
+func on_button_toggled(_toggle_on: bool):
 	var move_event := event as MoveEvent
-	if toggle_on == true:
-		move_event.spawn_path_points()
-	else:
-		move_event.despawn_path_points()
+	move_event.spawn_path_points()
+	# Despawn all path points on other move events + initialize curve editor
+	SignalManager.on_move_event_selected.emit(move_event)
 

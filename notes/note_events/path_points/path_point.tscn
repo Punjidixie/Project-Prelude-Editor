@@ -19,7 +19,7 @@ default_color = Color(1, 0.835294, 1, 1)
 
 [node name="MainVisual" type="Sprite2D" parent="."]
 modulate = Color(0, 0.870588, 0.878431, 1)
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_4cnet")
 
 [node name="InPoint" type="Sprite2D" parent="."]
@@ -31,7 +31,7 @@ coordinate_mode = 1
 
 [node name="OutPoint" type="Sprite2D" parent="."]
 modulate = Color(0.728832, 0.736492, 1, 1)
-scale = Vector2(0.15, 0.15)
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_4cnet")
 script = ExtResource("3_twijn")
 coordinate_mode = 1

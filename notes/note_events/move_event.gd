@@ -15,11 +15,6 @@ func _ready():
 	get_tree().get_root().size_changed.connect(on_viewport_size_changed)
 	connect_start_checkpoint()
 	connect_destination_checkpoint()
-	
-
-func _process(delta):
-	if Input.is_key_pressed(KEY_W):
-		spawn_path_points()
 
 # get the current note's play position from local time
 func get_notebody_play_position(local_time: float):
@@ -74,7 +69,7 @@ func remove_start_checkpoint():
 func remove_destination_checkpoint():
 	disconnect_destination_checkpoint()
 	destination_checkpoint = null
-	
+
 ### CHECKPOINTS UPDATED ###
 func on_destination_checkpoint_updated():
 	# Update the last point of the path
@@ -92,13 +87,54 @@ func on_start_checkpoint_updated():
 func on_checkpoints_renamed():
 	on_event_ui_needs_update.emit()
 
+### CHECKPOINTS DELETED ###
+func on_start_checkpoint_deleted(_c):
+	remove_start_checkpoint()
+	on_event_ui_needs_update.emit()
+
+func on_destination_checkpoint_deleted(_c):
+	remove_destination_checkpoint()
+	on_event_ui_needs_update.emit()
+
 ### PATH POINTS UPDATED ###
+# Called from path points
 func load_info_from_path_point(path_point: PathPoint):
 	path.set_point_position(path_point.index, path_point.play_position)
 	path.set_point_in(path_point.index, path_point.in_point.play_position)
 	path.set_point_out(path_point.index, path_point.out_point.play_position)
 	redraw_curve()
+	on_event_updated.emit(self)
+
+### ADD / REMOVE CURVE POINT ###
+### ASSUMING THE MOVE EVENT IS CURRENTLY SELECTED ###
+func remove_curve_point(index: int):
+	# Remove the actual point
+	path.remove_point(index)
+	redraw_curve()
 	
+	# Respawn all path points + re-initialize the curve editor
+	# Because the indices of the old path points will be messed up
+	spawn_path_points()
+	SignalManager.on_move_event_selected.emit(self)
+	
+	on_event_updated.emit(self)
+
+func add_curve_point():
+	# Add the actual point
+	# @ the position halfway between the last and the second to last point
+	var new_position = path.sample(path.point_count - 2, 0.5)
+	path.add_point(new_position, Vector2.ZERO, Vector2.ZERO, path.point_count - 1)
+	redraw_curve()
+	
+	# Show one new path point
+	var path_point: PathPoint = add_path_point(path.point_count - 2)
+	
+	# Tell the curve editor to add a new info box
+	var info_box: PathPointInfoBox = path_point.get_and_initialize_info_box()
+	SignalManager.on_path_point_info_box_added.emit(info_box)
+	
+	on_event_updated.emit(self)
+
 ### ESSENTIALS ###
 func redraw_curve():
 	visual_curve.clear_points()
@@ -107,25 +143,35 @@ func redraw_curve():
 
 func spawn_path_points():
 	GodotUtils.delete_all_children(path_points)
-	
-	for i in range(path.point_count):
-		if i != path.point_count - 1 and i != 0:
-			var path_point: PathPoint = ScenePreloader.path_point.instantiate()
-			path_point.initialize(self, i)
-			path_points.add_child(path_point)
+	for i in range(1, path.point_count - 1): add_path_point(i)
+		
+func add_path_point(index: int) -> PathPoint:
+	var path_point: PathPoint = ScenePreloader.path_point.instantiate()
+	path_point.initialize(self, index)
+	path_points.add_child(path_point)
+	return path_point
 
 func despawn_path_points():
 	GodotUtils.delete_all_children(path_points)
-		
+
+func get_path_point_info_boxes() -> Array:
+	var info_boxes = Array()
+	for path_point: PathPoint in path_points.get_children():
+		info_boxes.append(path_point.get_and_initialize_info_box())
+	
+	return info_boxes
+
 func connect_start_checkpoint():
 	if is_instance_valid(start_checkpoint):
 		start_checkpoint.on_checkpoint_updated.connect(on_start_checkpoint_updated)
 		start_checkpoint.on_checkpoint_renamed.connect(on_checkpoints_renamed)
+		start_checkpoint.on_checkpoint_deleted.connect(on_start_checkpoint_deleted)
 
 func connect_destination_checkpoint():
 	if is_instance_valid(destination_checkpoint):
 		destination_checkpoint.on_checkpoint_updated.connect(on_destination_checkpoint_updated)
 		destination_checkpoint.on_checkpoint_renamed.connect(on_checkpoints_renamed)
+		destination_checkpoint.on_checkpoint_deleted.connect(on_destination_checkpoint_deleted)
 	
 func disconnect_start_checkpoint():
 	if is_instance_valid(start_checkpoint):

@@ -90,7 +90,7 @@ func add_checkpoint(checkpoint: NoteCheckpoint):
 	
 	name_all_checkpoints()
 
-func add_event(event: MoveEvent):
+func add_move_event(event: MoveEvent):
 	connect_event(event)
 	note_events_container.add_child(event)
 	event.redraw_curve()
@@ -99,6 +99,7 @@ func add_event(event: MoveEvent):
 	var new_info_box = event.get_and_initialize_info_box()
 	SignalManager.on_new_event_info_box_added.emit(new_info_box)
 	SignalManager.on_event_info_boxes_need_reordering.emit()
+	update()
 
 # Rename all checkpoints
 func name_all_checkpoints():

@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3 uid="uid://dtjal1ff4gyfe"]
+
+[ext_resource type="Script" path="res://notes/note.gd" id="1_k3vvd"]
+[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_nfqg4"]
+[ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_m0n3l"]
+[ext_resource type="PackedScene" uid="uid://diyjao2akicpk" path="res://notes/note_events/move_event.tscn" id="4_bex8r"]
+[ext_resource type="Script" path="res://notes/note_events/end_event.gd" id="5_2uktm"]
+[ext_resource type="Script" path="res://notes/play_area_object.gd" id="6_isdil"]
+[ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="7_lkkwb"]
+
+[sub_resource type="Curve2D" id="Curve2D_46q8g"]
+resource_local_to_scene = true
+bake_interval = 1.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 50, 100, 0, 0, 30, 10, 50, 0)
+}
+point_count = 2
+
+[node name="Note" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "end_checkpoint", "appear_event", "end_event")]
+script = ExtResource("1_k3vvd")
+start_time = 0.5
+note_body = NodePath("NoteBody")
+checkpoints_container = NodePath("Checkpoints")
+note_events_container = NodePath("NoteEvents")
+end_checkpoint = NodePath("Checkpoints/EndCheckpoint")
+appear_event = NodePath("NoteEvents/AppearEvent")
+end_event = NodePath("NoteEvents/EndEvent")
+
+[node name="Checkpoints" type="Node" parent="."]
+
+[node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_nfqg4")]
+checkpoint_name = "Start"
+is_essential = true
+play_position = Vector2(50, 100)
+
+[node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_nfqg4")]
+target_time = 3.0
+checkpoint_name = "End"
+is_essential = true
+play_position = Vector2(50, 0)
+
+[node name="NoteEvents" type="Node" parent="."]
+
+[node name="AppearEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint")]
+script = ExtResource("3_m0n3l")
+start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
+event_name = "Appear Event"
+
+[node name="MoveEvent" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint") instance=ExtResource("4_bex8r")]
+path = SubResource("Curve2D_46q8g")
+start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
+destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
+start_time = 1.0
+
+[node name="EndEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
+script = ExtResource("5_2uktm")
+end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
+event_name = "End Event"
+
+[node name="NoteBody" type="Node2D" parent="."]
+script = ExtResource("6_isdil")
+
+[node name="Visual" type="Sprite2D" parent="NoteBody"]
+modulate = Color(1, 1, 1, 0.858824)
+texture = ExtResource("7_lkkwb")

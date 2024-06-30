@@ -15,3 +15,7 @@ signal on_new_event_info_box_added(info_box: EventInfoBox)
 signal on_event_info_boxes_need_reordering()
 
 signal on_top_ui_needs_update()
+
+signal on_move_event_selected(move_event: MoveEvent)
+signal on_path_point_info_box_added(info_box: PathPointInfoBox)
+

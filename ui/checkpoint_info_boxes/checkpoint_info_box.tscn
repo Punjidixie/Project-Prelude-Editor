@@ -3,14 +3,17 @@
 [ext_resource type="Script" path="res://ui/checkpoint_info_boxes/checkpoint_info_box.gd" id="1_wnjw8"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_q42yw"]
 
-[node name="CheckpointInfoBox" type="ColorRect" node_paths=PackedStringArray("checkpoint_name_label", "time_input_box", "x_input_box", "y_input_box")]
+[node name="CheckpointInfoBox" type="ColorRect" node_paths=PackedStringArray("checkpoint_name_label", "time_input_box", "x_input_box", "y_input_box", "delete_button")]
 custom_minimum_size = Vector2(0, 100)
+offset_right = 251.0
+offset_bottom = 100.0
 color = Color(0.321569, 0.321569, 0.321569, 0)
 script = ExtResource("1_wnjw8")
 checkpoint_name_label = NodePath("CheckpointName")
 time_input_box = NodePath("TimeInputBox")
 x_input_box = NodePath("xInputBox")
 y_input_box = NodePath("yInputbox")
+delete_button = NodePath("DeleteButton")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
@@ -28,8 +31,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_right = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -94,3 +95,15 @@ offset_left = 149.0
 offset_top = 49.0
 offset_right = 236.0
 offset_bottom = 80.0
+
+[node name="DeleteButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = 36.0
+grow_horizontal = 0
+text = "-"

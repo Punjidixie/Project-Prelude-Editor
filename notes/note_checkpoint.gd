@@ -17,11 +17,14 @@ signal on_checkpoint_clicked()
 # Tell UI and connected events to just update the names. Appearance-related only.
 signal on_checkpoint_renamed()
 
+signal on_checkpoint_deleted(checkpoint: NoteCheckpoint)
+
 # Local time
 @export var target_time : float
 @export var checkpoint_name : String
 @export var drag_detector: DragDetector
 @export var mouse_follower: MouseFollower
+@export var is_essential: bool
 
 var following_mouse = false
 var mouse_in = false # to be able to start following mouse
@@ -106,6 +109,17 @@ func rename(new_name: String) -> void:
 	checkpoint_name = new_name
 	on_checkpoint_renamed.emit()
 
+# Called from the info box
+func delete():
+	queue_free()
+	
+	# queue_free haven't taken effect yet.
+	# Do this so name_all_checkpoints() work properly.
+	get_parent().remove_child(self)
+	note.name_all_checkpoints()
+	
+	on_checkpoint_deleted.emit(self)
+	
 # Connected to the drag detector
 func on_clicked():
 	note.on_checkpoint_clicked()

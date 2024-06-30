@@ -6,6 +6,7 @@ class_name CheckpointInfoBox
 @export var time_input_box: LineEdit
 @export var x_input_box: LineEdit
 @export var y_input_box: LineEdit
+@export var delete_button: Button
 
 var checkpoint : NoteCheckpoint
 
@@ -13,11 +14,13 @@ func _ready():
 	time_input_box.text_submitted.connect(on_float_input_box_updated)
 	x_input_box.text_submitted.connect(on_float_input_box_updated)
 	y_input_box.text_submitted.connect(on_float_input_box_updated)
+	delete_button.pressed.connect(on_delete_button_pressed)
 	
 func initialize(_checkpoint : NoteCheckpoint):
 	checkpoint = _checkpoint
 	checkpoint.on_checkpoint_ui_needs_update.connect(update)
 	checkpoint.on_checkpoint_renamed.connect(rename)
+	if checkpoint.is_essential == true: delete_button.hide()
 	update()
 
 func update():
@@ -43,4 +46,8 @@ func on_float_input_box_updated(new_string : String) -> void:
 		SignalManager.on_checkpoint_info_boxes_need_reordering.emit()
 	else:
 		update()
+
+func on_delete_button_pressed():
+	checkpoint.delete()
+	queue_free()
 	
