@@ -6,6 +6,7 @@ class_name MoveEventInfoBox
 @export var start_dropdown: OptionButton
 @export var destination_dropdown: OptionButton
 @export var button: Button
+@export var delete_button: Button
 
 # Personal connections
 func _ready():
@@ -17,6 +18,7 @@ func _ready():
 	start_dropdown.item_selected.connect(on_start_dropdown_selected)
 	destination_dropdown.item_selected.connect(on_destination_dropdown_selected)
 	button.toggled.connect(on_button_toggled)
+	delete_button.pressed.connect(on_delete_button_pressed)
 
 func update():
 	super.update()
@@ -72,4 +74,9 @@ func on_button_toggled(_toggle_on: bool):
 	move_event.spawn_path_points()
 	# Despawn all path points on other move events + initialize curve editor
 	SignalManager.on_move_event_selected.emit(move_event)
+
+func on_delete_button_pressed():
+	var move_event := event as MoveEvent
+	move_event.delete()
+	queue_free()
 

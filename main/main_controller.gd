@@ -10,11 +10,7 @@ func _ready():
 	SignalManager.on_time_slider_drag_started.connect(on_time_slider_drag_started)
 	SignalManager.on_pause_button_pressed.connect(on_pause_button_pressed)
 
-	SignalManager.on_time_auto_updated.emit() # tell everything that time is now 0
-	
-	# after the children are all ready
-	# tell all PlayAreaObject children to update world position because GlobalManager.play_area is ready.
-	get_tree().get_root().size_changed.emit() 
+	spawn_notes()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -32,6 +28,10 @@ func on_time_slider_drag_started():
 
 func on_pause_button_pressed():
 	GlobalManager.is_paused = !GlobalManager.is_paused
+
+func spawn_notes():
+	var note : Note = ScenePreloader.note.instantiate()
+	notes.add_child(note)
 
 	
 	

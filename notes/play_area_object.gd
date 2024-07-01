@@ -10,6 +10,7 @@ enum PlayAreaMode {ABSOLUTE, RELATIVE}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	get_tree().get_root().size_changed.connect(on_viewport_size_changed)
+	update_world_position()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

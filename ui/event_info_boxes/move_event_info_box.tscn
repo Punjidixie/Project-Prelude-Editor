@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://ui/event_info_boxes/move_event_info_box.gd" id="1_7cu3j"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_tumwp"]
 
-[node name="MoveEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_input_box", "start_dropdown", "destination_dropdown", "button", "event_name_label")]
+[node name="MoveEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_input_box", "start_dropdown", "destination_dropdown", "button", "delete_button", "event_name_label")]
 custom_minimum_size = Vector2(0, 125)
 offset_right = 238.0
 offset_bottom = 100.0
@@ -13,6 +13,7 @@ time_input_box = NodePath("time_input_box")
 start_dropdown = NodePath("StartDropdown")
 destination_dropdown = NodePath("DestinationDropdown")
 button = NodePath("Button")
+delete_button = NodePath("DeleteButton")
 event_name_label = NodePath("EventName")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -96,3 +97,16 @@ offset_left = 90.0
 offset_top = 94.0
 offset_right = 180.0
 offset_bottom = 117.0
+
+[node name="DeleteButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_top = 3.0
+offset_right = -5.0
+offset_bottom = 34.0
+grow_horizontal = 0
+text = "-"
+text_overrun_behavior = 3

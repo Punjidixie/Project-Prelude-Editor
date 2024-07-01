@@ -1,17 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=15 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
-[ext_resource type="PackedScene" uid="uid://dtjal1ff4gyfe" path="res://notes/note.tscn" id="2_02223"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="9_hav3n"]
 [ext_resource type="Script" path="res://ui/top_info_box.gd" id="10_0fada"]
 [ext_resource type="Script" path="res://ui/pause_button.gd" id="10_64sur"]
 [ext_resource type="Script" path="res://ui/time_text.gd" id="10_u0ths"]
+[ext_resource type="PackedScene" uid="uid://j472kswpfgqg" path="res://ui/curve_editor/curve_editor_front_label.tscn" id="13_mpxto"]
+[ext_resource type="Script" path="res://ui/curve_editor/curve_editor_front_label.gd" id="14_8fyyp"]
 [ext_resource type="Script" path="res://ui/ui_controller.gd" id="14_bthse"]
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
 [ext_resource type="Script" path="res://main/add_move_event_checkpoint.gd" id="17_8s8e5"]
-[ext_resource type="Script" path="res://ui/curve_editor.gd" id="18_ie2ek"]
+[ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
 
 [sub_resource type="Curve2D" id="Curve2D_acccc"]
 _data = {
@@ -23,8 +24,6 @@ point_count = 4
 script = ExtResource("1_pmpl2")
 
 [node name="Notes" type="Node" parent="."]
-
-[node name="Note" parent="Notes" instance=ExtResource("2_02223")]
 
 [node name="Path2D" type="Path2D" parent="Notes"]
 visible = false
@@ -252,7 +251,7 @@ offset_bottom = 77.0
 text = "New move event"
 script = ExtResource("17_8s8e5")
 
-[node name="CurveEditor" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("path_point_container", "new_path_point_button")]
+[node name="CurveEditor" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("path_point_container", "new_path_point_button", "front_label")]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -268,6 +267,16 @@ color = Color(1, 0.87451, 1, 0.0980392)
 script = ExtResource("18_ie2ek")
 path_point_container = NodePath("ScrollContainer/HBoxContainer")
 new_path_point_button = NodePath("NewPathPoint")
+front_label = NodePath("FrontLabel")
+
+[node name="FrontLabel" parent="CanvasLayer/Control/CurveEditor" instance=ExtResource("13_mpxto")]
+layout_mode = 2
+offset_left = 138.0
+offset_top = 48.0
+offset_right = 284.0
+offset_bottom = 71.0
+text = "No events selected"
+script = ExtResource("14_8fyyp")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/CurveEditor"]
 layout_mode = 1
@@ -284,10 +293,14 @@ size_flags_vertical = 3
 
 [node name="NewPathPoint" type="Button" parent="CanvasLayer/Control/CurveEditor"]
 layout_mode = 1
-offset_left = 11.0
-offset_top = 12.0
-offset_right = 95.0
-offset_bottom = 43.0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 24.0
+offset_top = -15.5
+offset_right = 108.0
+offset_bottom = 15.5
+grow_vertical = 2
 text = "Add point"
 
 [connection signal="drag_ended" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_ended"]

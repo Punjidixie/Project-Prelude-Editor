@@ -15,6 +15,7 @@ func _ready():
 	get_tree().get_root().size_changed.connect(on_viewport_size_changed)
 	connect_start_checkpoint()
 	connect_destination_checkpoint()
+	redraw_curve()
 
 # get the current note's play position from local time
 func get_notebody_play_position(local_time: float):
@@ -44,6 +45,16 @@ func move_by(delta_position: Vector2) -> void:
 	
 	for path_point: PathPoint in path_points.get_children():
 		path_point.update()
+
+# Called from the info box
+func delete():
+	queue_free()
+	
+	# queue_free haven't taken effect yet.
+	# Do this so the note works properly when receiving the signal.
+	get_parent().remove_child(self)
+	
+	on_event_updated.emit(self)
 
 func on_viewport_size_changed():
 	redraw_curve()
@@ -113,7 +124,7 @@ func remove_curve_point(index: int):
 	redraw_curve()
 	
 	# Respawn all path points + re-initialize the curve editor
-	# Because the indices of the old path points will be messed up
+	# because the indices of the old path points will be messed up.
 	spawn_path_points()
 	SignalManager.on_move_event_selected.emit(self)
 	

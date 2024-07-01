@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://j472kswpfgqg"]
+
+[node name="CurveEditorFrontLabel" type="Label"]
+text = "The path is a straight line."

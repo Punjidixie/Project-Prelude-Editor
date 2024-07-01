@@ -13,7 +13,7 @@ x_input_box = NodePath("x_input")
 y_input_box = NodePath("y_input")
 x_control_input_box = NodePath("x_control_input")
 y_control_input_box = NodePath("y_control_input")
-remove_button = NodePath("RemoveButton")
+remove_button = NodePath("DeleteButton")
 
 [node name="Button" type="Button" parent="."]
 modulate = Color(0.486275, 1, 1, 0.721569)
@@ -116,7 +116,7 @@ offset_top = 70.0
 offset_right = 184.062
 offset_bottom = 101.0
 
-[node name="RemoveButton" type="Button" parent="."]
+[node name="DeleteButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

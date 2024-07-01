@@ -20,6 +20,7 @@ func _ready():
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
 	
 	initialize_connections()
+	update()
 	
 func initialize_connections():
 	for checkpoint in get_note_checkpoints():
@@ -77,6 +78,11 @@ func move_all(amount: Vector2):
 # Called from the add checkpoint button. Provide a place for the checkpoint to rent.
 func add_temporary_checkpoint(checkpoint: NoteCheckpoint):
 	connect_checkpoint(checkpoint)
+	
+	# Set the checkpoint time to sandwich between the last and second last.
+	var checkpoints = get_note_checkpoints()
+	checkpoint.target_time = (checkpoints[checkpoints.size() - 2].target_time + checkpoints[checkpoints.size() - 1].target_time) / 2
+	
 	checkpoints_container.add_child(checkpoint)
 	checkpoint.go_creation_mode() # Can now go creation mode, as _ready() has been called over there.
 
@@ -92,8 +98,12 @@ func add_checkpoint(checkpoint: NoteCheckpoint):
 
 func add_move_event(event: MoveEvent):
 	connect_event(event)
+	
+	# Set the eventtime to sandwich between the last and second last.
+	var events = get_note_events()
+	event.start_time = (events[events.size() - 2].start_time + events[events.size() - 1].start_time) / 2
+	
 	note_events_container.add_child(event)
-	event.redraw_curve()
 	
 	# Add info box
 	var new_info_box = event.get_and_initialize_info_box()
