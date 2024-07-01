@@ -29,7 +29,8 @@ func populate_ui(_move_event: MoveEvent):
 	
 	
 func on_new_path_point_button_pressed():
-	move_event.add_curve_point()
+	if is_instance_valid(move_event):
+		move_event.add_curve_point()
 
 # Will eventually be called after the function above.
 func add_path_point_info_box(info_box: PathPointInfoBox):
