@@ -30,8 +30,9 @@ func on_pause_button_pressed():
 	GlobalManager.is_paused = !GlobalManager.is_paused
 
 func spawn_notes():
-	var note : Note = ScenePreloader.note.instantiate()
-	notes.add_child(note)
+	for i in range(2):
+		var note : Note = ScenePreloader.note.instantiate()
+		notes.add_child(note)
 
 	
 	

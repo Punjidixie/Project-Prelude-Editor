@@ -59,27 +59,21 @@ func delete():
 func on_viewport_size_changed():
 	redraw_curve()
 
-### CHANGE CHECKPOINTS ### Called from the UI
+### CHANGE (SET) CHECKPOINTS ### Called from the UI
+# TODO merge set and remove
 func change_start_checkpoint(checkpoint: NoteCheckpoint):
 	disconnect_start_checkpoint()
 	start_checkpoint = checkpoint
-	connect_start_checkpoint()
-	on_start_checkpoint_updated()
+	if is_instance_valid(checkpoint):
+		connect_start_checkpoint()
+		on_start_checkpoint_updated()
 
 func change_destination_checkpoint(checkpoint: NoteCheckpoint):
 	disconnect_destination_checkpoint()
 	destination_checkpoint = checkpoint
-	connect_destination_checkpoint()
-	on_destination_checkpoint_updated()
-
-### REMOVE CHECKPOINTS ### Called from the UI
-func remove_start_checkpoint():
-	disconnect_start_checkpoint()
-	start_checkpoint = null
-
-func remove_destination_checkpoint():
-	disconnect_destination_checkpoint()
-	destination_checkpoint = null
+	if is_instance_valid(checkpoint):
+		connect_destination_checkpoint()
+		on_destination_checkpoint_updated()
 
 ### CHECKPOINTS UPDATED ###
 func on_destination_checkpoint_updated():
@@ -100,11 +94,11 @@ func on_checkpoints_renamed():
 
 ### CHECKPOINTS DELETED ###
 func on_start_checkpoint_deleted(_c):
-	remove_start_checkpoint()
+	change_start_checkpoint(null)
 	on_event_ui_needs_update.emit()
 
 func on_destination_checkpoint_deleted(_c):
-	remove_destination_checkpoint()
+	change_destination_checkpoint(null)
 	on_event_ui_needs_update.emit()
 
 ### PATH POINTS UPDATED ###

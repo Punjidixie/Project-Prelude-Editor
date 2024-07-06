@@ -57,14 +57,14 @@ func populate_destination_dropdown():
 	
 func on_start_dropdown_selected(index: int):
 	var move_event := event as MoveEvent
-	if index == 0: move_event.remove_start_checkpoint()
+	if index == 0: move_event.change_start_checkpoint(null)
 	else: 
 		var checkpoints: Array = event.note.get_note_checkpoints()
 		move_event.change_start_checkpoint(checkpoints[index - 1])
 
 func on_destination_dropdown_selected(index: int):
 	var move_event := event as MoveEvent
-	if index == 0: move_event.remove_destination_checkpoint()
+	if index == 0: move_event.change_destination_checkpoint(null)
 	else: 
 		var checkpoints: Array = event.note.get_note_checkpoints()
 		move_event.change_destination_checkpoint(checkpoints[index - 1])
