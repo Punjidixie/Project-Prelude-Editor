@@ -60,7 +60,6 @@ func on_viewport_size_changed():
 	redraw_curve()
 
 ### CHANGE (SET) CHECKPOINTS ### Called from the UI
-# TODO merge set and remove
 func change_start_checkpoint(checkpoint: NoteCheckpoint):
 	disconnect_start_checkpoint()
 	start_checkpoint = checkpoint

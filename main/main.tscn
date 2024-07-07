@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=17 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
+[ext_resource type="Script" path="res://ui/grid/grid_drawer.gd" id="2_fs1ln"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="9_hav3n"]
 [ext_resource type="Script" path="res://ui/top_info_box.gd" id="10_0fada"]
 [ext_resource type="Script" path="res://ui/pause_button.gd" id="10_64sur"]
@@ -10,6 +11,7 @@
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor_front_label.gd" id="14_8fyyp"]
 [ext_resource type="Script" path="res://ui/ui_controller.gd" id="14_bthse"]
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
+[ext_resource type="Script" path="res://ui/grid/grid_controller.gd" id="15_vy3by"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
 [ext_resource type="Script" path="res://main/add_move_event_checkpoint.gd" id="17_8s8e5"]
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
@@ -20,8 +22,21 @@ _data = {
 }
 point_count = 4
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("notes", "play_area")]
 script = ExtResource("1_pmpl2")
+notes = NodePath("Notes")
+play_area = NodePath("CanvasLayer/Control/MainEditor/PlayArea")
+
+[node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines")]
+script = ExtResource("2_fs1ln")
+horizontal_line_color = Color(1, 1, 1, 0.584314)
+horizontal_line_width = 1.0
+horizontal_lines = NodePath("HorizontalLines")
+vertical_lines = NodePath("VerticalLines")
+
+[node name="HorizontalLines" type="Node" parent="GridDrawer"]
+
+[node name="VerticalLines" type="Node" parent="GridDrawer"]
 
 [node name="Notes" type="Node" parent="."]
 
@@ -168,27 +183,7 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/Events"]
 layout_mode = 2
 
-[node name="TimeText" type="RichTextLabel" parent="CanvasLayer/Control"]
-layout_mode = 1
-offset_left = 13.0
-offset_top = 84.0
-offset_right = 157.0
-offset_bottom = 124.0
-text = "0"
-script = ExtResource("10_u0ths")
-
-[node name="TimeSlider" type="HSlider" parent="CanvasLayer/Control"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 51.0
-offset_top = 130.0
-offset_right = -309.0
-offset_bottom = 146.0
-grow_horizontal = 2
-script = ExtResource("2_0fta8")
-
-[node name="Control" type="Control" parent="CanvasLayer/Control"]
+[node name="MainEditor" type="Control" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -198,7 +193,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control/Control"]
+[node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0181564
@@ -215,7 +210,7 @@ mouse_filter = 2
 color = Color(1, 1, 1, 0.109804)
 metadata/_edit_use_anchors_ = true
 
-[node name="PauseButton" type="Button" parent="CanvasLayer/Control"]
+[node name="PauseButton" type="Button" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
 offset_left = 5.0
 offset_top = 117.0
@@ -224,7 +219,7 @@ offset_bottom = 153.0
 text = ">"
 script = ExtResource("10_64sur")
 
-[node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control"]
+[node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
 offset_left = 80.0
 offset_top = 90.0
@@ -233,7 +228,7 @@ offset_bottom = 121.0
 text = "Move all"
 script = ExtResource("15_3rhpp")
 
-[node name="NewCheckpoint" type="Button" parent="CanvasLayer/Control"]
+[node name="NewCheckpoint" type="Button" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
 offset_left = 6.0
 offset_top = 5.0
@@ -242,7 +237,7 @@ offset_bottom = 36.0
 text = "New checkpoint"
 script = ExtResource("16_ccpcj")
 
-[node name="NewMoveEvent" type="Button" parent="CanvasLayer/Control"]
+[node name="NewMoveEvent" type="Button" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
 offset_left = 5.0
 offset_top = 46.0
@@ -250,6 +245,26 @@ offset_right = 143.0
 offset_bottom = 77.0
 text = "New move event"
 script = ExtResource("17_8s8e5")
+
+[node name="TimeText" type="RichTextLabel" parent="CanvasLayer/Control/MainEditor"]
+layout_mode = 1
+offset_left = 13.0
+offset_top = 84.0
+offset_right = 157.0
+offset_bottom = 124.0
+text = "0"
+script = ExtResource("10_u0ths")
+
+[node name="TimeSlider" type="HSlider" parent="CanvasLayer/Control/MainEditor"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 51.0
+offset_top = 130.0
+offset_right = -309.0
+offset_bottom = 146.0
+grow_horizontal = 2
+script = ExtResource("2_0fta8")
 
 [node name="CurveEditor" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("path_point_container", "new_path_point_button", "front_label")]
 layout_mode = 1
@@ -303,8 +318,158 @@ offset_bottom = 15.5
 grow_vertical = 2
 text = "Add point"
 
-[connection signal="drag_ended" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_ended"]
-[connection signal="drag_started" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_drag_started"]
-[connection signal="value_changed" from="CanvasLayer/Control/TimeSlider" to="CanvasLayer/Control/TimeSlider" method="_on_value_changed"]
-[connection signal="pressed" from="CanvasLayer/Control/PauseButton" to="CanvasLayer/Control/PauseButton" method="_on_pressed"]
-[connection signal="toggled" from="CanvasLayer/Control/CheckButton" to="CanvasLayer/Control/CheckButton" method="_on_toggled"]
+[node name="GridController" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("speed_input_box", "bpm_input_box", "subdivisions_input_box", "horizontal_divisions_input_box", "vertical_divisions_input_box")]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 0
+offset_left = 495.0
+offset_top = 2.0
+offset_right = 991.0
+offset_bottom = 127.0
+color = Color(0.419608, 0.419608, 0.419608, 0.67451)
+script = ExtResource("15_vy3by")
+speed_input_box = NodePath("HorizontalDynamic/SpeedInputBox")
+bpm_input_box = NodePath("HorizontalDynamic/BpmInputBox")
+subdivisions_input_box = NodePath("HorizontalDynamic/SubdivisionsInputBox")
+horizontal_divisions_input_box = NodePath("HorizontalStatic/DivisionsInputBox")
+vertical_divisions_input_box = NodePath("Vertical/DivisionsInputBox")
+
+[node name="HorizontalDynamic" type="Control" parent="CanvasLayer/Control/GridController"]
+anchors_preset = 0
+offset_right = 225.0
+offset_bottom = 124.0
+
+[node name="Title" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 119.0
+offset_top = 85.0
+offset_right = 112.0
+offset_bottom = 108.0
+grow_horizontal = 2
+text = "Grid"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubdivisionLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+offset_left = 15.0
+offset_top = 95.0
+offset_right = 100.0
+offset_bottom = 118.0
+text = "Subdivisions"
+label_settings = ExtResource("9_hav3n")
+vertical_alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+offset_left = 19.0
+offset_top = 26.0
+offset_right = 87.0
+offset_bottom = 49.0
+text = "Speed"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BpmLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+offset_left = 18.0
+offset_top = 61.0
+offset_right = 86.0
+offset_bottom = 84.0
+text = "BPM"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpeedInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+offset_left = 120.0
+offset_top = 23.0
+offset_right = 207.0
+offset_bottom = 54.0
+
+[node name="BpmInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+offset_left = 120.0
+offset_top = 57.0
+offset_right = 207.0
+offset_bottom = 88.0
+
+[node name="SubdivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+offset_left = 120.0
+offset_top = 91.0
+offset_right = 207.0
+offset_bottom = 122.0
+
+[node name="HorizontalStatic" type="Control" parent="CanvasLayer/Control/GridController"]
+visible = false
+anchors_preset = 0
+offset_right = 225.0
+offset_bottom = 109.0
+
+[node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalStatic"]
+offset_left = 79.0
+offset_top = 61.0
+offset_right = 166.0
+offset_bottom = 92.0
+
+[node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalStatic"]
+offset_left = 80.0
+offset_top = 36.0
+offset_right = 165.0
+offset_bottom = 59.0
+text = "Divisions"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Vertical" type="Control" parent="CanvasLayer/Control/GridController"]
+anchors_preset = 0
+offset_left = 191.0
+offset_top = 1.0
+offset_right = 417.0
+offset_bottom = 110.0
+
+[node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/Vertical"]
+offset_left = 37.0
+offset_top = 60.0
+offset_right = 124.0
+offset_bottom = 91.0
+
+[node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/GridController/Vertical"]
+offset_left = 37.0
+offset_top = 34.0
+offset_right = 122.0
+offset_bottom = 57.0
+text = "Divisions"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control/GridController"]
+layout_mode = 0
+offset_left = 404.0
+offset_top = 49.0
+offset_right = 448.0
+offset_bottom = 73.0
+rotation = 1.5708
+
+[node name="HorizontalLabel" type="Label" parent="CanvasLayer/Control/GridController"]
+layout_mode = 0
+offset_left = 83.0
+offset_top = -1.0
+offset_right = 164.0
+offset_bottom = 22.0
+text = "Horizontal"
+
+[node name="VerticalLabel" type="Label" parent="CanvasLayer/Control/GridController"]
+offset_left = 228.0
+offset_right = 309.0
+offset_bottom = 23.0
+text = "Vertical"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
+[connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]
+[connection signal="drag_ended" from="CanvasLayer/Control/MainEditor/TimeSlider" to="CanvasLayer/Control/MainEditor/TimeSlider" method="_on_drag_ended"]
+[connection signal="drag_started" from="CanvasLayer/Control/MainEditor/TimeSlider" to="CanvasLayer/Control/MainEditor/TimeSlider" method="_on_drag_started"]
+[connection signal="value_changed" from="CanvasLayer/Control/MainEditor/TimeSlider" to="CanvasLayer/Control/MainEditor/TimeSlider" method="_on_value_changed"]

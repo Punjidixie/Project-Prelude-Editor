@@ -1,7 +1,7 @@
 extends Node
 
-@onready var notes = $Notes
-@onready var play_area = $CanvasLayer/Control/Control/PlayArea
+@export var notes: Node
+@export var play_area: Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,6 +11,8 @@ func _ready():
 	SignalManager.on_pause_button_pressed.connect(on_pause_button_pressed)
 
 	spawn_notes()
+	SignalManager.on_time_auto_updated.emit()
+	get_tree().get_root().size_changed.emit()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -30,7 +32,7 @@ func on_pause_button_pressed():
 	GlobalManager.is_paused = !GlobalManager.is_paused
 
 func spawn_notes():
-	for i in range(2):
+	for i in range(1):
 		var note : Note = ScenePreloader.note.instantiate()
 		notes.add_child(note)
 

@@ -67,7 +67,7 @@ func on_checkpoint_clicked():
 		SignalManager.on_note_selected.emit(self) # Tell the UI manager to spawn UIs
 		GlobalManager.selected_note = self
 
-# Called from a checkpoint when it moves
+# Called from a checkpoint when it moves. Amount = delta play position
 func move_all(amount: Vector2):
 	var checkpoints = get_note_checkpoints()
 	var events = get_note_events()
@@ -124,7 +124,6 @@ func name_all_checkpoints():
 func get_event_at_time(time: float):
 	var local_time = time - start_time
 	var note_events = get_note_events()
-	var selected_event : NoteEvent
 	for i in range(note_events.size() -1, -1, -1):
 		if local_time > note_events[i].start_time:
 			return note_events[i]

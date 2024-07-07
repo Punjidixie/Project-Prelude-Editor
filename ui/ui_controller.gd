@@ -6,7 +6,7 @@ extends Node
 @export var time_input_box : LineEdit
 
 
-func _process(delta):
+func _ready():
 	SignalManager.on_note_selected.connect(populate_note_ui)
 	SignalManager.on_checkpoint_info_boxes_need_reordering.connect(reorder_checkpoint_info_boxes)
 	SignalManager.on_event_info_boxes_need_reordering.connect(reorder_event_info_boxes)
