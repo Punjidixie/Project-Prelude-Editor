@@ -3,88 +3,72 @@ extends Node
 @export var horizontal_line_color: Color
 @export var horizontal_line_width: float
 
+@export var vertical_line_color: Color
+@export var vertical_line_width: float
+
+@export var border_line_color: Color
+@export var border_line_width: float
+
 @export var horizontal_lines: Node
 @export var vertical_lines: Node
+@export var border_lines: Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	SignalManager.on_time_auto_updated.connect(update_horizontal)
-	SignalManager.on_time_manual_updated.connect(update_horizontal)
+	SignalManager.on_time_auto_updated.connect(on_time_updated)
+	SignalManager.on_time_manual_updated.connect(on_time_updated)
 	SignalManager.on_grid_drawer_needs_update.connect(update)
 	get_tree().get_root().size_changed.connect(update)
 
 func update():
 	update_horizontal()
 	update_vertical()
+	update_border()
+	
+func on_time_updated():
+	if GlobalManager.is_static_grid == false:
+		update_horizontal()
+
+func update_border():
+	GodotUtils.delete_all_children(border_lines)
+	# Left border
+	var left_line = GodotUtils.create_line(Vector2(GridUtils.get_lower_left_border().x, GridUtils.get_lower_left_border().y), Vector2(GridUtils.get_lower_left_border().x, GridUtils.get_upper_right_border().y), border_line_width, border_line_color)
+	# Right border
+	var right_line = GodotUtils.create_line(Vector2(GridUtils.get_upper_right_border().x, GridUtils.get_lower_left_border().y), Vector2(GridUtils.get_upper_right_border().x, GridUtils.get_upper_right_border().y), border_line_width, border_line_color)
+	# Top border
+	var top_line = GodotUtils.create_line(Vector2(GridUtils.get_lower_left_border().x, GridUtils.get_upper_right_border().y), Vector2(GridUtils.get_upper_right_border().x, GridUtils.get_upper_right_border().y), border_line_width, border_line_color)
+	# Bottom border
+	var bottom_line = GodotUtils.create_line(Vector2(GridUtils.get_lower_left_border().x, GridUtils.get_lower_left_border().y), Vector2(GridUtils.get_upper_right_border().x, GridUtils.get_lower_left_border().y), border_line_width, border_line_color)
+	for line in [left_line, right_line, top_line, bottom_line]: border_lines.add_child(line)
+	
+	
+func update_vertical():
+	GodotUtils.delete_all_children(vertical_lines)
+	var gap_per_line = PlayAreaUtils.scale_factor / float(GlobalManager.vertical_divisions)
+	var num_lines_right: int = (GridUtils.get_upper_right_border().x) / gap_per_line
+	var num_lines_left: int = (-GridUtils.get_lower_left_border().x) / gap_per_line
+	for i in range(-num_lines_left, num_lines_right + 1):
+		var line_x: float = i * gap_per_line
+		var line = GodotUtils.create_line(Vector2(line_x, GridUtils.get_lower_left_border().y), Vector2(line_x, GridUtils.get_upper_right_border().y), horizontal_line_width, horizontal_line_color)
+		vertical_lines.add_child(line)
+
 
 func update_horizontal():
-	if GlobalManager.is_static_grid:
-		update_horizontal_static()
+	GodotUtils.delete_all_children(horizontal_lines)
+	
+	var gap_per_line: float
+	var origin_y: float
+	
+	if GlobalManager.is_static_grid == false:
+		gap_per_line = GridUtils.get_units_per_beat() / GlobalManager.subdivisions
+		origin_y = GridUtils.get_next_beat_y_position()
 	else:
-		update_horizontal_dynamic()
-	
-func update_horizontal_dynamic():
-	GodotUtils.delete_all_children(vertical_lines)
-	var next_beat_y_position = GridUtils.get_next_beat_y_position()
-	var gap = GridUtils.get_units_per_beat()
-	var i = 0 # For the ith line
-	while true:
-		var line_y = next_beat_y_position + gap * i
-		if line_y > 100: break
-		
-		# Create a new line
-		var l = Line2D.new()
-		vertical_lines.add_child(l)
-		l.width = horizontal_line_width
-		l.default_color = horizontal_line_color
-		l.add_point(PlayAreaUtils.get_world_position(Vector2(0, line_y)))
-		l.add_point(PlayAreaUtils.get_world_position(Vector2(100, line_y)))
-		
-		i += 1
+		gap_per_line = PlayAreaUtils.scale_factor / float(GlobalManager.horizontal_divisions)
+		origin_y = 0
 
-func update_horizontal_static():
-	GodotUtils.delete_all_children(horizontal_lines)
-	var i = 0
-	while true:
-
-		var line_y: float = 100 * (float(i) / float(GlobalManager.horizontal_divisions))
-		if line_y > 100: break
-
-		# Create a new line
-		var l = Line2D.new()
-		horizontal_lines.add_child(l)
-		l.width = horizontal_line_width
-		l.default_color = horizontal_line_color
-
-		l.add_point(PlayAreaUtils.get_world_position(Vector2(0, line_y)))
-		l.add_point(PlayAreaUtils.get_world_position(Vector2(100, line_y)))
-		
-		i += 1
-
-func update_vertical():
-	GodotUtils.delete_all_children(horizontal_lines)
-	var i = 0
-	while true:
-
-		var line_x: float = 100 * (float(i) / float(GlobalManager.vertical_divisions))
-		if line_x > 100: break
-
-		# Create a new line
-		var l = Line2D.new()
-		horizontal_lines.add_child(l)
-		l.width = horizontal_line_width
-		l.default_color = horizontal_line_color
-
-		l.add_point(PlayAreaUtils.get_world_position(Vector2(line_x, 0)))
-		l.add_point(PlayAreaUtils.get_world_position(Vector2(line_x, 100)))
-		
-		i += 1
-		
-func get_time_from_beat(beat: float):
-	# beat * (seconds per beat)
-	return beat / (GlobalManager.bpm / 60) + GlobalManager.time_offset
-
-func get_beat_from_time(time: float):
-	# time * (beats per sec)
-	return (time - GlobalManager.time_offset) * (GlobalManager.bpm / 60)
-	
+	var num_lines_up: int = (GridUtils.get_upper_right_border().y - origin_y) / gap_per_line
+	var num_lines_down: int = (origin_y - GridUtils.get_lower_left_border().y) / gap_per_line
+	for i in range(-num_lines_down, num_lines_up + 1):
+		var line_y: float = origin_y + i * gap_per_line
+		var line = GodotUtils.create_line(Vector2(GridUtils.get_lower_left_border().x, line_y), Vector2(GridUtils.get_upper_right_border().x, line_y), vertical_line_width, vertical_line_color)
+		horizontal_lines.add_child(line)

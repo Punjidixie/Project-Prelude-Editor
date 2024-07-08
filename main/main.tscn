@@ -27,16 +27,23 @@ script = ExtResource("1_pmpl2")
 notes = NodePath("Notes")
 play_area = NodePath("CanvasLayer/Control/MainEditor/PlayArea")
 
-[node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines")]
+[node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines", "border_lines")]
 script = ExtResource("2_fs1ln")
-horizontal_line_color = Color(1, 1, 1, 0.584314)
+horizontal_line_color = Color(1, 0.815686, 1, 0.584314)
 horizontal_line_width = 1.0
+vertical_line_color = Color(0.886275, 0.792157, 0.0392157, 0.694118)
+vertical_line_width = 1.0
+border_line_color = Color(0.928453, 0.371759, 3.85046e-07, 1)
+border_line_width = 2.0
 horizontal_lines = NodePath("HorizontalLines")
 vertical_lines = NodePath("VerticalLines")
+border_lines = NodePath("BorderLines")
 
 [node name="HorizontalLines" type="Node" parent="GridDrawer"]
 
 [node name="VerticalLines" type="Node" parent="GridDrawer"]
+
+[node name="BorderLines" type="Node" parent="GridDrawer"]
 
 [node name="Notes" type="Node" parent="."]
 
@@ -196,10 +203,10 @@ mouse_filter = 2
 [node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0181564
-anchor_top = 0.194286
-anchor_right = 1.00279
-anchor_bottom = 0.752857
+anchor_left = 0.102823
+anchor_top = 0.2375
+anchor_right = 0.903226
+anchor_bottom = 0.73625
 offset_left = 50.0
 offset_top = 33.0
 offset_right = -41.0
@@ -353,6 +360,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SubdivisionLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 15.0
 offset_top = 95.0
 offset_right = 100.0
@@ -362,6 +370,7 @@ label_settings = ExtResource("9_hav3n")
 vertical_alignment = 1
 
 [node name="SpeedLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 19.0
 offset_top = 26.0
 offset_right = 87.0
@@ -372,6 +381,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BpmLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 18.0
 offset_top = 61.0
 offset_right = 86.0
@@ -382,18 +392,21 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SpeedInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 120.0
 offset_top = 23.0
 offset_right = 207.0
 offset_bottom = 54.0
 
 [node name="BpmInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 120.0
 offset_top = 57.0
 offset_right = 207.0
 offset_bottom = 88.0
 
 [node name="SubdivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 120.0
 offset_top = 91.0
 offset_right = 207.0
@@ -406,12 +419,14 @@ offset_right = 225.0
 offset_bottom = 109.0
 
 [node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalStatic"]
+layout_mode = 0
 offset_left = 79.0
 offset_top = 61.0
 offset_right = 166.0
 offset_bottom = 92.0
 
 [node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalStatic"]
+layout_mode = 0
 offset_left = 80.0
 offset_top = 36.0
 offset_right = 165.0
@@ -429,12 +444,14 @@ offset_right = 417.0
 offset_bottom = 110.0
 
 [node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/Vertical"]
+layout_mode = 0
 offset_left = 37.0
 offset_top = 60.0
 offset_right = 124.0
 offset_bottom = 91.0
 
 [node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/GridController/Vertical"]
+layout_mode = 0
 offset_left = 37.0
 offset_top = 34.0
 offset_right = 122.0
@@ -461,6 +478,7 @@ offset_bottom = 22.0
 text = "Horizontal"
 
 [node name="VerticalLabel" type="Label" parent="CanvasLayer/Control/GridController"]
+layout_mode = 0
 offset_left = 228.0
 offset_right = 309.0
 offset_bottom = 23.0

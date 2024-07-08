@@ -16,6 +16,8 @@ var subdivisions: int = 1
 var horizontal_divisions: int = 1
 var vertical_divisions: int = 12
 var is_static_grid: bool = false
+var snap_vertical: bool = true
+var snap_horizontal: bool = true
 
 var time_offset: float = 0 # The time the first beat / chart starts
 
