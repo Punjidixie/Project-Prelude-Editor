@@ -3,6 +3,9 @@ extends Node
 @export var horizontal_line_color: Color
 @export var horizontal_line_width: float
 
+@export var subdivision_line_color: Color
+@export var subdivision_line_width: float
+
 @export var vertical_line_color: Color
 @export var vertical_line_width: float
 
@@ -49,7 +52,7 @@ func update_vertical():
 	var num_lines_left: int = (-GridUtils.get_lower_left_border().x) / gap_per_line
 	for i in range(-num_lines_left, num_lines_right + 1):
 		var line_x: float = i * gap_per_line
-		var line = GodotUtils.create_line(Vector2(line_x, GridUtils.get_lower_left_border().y), Vector2(line_x, GridUtils.get_upper_right_border().y), horizontal_line_width, horizontal_line_color)
+		var line = GodotUtils.create_line(Vector2(line_x, GridUtils.get_lower_left_border().y), Vector2(line_x, GridUtils.get_upper_right_border().y), vertical_line_width, vertical_line_color)
 		vertical_lines.add_child(line)
 
 
@@ -69,6 +72,13 @@ func update_horizontal():
 	var num_lines_up: int = (GridUtils.get_upper_right_border().y - origin_y) / gap_per_line
 	var num_lines_down: int = (origin_y - GridUtils.get_lower_left_border().y) / gap_per_line
 	for i in range(-num_lines_down, num_lines_up + 1):
+		# Check if the line is a main beat or a subdivision
+		var color: Color = horizontal_line_color
+		var width: float = horizontal_line_width
+		if i % GlobalManager.subdivisions != 0 and GlobalManager.is_static_grid == false:
+			color = subdivision_line_color
+			width = subdivision_line_width
+		
 		var line_y: float = origin_y + i * gap_per_line
-		var line = GodotUtils.create_line(Vector2(GridUtils.get_lower_left_border().x, line_y), Vector2(GridUtils.get_upper_right_border().x, line_y), vertical_line_width, vertical_line_color)
+		var line = GodotUtils.create_line(Vector2(GridUtils.get_lower_left_border().x, line_y), Vector2(GridUtils.get_upper_right_border().x, line_y), width, color)
 		horizontal_lines.add_child(line)

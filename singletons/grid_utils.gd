@@ -67,11 +67,16 @@ func get_snapped_position(world_position: Vector2):
 	return PlayAreaUtils.get_world_position(closest)
 
 # If the original position is somehow closer to the border than the grid, snap to the border instead.
-func get_border_snapped_position(grid_position: Vector2, original_position: Vector2):
-	var output = original_position
-
-	var closest_y = GodotUtils.get_closest_number([get_upper_right_border().y, get_lower_left_border().y, grid_position.y], original_position.y)
-	var closest_x = GodotUtils.get_closest_number([get_upper_right_border().x, get_lower_left_border().x, grid_position.x], original_position.x)
+func get_border_snapped_position(grid_play_position: Vector2, original_play_position: Vector2):
+	var closest_y = GodotUtils.get_closest_number([get_upper_right_border().y, get_lower_left_border().y, grid_play_position.y], original_play_position.y)
+	var closest_x = GodotUtils.get_closest_number([get_upper_right_border().x, get_lower_left_border().x, grid_play_position.x], original_play_position.x)
 	
 	return Vector2(closest_x, closest_y)
+
+func get_border_clamped_position(world_position: Vector2) -> Vector2:
+	print("HI")
+	var play_position = PlayAreaUtils.get_play_position(world_position)
+	var x_val = clampf(play_position.x, get_lower_left_border().x, get_upper_right_border().x)
+	var y_val = clampf(play_position.y, get_lower_left_border().y, get_upper_right_border().y)
+	return PlayAreaUtils.get_world_position(Vector2(x_val, y_val))
 	

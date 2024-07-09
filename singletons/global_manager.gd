@@ -11,9 +11,9 @@ var selected_note : Note
 var move_all : bool = false
 
 var bpm: float = 120 # Beats per minute
-var scroll_speed: float = 30 # Play units per second
-var subdivisions: int = 1
-var horizontal_divisions: int = 1
+var scroll_speed: float = 60 # Play units per second
+var subdivisions: int = 2
+var horizontal_divisions: int = 4
 var vertical_divisions: int = 12
 var is_static_grid: bool = false
 var snap_vertical: bool = true

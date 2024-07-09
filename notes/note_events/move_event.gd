@@ -51,7 +51,7 @@ func delete():
 	queue_free()
 	
 	# queue_free haven't taken effect yet.
-	# Do this so the note works properly when receiving the signal.
+	# Do this so the note works as if this event is gone when receiving the signal.
 	get_parent().remove_child(self)
 	
 	on_event_updated.emit(self)

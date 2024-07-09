@@ -36,6 +36,8 @@ func _process(delta):
 		
 		if ignore_snap == false:
 			new_global_position = GridUtils.get_snapped_position(new_global_position)
+		
+		new_global_position = GridUtils.get_border_clamped_position(new_global_position)
 			
 		amount_moved = new_global_position - parent_global_position
 		on_dragged.emit(amount_moved)

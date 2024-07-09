@@ -29,10 +29,12 @@ play_area = NodePath("CanvasLayer/Control/MainEditor/PlayArea")
 
 [node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines", "border_lines")]
 script = ExtResource("2_fs1ln")
-horizontal_line_color = Color(1, 0.815686, 1, 0.584314)
-horizontal_line_width = 1.0
-vertical_line_color = Color(0.886275, 0.792157, 0.0392157, 0.694118)
-vertical_line_width = 1.0
+horizontal_line_color = Color(1, 0.815686, 1, 0.388235)
+horizontal_line_width = 2.0
+subdivision_line_color = Color(1, 0.858824, 0.74902, 0.345098)
+subdivision_line_width = 1.0
+vertical_line_color = Color(0.886275, 0.792157, 0.0392157, 0.270588)
+vertical_line_width = 2.0
 border_line_color = Color(0.928453, 0.371759, 3.85046e-07, 1)
 border_line_width = 2.0
 horizontal_lines = NodePath("HorizontalLines")
@@ -325,7 +327,7 @@ offset_bottom = 15.5
 grow_vertical = 2
 text = "Add point"
 
-[node name="GridController" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("speed_input_box", "bpm_input_box", "subdivisions_input_box", "horizontal_divisions_input_box", "vertical_divisions_input_box")]
+[node name="GridController" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("speed_input_box", "bpm_input_box", "subdivisions_input_box", "horizontal_divisions_input_box", "vertical_divisions_input_box", "horizontal_dynamic_ui", "horizontal_static_ui", "is_static_toggle_button")]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 0
 offset_left = 495.0
@@ -339,6 +341,9 @@ bpm_input_box = NodePath("HorizontalDynamic/BpmInputBox")
 subdivisions_input_box = NodePath("HorizontalDynamic/SubdivisionsInputBox")
 horizontal_divisions_input_box = NodePath("HorizontalStatic/DivisionsInputBox")
 vertical_divisions_input_box = NodePath("Vertical/DivisionsInputBox")
+horizontal_dynamic_ui = NodePath("HorizontalDynamic")
+horizontal_static_ui = NodePath("HorizontalStatic")
+is_static_toggle_button = NodePath("CheckButton")
 
 [node name="HorizontalDynamic" type="Control" parent="CanvasLayer/Control/GridController"]
 anchors_preset = 0
@@ -483,6 +488,26 @@ offset_left = 228.0
 offset_right = 309.0
 offset_bottom = 23.0
 text = "Vertical"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaticLabel" type="Label" parent="CanvasLayer/Control/GridController"]
+offset_left = 351.0
+offset_top = 33.0
+offset_right = 436.0
+offset_bottom = 56.0
+text = "Static"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaticLabel2" type="Label" parent="CanvasLayer/Control/GridController"]
+offset_left = 350.0
+offset_top = 84.0
+offset_right = 435.0
+offset_bottom = 107.0
+text = "Dynamic"
+label_settings = ExtResource("9_hav3n")
 horizontal_alignment = 1
 vertical_alignment = 1
 
