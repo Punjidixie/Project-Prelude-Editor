@@ -54,3 +54,4 @@ mouse_filter = 1
 script = ExtResource("3_loxqh")
 action_name = "right_click"
 ignore_snap = true
+ignore_border = true

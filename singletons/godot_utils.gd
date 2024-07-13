@@ -35,4 +35,10 @@ func create_line(point_1: Vector2, point_2: Vector2, width: float, color: Color)
 	
 	return l
 
+func is_between(target: float, lower_bound: float, upper_bound: float) -> bool:
+	if target < lower_bound or target > upper_bound:
+		return false
+
+	return true
+
 

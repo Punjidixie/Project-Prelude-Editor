@@ -69,11 +69,15 @@ func on_checkpoint_clicked():
 
 # Called from a checkpoint when it moves. Amount = delta play position
 func move_all(amount: Vector2):
+	move_by(amount)
+	update()
+
+# Amount = delta play position
+func move_by(amount: Vector2):
 	var checkpoints = get_note_checkpoints()
 	var events = get_note_events()
 	for checkpoint: NoteCheckpoint in checkpoints: checkpoint.move_by(amount)
 	for event: NoteEvent in events: event.move_by(amount)
-	update()
 
 # Called from the add checkpoint button. Provide a place for the checkpoint to rent.
 func add_temporary_checkpoint(checkpoint: NoteCheckpoint):
@@ -99,7 +103,7 @@ func add_checkpoint(checkpoint: NoteCheckpoint):
 func add_move_event(event: MoveEvent):
 	connect_event(event)
 	
-	# Set the eventtime to sandwich between the last and second last.
+	# Set the event time to be sandwiched between the last and second last.
 	var events = get_note_events()
 	event.start_time = (events[events.size() - 2].start_time + events[events.size() - 1].start_time) / 2
 	
@@ -109,6 +113,7 @@ func add_move_event(event: MoveEvent):
 	var new_info_box = event.get_and_initialize_info_box()
 	SignalManager.on_new_event_info_box_added.emit(new_info_box)
 	SignalManager.on_event_info_boxes_need_reordering.emit()
+	
 	update()
 
 # Rename all checkpoints
@@ -118,7 +123,41 @@ func name_all_checkpoints():
 		var checkpoint: NoteCheckpoint = checkpoints[i]
 		if checkpoint.checkpoint_name != "Start" and checkpoint.checkpoint_name != "End":
 			checkpoint.rename("Checkpoint %s" % i) # Will emit the info box update signal too
-		
+
+### CREATION ###
+func go_creation_mode():
+	note_body.go_creation_mode()
+
+func go_regular_mode():
+	note_body.go_regular_mode()
+	
+func on_creation_confirmed():
+	go_regular_mode()
+	var checkpoints = get_note_checkpoints()
+
+	var note_distance = checkpoints[0].play_position.y - note_body.play_position.y
+	var time_difference = note_distance / GlobalManager.scroll_speed
+	
+	start_time = GlobalManager.current_time - time_difference
+	print(start_time)
+	on_checkpoint_clicked() # As if the note gets selected
+	end_checkpoint.load_time_from_note(checkpoints[0].play_position.y / GlobalManager.scroll_speed)
+	# update()
+	# No need because the end_checkpoint will sort it out.
+
+func on_creation_cancelled():
+	queue_free()
+
+func on_creation_zone_exited():
+	for checkpoint in get_note_checkpoints(): checkpoint.visible = false
+	for event: NoteEvent in get_note_events(): event.set_visible(false)
+	note_body.visible = false
+
+func on_creation_zone_entered():
+	for checkpoint in get_note_checkpoints(): checkpoint.visible = true
+	for event: NoteEvent in get_note_events(): event.set_visible(true)
+	note_body.visible = true
+
 ### UTILITY FUNCTIONS BELOW ###
 
 func get_event_at_time(time: float):

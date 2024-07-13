@@ -63,20 +63,27 @@ func get_snapped_position(world_position: Vector2):
 	# If we only rely on border limiting, we would have to wait until the position gets snapped somewhere outside the border for the limiting to take place.
 	var closest = get_border_snapped_position(closest_intersection, play_position)
 
-
 	return PlayAreaUtils.get_world_position(closest)
 
+func get_border_clamped_position(world_position: Vector2) -> Vector2:
+	var play_position = PlayAreaUtils.get_play_position(world_position)
+	var x_val = clampf(play_position.x, get_lower_left_border().x, get_upper_right_border().x)
+	var y_val = clampf(play_position.y, get_lower_left_border().y, get_upper_right_border().y)
+	return PlayAreaUtils.get_world_position(Vector2(x_val, y_val))
+	
+func is_in_zone(world_position: Vector2) -> bool:
+	var play_position = PlayAreaUtils.get_play_position(world_position)
+	if !GodotUtils.is_between(play_position.x, get_lower_left_border().x, get_upper_right_border().x):
+		return false
+	elif !GodotUtils.is_between(play_position.y, get_lower_left_border().y, get_upper_right_border().y):
+		return false
+	else:
+		return true
+
+# Private function!
 # If the original position is somehow closer to the border than the grid, snap to the border instead.
 func get_border_snapped_position(grid_play_position: Vector2, original_play_position: Vector2):
 	var closest_y = GodotUtils.get_closest_number([get_upper_right_border().y, get_lower_left_border().y, grid_play_position.y], original_play_position.y)
 	var closest_x = GodotUtils.get_closest_number([get_upper_right_border().x, get_lower_left_border().x, grid_play_position.x], original_play_position.x)
 	
 	return Vector2(closest_x, closest_y)
-
-func get_border_clamped_position(world_position: Vector2) -> Vector2:
-	print("HI")
-	var play_position = PlayAreaUtils.get_play_position(world_position)
-	var x_val = clampf(play_position.x, get_lower_left_border().x, get_upper_right_border().x)
-	var y_val = clampf(play_position.y, get_lower_left_border().y, get_upper_right_border().y)
-	return PlayAreaUtils.get_world_position(Vector2(x_val, y_val))
-	

@@ -9,8 +9,9 @@ func _ready():
 	GlobalManager.play_area = play_area
 	SignalManager.on_time_slider_drag_started.connect(on_time_slider_drag_started)
 	SignalManager.on_pause_button_pressed.connect(on_pause_button_pressed)
+	SignalManager.on_note_added.connect(on_note_added)
 
-	spawn_notes()
+	#spawn_notes()
 	SignalManager.on_time_auto_updated.emit()
 	get_tree().get_root().size_changed.emit()
 	
@@ -19,6 +20,9 @@ func _process(delta):
 	if (GlobalManager.is_paused == false):
 		auto_increment_time(delta)
 	
+func on_note_added(note: Note):
+	notes.add_child(note)
+	note.go_creation_mode()
 	
 func auto_increment_time(delta):
 	var new_time = GlobalManager.current_time + delta

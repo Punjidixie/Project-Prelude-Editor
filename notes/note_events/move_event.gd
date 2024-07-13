@@ -46,6 +46,11 @@ func move_by(delta_position: Vector2) -> void:
 	for path_point: PathPoint in path_points.get_children():
 		path_point.update()
 
+func set_visible(visible: bool):
+	for path_point: PathPoint in path_points.get_children(): 
+		path_point.visible = visible
+	visual_curve.visible = visible
+
 # Called from the info box
 func delete():
 	queue_free()

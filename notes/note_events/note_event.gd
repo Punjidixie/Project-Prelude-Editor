@@ -26,8 +26,13 @@ func get_and_initialize_info_box():
 func load_info_from_info_box(info_box: EventInfoBox):
 	pass
 
+# Called from the note to hide. Override in inherited classes.
+func set_visible(visible: bool):
+	pass
+	
 # Called from note when a checkpoint changes (and move_all is active)
 func move_by(delta_position: Vector2) -> void:
 	pass
+
 
 

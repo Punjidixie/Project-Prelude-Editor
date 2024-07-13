@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=18 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
 [ext_resource type="Script" path="res://ui/grid/grid_drawer.gd" id="2_fs1ln"]
+[ext_resource type="Script" path="res://ui/add_note_button.gd" id="8_ne3nl"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="9_hav3n"]
 [ext_resource type="Script" path="res://ui/top_info_box.gd" id="10_0fada"]
 [ext_resource type="Script" path="res://ui/pause_button.gd" id="10_64sur"]
@@ -13,7 +14,7 @@
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 [ext_resource type="Script" path="res://ui/grid/grid_controller.gd" id="15_vy3by"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
-[ext_resource type="Script" path="res://main/add_move_event_checkpoint.gd" id="17_8s8e5"]
+[ext_resource type="Script" path="res://ui/add_move_event_checkpoint.gd" id="17_8s8e5"]
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
 
 [sub_resource type="Curve2D" id="Curve2D_acccc"]
@@ -236,6 +237,15 @@ offset_right = 193.0
 offset_bottom = 121.0
 text = "Move all"
 script = ExtResource("15_3rhpp")
+
+[node name="NewNote" type="Button" parent="CanvasLayer/Control/MainEditor"]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 5.0
+offset_right = 289.0
+offset_bottom = 36.0
+text = "New note"
+script = ExtResource("8_ne3nl")
 
 [node name="NewCheckpoint" type="Button" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
@@ -492,6 +502,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="StaticLabel" type="Label" parent="CanvasLayer/Control/GridController"]
+layout_mode = 0
 offset_left = 351.0
 offset_top = 33.0
 offset_right = 436.0
@@ -502,6 +513,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="StaticLabel2" type="Label" parent="CanvasLayer/Control/GridController"]
+layout_mode = 0
 offset_left = 350.0
 offset_top = 84.0
 offset_right = 435.0

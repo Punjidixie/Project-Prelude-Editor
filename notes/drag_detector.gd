@@ -7,6 +7,7 @@ var mouse_in = false # to be able to start following mouse
 var drag_position : Vector2 # the local mouse position where it started to get dragged
 @export var action_name: String = "left_click"
 @export var ignore_snap: bool = false
+@export var ignore_border: bool = false
 
 signal on_clicked()
 signal on_dragged(amount: Vector2)
@@ -37,7 +38,8 @@ func _process(delta):
 		if ignore_snap == false:
 			new_global_position = GridUtils.get_snapped_position(new_global_position)
 		
-		new_global_position = GridUtils.get_border_clamped_position(new_global_position)
+		if ignore_border == false:
+			new_global_position = GridUtils.get_border_clamped_position(new_global_position)
 			
 		amount_moved = new_global_position - parent_global_position
 		on_dragged.emit(amount_moved)

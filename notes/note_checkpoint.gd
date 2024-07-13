@@ -40,6 +40,8 @@ func _ready():
 	mouse_follower.on_cancelled.connect(on_creation_cancelled)
 	mouse_follower.on_confirmed.connect(on_creation_confirmed)
 	mouse_follower.on_moved.connect(waiting_move_by)
+	mouse_follower.on_zone_entered.connect(on_creation_zone_entered)
+	mouse_follower.on_zone_exited.connect(on_creation_zone_exited)
 	
 	go_regular_mode()
 
@@ -101,7 +103,7 @@ func load_time_from_note(new_time: float) -> void:
 	on_checkpoint_updated.emit()
 	on_checkpoint_ui_needs_update.emit()
 
-# Change 5 : Called from mouse follower.
+# Change 5 : Called from mouse follower. amount = delta world position
 func waiting_move_by(amount: Vector2) -> void:
 	set_world_position(position + amount)
 
@@ -130,3 +132,9 @@ func on_creation_confirmed():
 
 func on_creation_cancelled():
 	queue_free()
+
+func on_creation_zone_exited():
+	visible = false
+
+func on_creation_zone_entered():
+	visible = true
