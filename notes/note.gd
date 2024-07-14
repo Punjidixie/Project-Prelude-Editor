@@ -14,6 +14,8 @@ class_name Note
 @export var appear_event : AppearEvent
 @export var end_event : EndEvent
 
+signal on_top_ui_needs_update()
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	SignalManager.on_time_auto_updated.connect(on_time_updated)
@@ -139,7 +141,7 @@ func on_creation_confirmed():
 	var time_difference = note_distance / GlobalManager.scroll_speed
 	
 	start_time = GlobalManager.current_time - time_difference
-	print(start_time)
+
 	on_checkpoint_clicked() # As if the note gets selected
 	end_checkpoint.load_time_from_note(checkpoints[0].play_position.y / GlobalManager.scroll_speed)
 	# update()
@@ -157,6 +159,9 @@ func on_creation_zone_entered():
 	for checkpoint in get_note_checkpoints(): checkpoint.visible = true
 	for event: NoteEvent in get_note_events(): event.set_visible(true)
 	note_body.visible = true
+
+### DELETION ###
+func delete(): queue_free()
 
 ### UTILITY FUNCTIONS BELOW ###
 
@@ -187,6 +192,11 @@ func get_checkpoint_info_boxes() -> Array:
 		info_boxes.append(checkpoint.get_and_initialize_info_box())
 	
 	return info_boxes
+
+func get_and_initialize_top_info_box() -> TopInfoBox:
+	var top_info_box: TopInfoBox = ScenePreloader.top_info_box.instantiate()
+	top_info_box.initialize(self)
+	return top_info_box
 
 func get_event_info_boxes() -> Array:
 	var note_events = get_note_events()

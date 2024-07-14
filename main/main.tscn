@@ -1,11 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=17 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
 [ext_resource type="Script" path="res://ui/grid/grid_drawer.gd" id="2_fs1ln"]
 [ext_resource type="Script" path="res://ui/add_note_button.gd" id="8_ne3nl"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="9_hav3n"]
-[ext_resource type="Script" path="res://ui/top_info_box.gd" id="10_0fada"]
 [ext_resource type="Script" path="res://ui/pause_button.gd" id="10_64sur"]
 [ext_resource type="Script" path="res://ui/time_text.gd" id="10_u0ths"]
 [ext_resource type="PackedScene" uid="uid://j472kswpfgqg" path="res://ui/curve_editor/curve_editor_front_label.tscn" id="13_mpxto"]
@@ -34,7 +33,7 @@ horizontal_line_color = Color(1, 0.815686, 1, 0.388235)
 horizontal_line_width = 2.0
 subdivision_line_color = Color(1, 0.858824, 0.74902, 0.345098)
 subdivision_line_width = 1.0
-vertical_line_color = Color(0.886275, 0.792157, 0.0392157, 0.270588)
+vertical_line_color = Color(0.886275, 0.792157, 0.0392157, 0.470588)
 vertical_line_width = 2.0
 border_line_color = Color(0.928453, 0.371759, 3.85046e-07, 1)
 border_line_width = 2.0
@@ -67,7 +66,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="NoteInfoUI" type="ScrollContainer" parent="CanvasLayer/Control" node_paths=PackedStringArray("checkpoint_container", "event_container", "top_info_box")]
+[node name="NoteInfoUI" type="ScrollContainer" parent="CanvasLayer/Control" node_paths=PackedStringArray("checkpoint_container", "event_container", "top_ui_container")]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -79,75 +78,14 @@ grow_vertical = 2
 script = ExtResource("14_bthse")
 checkpoint_container = NodePath("NoteInfo/Checkpoints/VBoxContainer")
 event_container = NodePath("NoteInfo/Events/VBoxContainer")
-top_info_box = NodePath("NoteInfo/TopInfoBox")
+top_ui_container = NodePath("NoteInfo/TopUI")
 
 [node name="NoteInfo" type="VBoxContainer" parent="CanvasLayer/Control/NoteInfoUI"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TopInfoBox" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo" node_paths=PackedStringArray("name_label", "start_time_input_box", "end_time_input_box")]
-custom_minimum_size = Vector2(0, 110)
+[node name="TopUI" type="MarginContainer" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo"]
 layout_mode = 2
-color = Color(0.321569, 0.321569, 0.321569, 0)
-script = ExtResource("10_0fada")
-name_label = NodePath("NameLabel")
-start_time_input_box = NodePath("StartTimeInputBox")
-end_time_input_box = NodePath("EndTimeInputBox")
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.364711, 0.364711, 0.364711, 1)
-
-[node name="NameLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 23.0
-grow_horizontal = 2
-text = "Note #1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StartTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
-layout_mode = 1
-offset_left = 18.0
-offset_top = 34.0
-offset_right = 86.0
-offset_bottom = 57.0
-text = "Start time"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="EndTimeLabel" type="Label" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
-layout_mode = 1
-offset_left = 19.0
-offset_top = 71.0
-offset_right = 87.0
-offset_bottom = 94.0
-text = "End time"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StartTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
-layout_mode = 0
-offset_left = 105.0
-offset_top = 31.0
-offset_right = 192.0
-offset_bottom = 62.0
-
-[node name="EndTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo/TopInfoBox"]
-layout_mode = 0
-offset_left = 105.0
-offset_top = 69.0
-offset_right = 192.0
-offset_bottom = 100.0
 
 [node name="Checkpoints Label" type="ColorRect" parent="CanvasLayer/Control/NoteInfoUI/NoteInfo"]
 custom_minimum_size = Vector2(0, 30)
@@ -478,11 +416,11 @@ vertical_alignment = 1
 
 [node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control/GridController"]
 layout_mode = 0
-offset_left = 404.0
-offset_top = 49.0
-offset_right = 448.0
-offset_bottom = 73.0
-rotation = 1.5708
+offset_left = 382.0
+offset_top = 91.0
+offset_right = 426.0
+offset_bottom = 115.0
+rotation = -1.5708
 
 [node name="HorizontalLabel" type="Label" parent="CanvasLayer/Control/GridController"]
 layout_mode = 0
@@ -522,6 +460,15 @@ text = "Dynamic"
 label_settings = ExtResource("9_hav3n")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="FileDialog" type="FileDialog" parent="."]
+mode = 2
+title = "Open a Directory"
+size = Vector2i(607, 159)
+visible = true
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
 
 [connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
 [connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]

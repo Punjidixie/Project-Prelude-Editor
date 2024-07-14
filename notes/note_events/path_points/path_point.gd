@@ -19,6 +19,7 @@ func _ready():
 	right_click_drag_detector.on_dragged.connect(on_right_dragged)
 	right_click_drag_detector.on_released.connect(on_right_released)
 	SignalManager.on_move_event_selected.connect(on_move_event_selected)
+	SignalManager.on_note_selected.connect(on_note_selected)
 
 func on_viewport_size_changed():
 	super.on_viewport_size_changed()
@@ -78,5 +79,8 @@ func redraw_control_line():
 
 func on_move_event_selected(move_event: MoveEvent): 
 	if move_event != self.move_event: queue_free()
+
+func on_note_selected(note: Note):
+	queue_free()
 
 	

@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=3 uid="uid://blk560a2720yo"]
+
+[ext_resource type="Script" path="res://ui/top_info_box.gd" id="1_0ghe8"]
+[ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_igrw0"]
+
+[node name="TopInfoBox" type="ColorRect" node_paths=PackedStringArray("name_label", "start_time_input_box", "end_time_input_box", "delete_button")]
+custom_minimum_size = Vector2(0, 110)
+offset_right = 244.0
+offset_bottom = 110.0
+color = Color(0.321569, 0.321569, 0.321569, 0)
+script = ExtResource("1_0ghe8")
+name_label = NodePath("NameLabel")
+start_time_input_box = NodePath("StartTimeInputBox")
+end_time_input_box = NodePath("EndTimeInputBox")
+delete_button = NodePath("DeleteButton")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.364711, 0.364711, 0.364711, 1)
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Note #1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartTimeLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 34.0
+offset_right = 86.0
+offset_bottom = 57.0
+text = "Start time"
+label_settings = ExtResource("2_igrw0")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndTimeLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 19.0
+offset_top = 71.0
+offset_right = 87.0
+offset_bottom = 94.0
+text = "End time"
+label_settings = ExtResource("2_igrw0")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartTimeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 31.0
+offset_right = 192.0
+offset_bottom = 62.0
+
+[node name="EndTimeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 69.0
+offset_right = 192.0
+offset_bottom = 100.0
+
+[node name="DeleteButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_top = 3.0
+offset_right = -5.0
+offset_bottom = 34.0
+grow_horizontal = 0
+text = "-"
+text_overrun_behavior = 3

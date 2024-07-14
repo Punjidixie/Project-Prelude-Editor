@@ -78,5 +78,6 @@ func on_button_toggled(_toggle_on: bool):
 func on_delete_button_pressed():
 	var move_event := event as MoveEvent
 	move_event.delete()
+	SignalManager.on_move_event_selected.emit(null)
 	queue_free()
 
