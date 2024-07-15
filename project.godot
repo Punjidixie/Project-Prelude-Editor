@@ -27,8 +27,8 @@ GridUtils="*res://singletons/grid_utils.gd"
 
 [display]
 
-window/size/viewport_width=1300
-window/size/viewport_height=800
+window/size/viewport_width=1600
+window/size/viewport_height=1000
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/dpi/allow_hidpi=false

@@ -25,7 +25,7 @@ point_count = 4
 [node name="Main" type="Node2D" node_paths=PackedStringArray("notes", "play_area")]
 script = ExtResource("1_pmpl2")
 notes = NodePath("Notes")
-play_area = NodePath("CanvasLayer/Control/MainEditor/PlayArea")
+play_area = NodePath("CanvasLayer/Control/PlayArea")
 
 [node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines", "border_lines")]
 script = ExtResource("2_fs1ln")
@@ -65,6 +65,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.175711
+anchor_top = 0.216
+anchor_right = 0.756961
+anchor_bottom = 0.747
+offset_left = 78.862
+offset_top = 33.0
+offset_right = -12.1381
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.109804)
+metadata/_edit_use_anchors_ = true
 
 [node name="NoteInfoUI" type="ScrollContainer" parent="CanvasLayer/Control" node_paths=PackedStringArray("checkpoint_container", "event_container", "top_ui_container")]
 layout_mode = 1
@@ -136,27 +153,12 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -308.0
+offset_left = 281.0
+offset_right = -310.0
+offset_bottom = -142.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control/MainEditor"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.102823
-anchor_top = 0.2375
-anchor_right = 0.903226
-anchor_bottom = 0.73625
-offset_left = 50.0
-offset_top = 33.0
-offset_right = -41.0
-offset_bottom = 9.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(1, 1, 1, 0.109804)
-metadata/_edit_use_anchors_ = true
 
 [node name="PauseButton" type="Button" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
@@ -223,16 +225,203 @@ offset_bottom = 146.0
 grow_horizontal = 2
 script = ExtResource("2_0fta8")
 
+[node name="GridController" type="ColorRect" parent="CanvasLayer/Control/MainEditor" node_paths=PackedStringArray("speed_input_box", "bpm_input_box", "subdivisions_input_box", "horizontal_divisions_input_box", "vertical_divisions_input_box", "horizontal_dynamic_ui", "horizontal_static_ui", "is_static_toggle_button")]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -496.0
+offset_bottom = 125.0
+grow_horizontal = 0
+color = Color(0.419608, 0.419608, 0.419608, 0.67451)
+script = ExtResource("15_vy3by")
+speed_input_box = NodePath("HorizontalDynamic/SpeedInputBox")
+bpm_input_box = NodePath("HorizontalDynamic/BpmInputBox")
+subdivisions_input_box = NodePath("HorizontalDynamic/SubdivisionsInputBox")
+horizontal_divisions_input_box = NodePath("HorizontalStatic/DivisionsInputBox")
+vertical_divisions_input_box = NodePath("Vertical/DivisionsInputBox")
+horizontal_dynamic_ui = NodePath("HorizontalDynamic")
+horizontal_static_ui = NodePath("HorizontalStatic")
+is_static_toggle_button = NodePath("CheckButton")
+
+[node name="HorizontalDynamic" type="Control" parent="CanvasLayer/Control/MainEditor/GridController"]
+anchors_preset = 0
+offset_right = 225.0
+offset_bottom = 124.0
+
+[node name="Title" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 119.0
+offset_top = 85.0
+offset_right = 112.0
+offset_bottom = 108.0
+grow_horizontal = 2
+text = "Grid"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubdivisionLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 95.0
+offset_right = 100.0
+offset_bottom = 118.0
+text = "Subdivisions"
+label_settings = ExtResource("9_hav3n")
+vertical_alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 26.0
+offset_right = 87.0
+offset_bottom = 49.0
+text = "Speed"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BpmLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 61.0
+offset_right = 86.0
+offset_bottom = 84.0
+text = "BPM"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpeedInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 23.0
+offset_right = 207.0
+offset_bottom = 54.0
+
+[node name="BpmInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 57.0
+offset_right = 207.0
+offset_bottom = 88.0
+
+[node name="SubdivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 91.0
+offset_right = 207.0
+offset_bottom = 122.0
+
+[node name="HorizontalStatic" type="Control" parent="CanvasLayer/Control/MainEditor/GridController"]
+visible = false
+anchors_preset = 0
+offset_right = 225.0
+offset_bottom = 109.0
+
+[node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalStatic"]
+layout_mode = 0
+offset_left = 79.0
+offset_top = 61.0
+offset_right = 166.0
+offset_bottom = 92.0
+
+[node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalStatic"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 36.0
+offset_right = 165.0
+offset_bottom = 59.0
+text = "Divisions"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Vertical" type="Control" parent="CanvasLayer/Control/MainEditor/GridController"]
+anchors_preset = 0
+offset_left = 191.0
+offset_top = 1.0
+offset_right = 417.0
+offset_bottom = 110.0
+
+[node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/Vertical"]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 60.0
+offset_right = 124.0
+offset_bottom = 91.0
+
+[node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/Vertical"]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 34.0
+offset_right = 122.0
+offset_bottom = 57.0
+text = "Divisions"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control/MainEditor/GridController"]
+layout_mode = 0
+offset_left = 382.0
+offset_top = 91.0
+offset_right = 426.0
+offset_bottom = 115.0
+rotation = -1.5708
+
+[node name="HorizontalLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController"]
+layout_mode = 0
+offset_left = 83.0
+offset_top = -1.0
+offset_right = 164.0
+offset_bottom = 22.0
+text = "Horizontal"
+
+[node name="VerticalLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController"]
+layout_mode = 0
+offset_left = 228.0
+offset_right = 309.0
+offset_bottom = 23.0
+text = "Vertical"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaticLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController"]
+layout_mode = 0
+offset_left = 351.0
+offset_top = 33.0
+offset_right = 436.0
+offset_bottom = 56.0
+text = "Static"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaticLabel2" type="Label" parent="CanvasLayer/Control/MainEditor/GridController"]
+layout_mode = 0
+offset_left = 350.0
+offset_top = 84.0
+offset_right = 435.0
+offset_bottom = 107.0
+text = "Dynamic"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CurveEditor" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("path_point_container", "new_path_point_button", "front_label")]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 27.0
-offset_top = -128.0
-offset_right = -341.0
-offset_bottom = -9.0
+offset_left = 299.0
+offset_top = -146.0
+offset_right = -389.0
 grow_horizontal = 2
 grow_vertical = 0
 color = Color(1, 0.87451, 1, 0.0980392)
@@ -274,201 +463,6 @@ offset_right = 108.0
 offset_bottom = 15.5
 grow_vertical = 2
 text = "Add point"
-
-[node name="GridController" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("speed_input_box", "bpm_input_box", "subdivisions_input_box", "horizontal_divisions_input_box", "vertical_divisions_input_box", "horizontal_dynamic_ui", "horizontal_static_ui", "is_static_toggle_button")]
-custom_minimum_size = Vector2(0, 110)
-layout_mode = 0
-offset_left = 495.0
-offset_top = 2.0
-offset_right = 991.0
-offset_bottom = 127.0
-color = Color(0.419608, 0.419608, 0.419608, 0.67451)
-script = ExtResource("15_vy3by")
-speed_input_box = NodePath("HorizontalDynamic/SpeedInputBox")
-bpm_input_box = NodePath("HorizontalDynamic/BpmInputBox")
-subdivisions_input_box = NodePath("HorizontalDynamic/SubdivisionsInputBox")
-horizontal_divisions_input_box = NodePath("HorizontalStatic/DivisionsInputBox")
-vertical_divisions_input_box = NodePath("Vertical/DivisionsInputBox")
-horizontal_dynamic_ui = NodePath("HorizontalDynamic")
-horizontal_static_ui = NodePath("HorizontalStatic")
-is_static_toggle_button = NodePath("CheckButton")
-
-[node name="HorizontalDynamic" type="Control" parent="CanvasLayer/Control/GridController"]
-anchors_preset = 0
-offset_right = 225.0
-offset_bottom = 124.0
-
-[node name="Title" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
-visible = false
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 119.0
-offset_top = 85.0
-offset_right = 112.0
-offset_bottom = 108.0
-grow_horizontal = 2
-text = "Grid"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SubdivisionLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
-layout_mode = 0
-offset_left = 15.0
-offset_top = 95.0
-offset_right = 100.0
-offset_bottom = 118.0
-text = "Subdivisions"
-label_settings = ExtResource("9_hav3n")
-vertical_alignment = 1
-
-[node name="SpeedLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
-layout_mode = 0
-offset_left = 19.0
-offset_top = 26.0
-offset_right = 87.0
-offset_bottom = 49.0
-text = "Speed"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BpmLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 61.0
-offset_right = 86.0
-offset_bottom = 84.0
-text = "BPM"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SpeedInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
-layout_mode = 0
-offset_left = 120.0
-offset_top = 23.0
-offset_right = 207.0
-offset_bottom = 54.0
-
-[node name="BpmInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
-layout_mode = 0
-offset_left = 120.0
-offset_top = 57.0
-offset_right = 207.0
-offset_bottom = 88.0
-
-[node name="SubdivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalDynamic"]
-layout_mode = 0
-offset_left = 120.0
-offset_top = 91.0
-offset_right = 207.0
-offset_bottom = 122.0
-
-[node name="HorizontalStatic" type="Control" parent="CanvasLayer/Control/GridController"]
-visible = false
-anchors_preset = 0
-offset_right = 225.0
-offset_bottom = 109.0
-
-[node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/HorizontalStatic"]
-layout_mode = 0
-offset_left = 79.0
-offset_top = 61.0
-offset_right = 166.0
-offset_bottom = 92.0
-
-[node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/GridController/HorizontalStatic"]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 36.0
-offset_right = 165.0
-offset_bottom = 59.0
-text = "Divisions"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Vertical" type="Control" parent="CanvasLayer/Control/GridController"]
-anchors_preset = 0
-offset_left = 191.0
-offset_top = 1.0
-offset_right = 417.0
-offset_bottom = 110.0
-
-[node name="DivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/GridController/Vertical"]
-layout_mode = 0
-offset_left = 37.0
-offset_top = 60.0
-offset_right = 124.0
-offset_bottom = 91.0
-
-[node name="DivisionsLabel" type="Label" parent="CanvasLayer/Control/GridController/Vertical"]
-layout_mode = 0
-offset_left = 37.0
-offset_top = 34.0
-offset_right = 122.0
-offset_bottom = 57.0
-text = "Divisions"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control/GridController"]
-layout_mode = 0
-offset_left = 382.0
-offset_top = 91.0
-offset_right = 426.0
-offset_bottom = 115.0
-rotation = -1.5708
-
-[node name="HorizontalLabel" type="Label" parent="CanvasLayer/Control/GridController"]
-layout_mode = 0
-offset_left = 83.0
-offset_top = -1.0
-offset_right = 164.0
-offset_bottom = 22.0
-text = "Horizontal"
-
-[node name="VerticalLabel" type="Label" parent="CanvasLayer/Control/GridController"]
-layout_mode = 0
-offset_left = 228.0
-offset_right = 309.0
-offset_bottom = 23.0
-text = "Vertical"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StaticLabel" type="Label" parent="CanvasLayer/Control/GridController"]
-layout_mode = 0
-offset_left = 351.0
-offset_top = 33.0
-offset_right = 436.0
-offset_bottom = 56.0
-text = "Static"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StaticLabel2" type="Label" parent="CanvasLayer/Control/GridController"]
-layout_mode = 0
-offset_left = 350.0
-offset_top = 84.0
-offset_right = 435.0
-offset_bottom = 107.0
-text = "Dynamic"
-label_settings = ExtResource("9_hav3n")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="FileDialog" type="FileDialog" parent="."]
-mode = 2
-title = "Open a Directory"
-size = Vector2i(607, 159)
-visible = true
-ok_button_text = "Select Current Folder"
-file_mode = 2
-access = 2
 
 [connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
 [connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]
