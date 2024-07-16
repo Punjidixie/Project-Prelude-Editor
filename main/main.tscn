@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=19 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 [ext_resource type="Script" path="res://ui/grid/grid_controller.gd" id="15_vy3by"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
+[ext_resource type="Script" path="res://midi_viewer/custom_play_area_object.gd" id="16_y3680"]
+[ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="17_7psa5"]
 [ext_resource type="Script" path="res://ui/add_move_event_checkpoint.gd" id="17_8s8e5"]
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
 
@@ -69,14 +71,14 @@ mouse_filter = 2
 [node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.175711
-anchor_top = 0.216
+anchor_left = 0.225
+anchor_top = 0.249
 anchor_right = 0.756961
-anchor_bottom = 0.747
-offset_left = 78.862
-offset_top = 33.0
+anchor_bottom = 0.756
+offset_left = -0.000396729
+offset_top = -1.52588e-05
 offset_right = -12.1381
-offset_bottom = 9.0
+offset_bottom = -6.10352e-05
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -463,6 +465,38 @@ offset_right = 108.0
 offset_bottom = 15.5
 grow_vertical = 2
 text = "Add point"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.228
+anchor_top = 0.249
+anchor_right = 0.746
+anchor_bottom = 0.753
+offset_left = -66.8
+offset_top = -43.0
+offset_right = 63.3999
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(1, 1, 1, 0.231373)
+
+[node name="Node2D" type="Node2D" parent="CanvasLayer/Control/ScrollContainer/ColorRect" node_paths=PackedStringArray("reference_control")]
+script = ExtResource("16_y3680")
+reference_control = NodePath("..")
+scale_vector = Vector2(88, 100)
+play_position = Vector2(0, -100)
+coordinate_mode = 1
+
+[node name="Visual" type="Sprite2D" parent="CanvasLayer/Control/ScrollContainer/ColorRect/Node2D"]
+modulate = Color(0.662745, 1, 1, 0.792157)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("17_7psa5")
 
 [connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
 [connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]

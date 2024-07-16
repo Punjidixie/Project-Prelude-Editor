@@ -11,10 +11,6 @@ enum PlayAreaMode {ABSOLUTE, RELATIVE}
 func _ready():
 	get_tree().get_root().size_changed.connect(on_viewport_size_changed)
 	update_world_position()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 	
 func on_viewport_size_changed():
 	update_world_position()

@@ -7,6 +7,7 @@ class_name NoteBody
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	super._ready()
 	mouse_follower.on_cancelled.connect(on_creation_cancelled)
 	mouse_follower.on_confirmed.connect(on_creation_confirmed)
 	mouse_follower.on_zone_entered.connect(on_creation_zone_entered)

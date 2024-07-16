@@ -24,6 +24,7 @@ SortingFunctions="*res://singletons/sorting_functions.gd"
 GodotUtils="*res://singletons/godot_utils.gd"
 ScenePreloader="*res://singletons/scene_preloader.gd"
 GridUtils="*res://singletons/grid_utils.gd"
+MidiUtils="*res://singletons/midi_utils.gd"
 
 [display]
 
