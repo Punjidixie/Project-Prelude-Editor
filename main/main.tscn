@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=20 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -12,9 +12,10 @@
 [ext_resource type="Script" path="res://ui/ui_controller.gd" id="14_bthse"]
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 [ext_resource type="Script" path="res://ui/grid/grid_controller.gd" id="15_vy3by"]
+[ext_resource type="Texture2D" uid="uid://1cdipqha27sr" path="res://midi_viewer/full_keyboard.png" id="16_0pcot"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
+[ext_resource type="Script" path="res://midi_viewer/midi_viewer.gd" id="16_ib35u"]
 [ext_resource type="Script" path="res://midi_viewer/custom_play_area_object.gd" id="16_y3680"]
-[ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="17_7psa5"]
 [ext_resource type="Script" path="res://ui/add_move_event_checkpoint.gd" id="17_8s8e5"]
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
 
@@ -71,14 +72,13 @@ mouse_filter = 2
 [node name="PlayArea" type="ColorRect" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.225
-anchor_top = 0.249
-anchor_right = 0.756961
-anchor_bottom = 0.756
-offset_left = -0.000396729
+anchor_left = 0.2085
+anchor_top = 0.241
+anchor_right = 0.75
+anchor_bottom = 0.759
+offset_left = 0.399976
 offset_top = -1.52588e-05
-offset_right = -12.1381
-offset_bottom = -6.10352e-05
+offset_bottom = -5.96046e-05
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -466,37 +466,60 @@ offset_bottom = 15.5
 grow_vertical = 2
 text = "Add point"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control"]
+[node name="MidiViewer" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("midi_note_origin")]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.228
-anchor_top = 0.249
-anchor_right = 0.746
-anchor_bottom = 0.753
-offset_left = -66.8
-offset_top = -43.0
-offset_right = 63.3999
-offset_bottom = 41.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 300.0
+offset_top = 211.0
+offset_right = -361.0
+offset_bottom = -204.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("16_ib35u")
+midi_note_origin = NodePath("ScrollContainer/MidiNoteOrigin")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/MidiViewer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/ScrollContainer"]
+[node name="Background" type="ColorRect" parent="CanvasLayer/Control/MidiViewer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color(1, 1, 1, 0.231373)
+color = Color(0, 0, 0, 1)
 
-[node name="Node2D" type="Node2D" parent="CanvasLayer/Control/ScrollContainer/ColorRect" node_paths=PackedStringArray("reference_control")]
+[node name="MidiNoteOrigin" type="Node2D" parent="CanvasLayer/Control/MidiViewer/ScrollContainer" node_paths=PackedStringArray("reference_control")]
 script = ExtResource("16_y3680")
-reference_control = NodePath("..")
+reference_control = NodePath("../..")
 scale_vector = Vector2(88, 100)
 play_position = Vector2(0, -100)
 coordinate_mode = 1
 
-[node name="Visual" type="Sprite2D" parent="CanvasLayer/Control/ScrollContainer/ColorRect/Node2D"]
-modulate = Color(0.662745, 1, 1, 0.792157)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("17_7psa5")
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/MidiViewer"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("16_0pcot")
+expand_mode = 1
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/Control/MidiViewer"]
+layout_mode = 0
+offset_left = 825.0
+offset_top = 11.0
+offset_right = 929.0
+offset_bottom = 54.0
 
 [connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
 [connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccof50aoforiv"]
+
+[ext_resource type="Script" path="res://midi_viewer/midi_note_object.gd" id="1_kl3fr"]
+[ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_ig2ey"]
+
+[node name="MidiNoteObject" type="Node2D"]
+script = ExtResource("1_kl3fr")
+coordinate_mode = 1
+
+[node name="Visual" type="Sprite2D" parent="."]
+modulate = Color(0.662745, 1, 1, 0.792157)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_ig2ey")

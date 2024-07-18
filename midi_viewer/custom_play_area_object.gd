@@ -10,7 +10,6 @@ func update_world_position():
 		position = PlayAreaUtils.get_custom_world_position(play_position, reference_control, scale_vector)
 	else:
 		position = PlayAreaUtils.get_custom_delta_world_position(play_position, reference_control, scale_vector)
-	print(position)
 
 
 func update_play_position():

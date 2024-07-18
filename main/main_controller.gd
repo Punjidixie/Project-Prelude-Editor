@@ -3,6 +3,8 @@ extends Node
 @export var notes: Node
 @export var play_area: Control
 
+var last_frame_time: float = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	GlobalManager.current_time = 0
