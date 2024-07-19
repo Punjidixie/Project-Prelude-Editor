@@ -5,7 +5,7 @@ class_name Note
 
 @export var start_time : float
 
-@export var note_body : PlayAreaObject
+@export var note_body : NoteBody
 @export var checkpoints_container : Node
 @export var note_events_container : Node
 
@@ -22,7 +22,10 @@ func _ready():
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
 	
 	initialize_connections()
+	
+	# All checkpoints would've been in place by now.
 	update()
+	go_regular_mode() # Technically not needed, but is here for consistency like in NoteCheckpoint.
 	
 func initialize_connections():
 	for checkpoint in get_note_checkpoints():
@@ -58,6 +61,12 @@ func load_info_from_info_box(info_box : TopInfoBox) -> void:
 	end_checkpoint.load_time_from_note(relative_end_time)
 	#update() 
 	# No need, eventually it will reach the event and will be picked up.
+
+func load_info_from_midi_note(midi_note: MidiNoteObject) -> void:
+	var time_gap = end_event.start_time - start_time
+	start_time = midi_note.midi_time - time_gap
+	SignalManager.on_top_ui_needs_update.emit()
+	update()
 
 func on_event_updated(event: NoteEvent):
 	if event == end_event:

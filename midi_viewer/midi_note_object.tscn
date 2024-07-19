@@ -1,13 +1,51 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccof50aoforiv"]
+[gd_scene load_steps=3 format=3 uid="uid://r54bk6xpkuqh"]
 
 [ext_resource type="Script" path="res://midi_viewer/midi_note_object.gd" id="1_kl3fr"]
 [ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="2_ig2ey"]
 
-[node name="MidiNoteObject" type="Node2D"]
+[node name="MidiNoteObject" type="Node2D" node_paths=PackedStringArray("button", "info_tooltip", "tooltip_label")]
 script = ExtResource("1_kl3fr")
+button = NodePath("Button")
+info_tooltip = NodePath("InfoTooltip")
+tooltip_label = NodePath("InfoTooltip/Label")
 coordinate_mode = 1
 
 [node name="Visual" type="Sprite2D" parent="."]
 modulate = Color(0.662745, 1, 1, 0.792157)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_ig2ey")
+
+[node name="Button" type="Button" parent="."]
+offset_left = -16.0
+offset_top = -17.0
+offset_right = 17.0
+offset_bottom = 16.0
+flat = true
+
+[node name="InfoTooltip" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -62.0
+offset_right = 113.0
+offset_bottom = -7.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="InfoTooltip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0693307, 0.0667868, 0, 0.313726)
+
+[node name="Label" type="Label" parent="InfoTooltip"]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 23.0
+text = "s"

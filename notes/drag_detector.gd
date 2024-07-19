@@ -17,7 +17,7 @@ func _ready():
 	mouse_entered.connect(on_mouse_entered)
 	mouse_exited.connect(on_mouse_exited)
 	
-func _process(delta):
+func _process(_delta):
 	if mouse_in:
 		if Input.is_action_just_pressed(action_name):
 			drag_position = get_local_mouse_position()

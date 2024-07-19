@@ -25,11 +25,11 @@ func get_units_per_beat():
 
 func get_time_from_beat(beat: float):
 	# beat * (seconds per beat)
-	return beat / (GlobalManager.bpm / 60) + GlobalManager.time_offset
+	return beat / (GlobalManager.bpm / 60) + GlobalManager.grid_time_offset
 
 func get_beat_from_time(time: float):
 	# time * (beats per sec)
-	return (time - GlobalManager.time_offset) * (GlobalManager.bpm / 60)
+	return (time - GlobalManager.grid_time_offset) * (GlobalManager.bpm / 60)
 
 func get_snapped_position(world_position: Vector2):
 	# On each axis, how far away is the position from the reference position?

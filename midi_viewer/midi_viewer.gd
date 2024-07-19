@@ -7,27 +7,37 @@ class_name MidiViewer
 func _ready():
 	SignalManager.on_time_auto_updated.connect(on_time_updated)
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
+	SignalManager.on_midi_viewer_needs_update.connect(update)
+	
 	spawn_midi_note_objects()
-	update_midi_note_objects()
+	update()
 
+# Just spawn the notes into the tree. Positions aren't set yet.
 func spawn_midi_note_objects():
 	var raw_midi_notes = MidiUtils.process_midi("res://assets/midi/Four_Little_Kittens.mid")
 	for raw_midi_note in raw_midi_notes:
 		var midi_note_object: MidiNoteObject = ScenePreloader.midi_note_object.instantiate()
 		midi_note_object.initialize_references(self, Vector2(88, 100))
-		midi_note_object.initialize_midi_info(raw_midi_note.x, raw_midi_note.y)
+		midi_note_object.initialize_midi_info(raw_midi_note)
 		midi_note_origin.add_child(midi_note_object)
 
-# If the scale changes, the positions need to change.
+func _process(_delta):
+	if Input.is_action_just_pressed("toggle_midi_viewer"):
+		visible = not visible
+
+func update():
+	update_midi_note_objects()
+	on_time_updated()
+	
+# Reposition midi note objects' based on the speed
 func update_midi_note_objects():
-	print(midi_note_origin.get_children().size())
 	for midi_note_object: MidiNoteObject in midi_note_origin.get_children():		
 		var time = midi_note_object.midi_time / 1000
 		var y_position = GlobalManager.midi_speed * time
 		var x_position = midi_note_object.note - 21 # A0 = 21, C8 = 108
 		midi_note_object.set_play_position(Vector2(x_position, y_position))
 		
-
+# Reposition the origin based on the speed and time.	
 func on_time_updated():
 	var delta_pos = GlobalManager.midi_speed * GlobalManager.current_time
 	midi_note_origin.set_play_position(Vector2(0, -100 - delta_pos))

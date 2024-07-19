@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=21 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -12,12 +12,13 @@
 [ext_resource type="Script" path="res://ui/ui_controller.gd" id="14_bthse"]
 [ext_resource type="Script" path="res://ui/move_all_marker.gd" id="15_3rhpp"]
 [ext_resource type="Script" path="res://ui/grid/grid_controller.gd" id="15_vy3by"]
-[ext_resource type="Texture2D" uid="uid://1cdipqha27sr" path="res://midi_viewer/full_keyboard.png" id="16_0pcot"]
+[ext_resource type="Texture2D" uid="uid://1cdipqha27sr" path="res://assets/full_keyboard.png" id="16_0pcot"]
 [ext_resource type="Script" path="res://ui/add_checkpoint_button.gd" id="16_ccpcj"]
 [ext_resource type="Script" path="res://midi_viewer/midi_viewer.gd" id="16_ib35u"]
 [ext_resource type="Script" path="res://midi_viewer/custom_play_area_object.gd" id="16_y3680"]
 [ext_resource type="Script" path="res://ui/add_move_event_checkpoint.gd" id="17_8s8e5"]
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
+[ext_resource type="Script" path="res://ui/midi_viewer/midi_settings.gd" id="19_mb36r"]
 
 [sub_resource type="Curve2D" id="Curve2D_acccc"]
 _data = {
@@ -227,13 +228,13 @@ offset_bottom = 146.0
 grow_horizontal = 2
 script = ExtResource("2_0fta8")
 
-[node name="GridController" type="ColorRect" parent="CanvasLayer/Control/MainEditor" node_paths=PackedStringArray("speed_input_box", "bpm_input_box", "subdivisions_input_box", "horizontal_divisions_input_box", "vertical_divisions_input_box", "horizontal_dynamic_ui", "horizontal_static_ui", "is_static_toggle_button")]
+[node name="GridController" type="ColorRect" parent="CanvasLayer/Control/MainEditor" node_paths=PackedStringArray("speed_input_box", "bpm_input_box", "subdivisions_input_box", "offset_input_box", "horizontal_divisions_input_box", "vertical_divisions_input_box", "horizontal_dynamic_ui", "horizontal_static_ui", "is_static_toggle_button")]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -496.0
+offset_left = -564.0
 offset_bottom = 125.0
 grow_horizontal = 0
 color = Color(0.419608, 0.419608, 0.419608, 0.67451)
@@ -241,6 +242,7 @@ script = ExtResource("15_vy3by")
 speed_input_box = NodePath("HorizontalDynamic/SpeedInputBox")
 bpm_input_box = NodePath("HorizontalDynamic/BpmInputBox")
 subdivisions_input_box = NodePath("HorizontalDynamic/SubdivisionsInputBox")
+offset_input_box = NodePath("HorizontalDynamic/OffsetInputBox")
 horizontal_divisions_input_box = NodePath("HorizontalStatic/DivisionsInputBox")
 vertical_divisions_input_box = NodePath("Vertical/DivisionsInputBox")
 horizontal_dynamic_ui = NodePath("HorizontalDynamic")
@@ -268,20 +270,20 @@ vertical_alignment = 1
 
 [node name="SubdivisionLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 95.0
-offset_right = 100.0
-offset_bottom = 118.0
+offset_left = 109.0
+offset_top = 17.0
+offset_right = 194.0
+offset_bottom = 40.0
 text = "Subdivisions"
 label_settings = ExtResource("9_hav3n")
 vertical_alignment = 1
 
 [node name="SpeedLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
 layout_mode = 0
-offset_left = 19.0
-offset_top = 26.0
-offset_right = 87.0
-offset_bottom = 49.0
+offset_left = -1.0
+offset_top = 18.0
+offset_right = 67.0
+offset_bottom = 41.0
 text = "Speed"
 label_settings = ExtResource("9_hav3n")
 horizontal_alignment = 1
@@ -289,35 +291,51 @@ vertical_alignment = 1
 
 [node name="BpmLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
 layout_mode = 0
-offset_left = 18.0
-offset_top = 61.0
-offset_right = 86.0
-offset_bottom = 84.0
+offset_left = -9.0
+offset_top = 70.0
+offset_right = 59.0
+offset_bottom = 93.0
 text = "BPM"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OffsetLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+offset_left = 99.0
+offset_top = 70.0
+offset_right = 167.0
+offset_bottom = 93.0
+text = "Offset"
 label_settings = ExtResource("9_hav3n")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SpeedInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
 layout_mode = 0
-offset_left = 120.0
-offset_top = 23.0
-offset_right = 207.0
-offset_bottom = 54.0
+offset_left = 9.0
+offset_top = 40.0
+offset_right = 96.0
+offset_bottom = 71.0
 
 [node name="BpmInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
 layout_mode = 0
-offset_left = 120.0
-offset_top = 57.0
-offset_right = 207.0
-offset_bottom = 88.0
+offset_left = 7.0
+offset_top = 89.0
+offset_right = 94.0
+offset_bottom = 120.0
 
 [node name="SubdivisionsInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
 layout_mode = 0
-offset_left = 120.0
-offset_top = 91.0
-offset_right = 207.0
-offset_bottom = 122.0
+offset_left = 109.0
+offset_top = 39.0
+offset_right = 196.0
+offset_bottom = 70.0
+
+[node name="OffsetInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+offset_left = 109.0
+offset_top = 89.0
+offset_right = 196.0
+offset_bottom = 120.0
 
 [node name="HorizontalStatic" type="Control" parent="CanvasLayer/Control/MainEditor/GridController"]
 visible = false
@@ -514,12 +532,51 @@ grow_vertical = 0
 texture = ExtResource("16_0pcot")
 expand_mode = 1
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/Control/MidiViewer"]
-layout_mode = 0
-offset_left = 825.0
-offset_top = 11.0
-offset_right = 929.0
-offset_bottom = 54.0
+[node name="MidiSettings" type="Control" parent="CanvasLayer/Control/MidiViewer" node_paths=PackedStringArray("midi_speed_input_box")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -201.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = 71.0
+grow_horizontal = 0
+script = ExtResource("19_mb36r")
+midi_speed_input_box = NodePath("MidiSpeedInputBox")
+
+[node name="Background" type="ColorRect" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.654902, 1, 1, 0.294118)
+
+[node name="MidiSpeedInputBox" type="LineEdit" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -111.0
+offset_top = -18.5
+offset_right = -11.0
+offset_bottom = 18.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 68.0
+grow_vertical = 2
+text = "Speed"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
 [connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]

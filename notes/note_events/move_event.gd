@@ -160,9 +160,6 @@ func add_path_point(index: int) -> PathPoint:
 	path_points.add_child(path_point)
 	return path_point
 
-func despawn_path_points():
-	GodotUtils.delete_all_children(path_points)
-
 func get_path_point_info_boxes() -> Array:
 	var info_boxes = Array()
 	for path_point: PathPoint in path_points.get_children():
