@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=24 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
 [ext_resource type="Script" path="res://ui/grid/grid_drawer.gd" id="2_fs1ln"]
+[ext_resource type="Texture2D" uid="uid://c5bxbj6qgyfxw" path="res://assets/paper_texture.JPG" id="3_0ily2"]
 [ext_resource type="Script" path="res://ui/add_note_button.gd" id="8_ne3nl"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="9_hav3n"]
 [ext_resource type="Script" path="res://ui/pause_button.gd" id="10_64sur"]
@@ -33,15 +34,23 @@ script = ExtResource("1_pmpl2")
 notes = NodePath("Notes")
 play_area = NodePath("CanvasLayer/Control/PlayArea")
 
+[node name="Notes" type="Node" parent="."]
+
+[node name="Path2D" type="Path2D" parent="Notes"]
+visible = false
+position = Vector2(-29.4448, -34.9067)
+scale = Vector2(1.14947, 1.14667)
+curve = SubResource("Curve2D_acccc")
+
 [node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines", "border_lines")]
 script = ExtResource("2_fs1ln")
-horizontal_line_color = Color(1, 0.815686, 1, 0.388235)
+horizontal_line_color = Color(0.147656, 0.0949568, 0.999999, 0.388235)
 horizontal_line_width = 2.0
-subdivision_line_color = Color(1, 0.858824, 0.74902, 0.345098)
+subdivision_line_color = Color(0.479543, 0.500766, 0.990679, 0.345098)
 subdivision_line_width = 1.0
-vertical_line_color = Color(0.886275, 0.792157, 0.0392157, 0.470588)
+vertical_line_color = Color(0.999805, 0.192561, 0.235218, 0.470588)
 vertical_line_width = 2.0
-border_line_color = Color(0.928453, 0.371759, 3.85046e-07, 1)
+border_line_color = Color(0.848079, 0.664158, 1, 1)
 border_line_width = 2.0
 horizontal_lines = NodePath("HorizontalLines")
 vertical_lines = NodePath("VerticalLines")
@@ -53,15 +62,8 @@ border_lines = NodePath("BorderLines")
 
 [node name="BorderLines" type="Node" parent="GridDrawer"]
 
-[node name="Notes" type="Node" parent="."]
-
-[node name="Path2D" type="Path2D" parent="Notes"]
-visible = false
-position = Vector2(-29.4448, -34.9067)
-scale = Vector2(1.14947, 1.14667)
-curve = SubResource("Curve2D_acccc")
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
@@ -87,6 +89,30 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0.109804)
 metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/PlayArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 81.0001
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_0ily2")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/PlayArea"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 6.10352e-05
+offset_bottom = 15.0001
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.174626, 0.174626, 0.174626, 0.352941)
 
 [node name="NoteInfoUI" type="ScrollContainer" parent="CanvasLayer/Control" node_paths=PackedStringArray("checkpoint_container", "event_container", "top_ui_container")]
 layout_mode = 1
@@ -537,7 +563,7 @@ grow_vertical = 0
 texture = ExtResource("16_0pcot")
 expand_mode = 1
 
-[node name="MidiSettings" type="Control" parent="CanvasLayer/Control/MidiViewer" node_paths=PackedStringArray("midi_speed_input_box")]
+[node name="MidiSettings" type="Control" parent="CanvasLayer/Control/MidiViewer" node_paths=PackedStringArray("midi_speed_input_box", "file_dialog", "set_midi_button")]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -545,10 +571,12 @@ anchor_right = 1.0
 offset_left = -201.0
 offset_top = 8.0
 offset_right = -6.0
-offset_bottom = 71.0
+offset_bottom = 119.0
 grow_horizontal = 0
 script = ExtResource("19_mb36r")
 midi_speed_input_box = NodePath("MidiSpeedInputBox")
+file_dialog = NodePath("FileDialog")
+set_midi_button = NodePath("SetMidiButton")
 
 [node name="Background" type="ColorRect" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
 layout_mode = 1
@@ -561,37 +589,48 @@ color = Color(0.654902, 1, 1, 0.294118)
 
 [node name="MidiSpeedInputBox" type="LineEdit" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
 layout_mode = 1
-anchors_preset = 6
+anchors_preset = 3
 anchor_left = 1.0
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -111.0
-offset_top = -18.5
-offset_right = -11.0
-offset_bottom = 18.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -51.0
+offset_right = -10.0
+offset_bottom = -14.0
 grow_horizontal = 0
-grow_vertical = 2
+grow_vertical = 0
 
 [node name="Label" type="Label" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
-offset_right = 68.0
-grow_vertical = 2
+offset_left = 4.0
+offset_top = -46.0
+offset_right = 72.0
+offset_bottom = -23.0
+grow_vertical = 0
 text = "Speed"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FileDialog" type="FileDialog" parent="CanvasLayer/Control"]
+[node name="FileDialog" type="FileDialog" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
 title = "Open a File"
 initial_position = 2
-size = Vector2i(392, 159)
+size = Vector2i(1000, 720)
 ok_button_text = "Open"
 file_mode = 0
-access = 1
 
-[node name="AudioEditor" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("set_audio_button", "lead_time_input_box")]
+[node name="SetMidiButton" type="Button" parent="CanvasLayer/Control/MidiViewer/MidiSettings"]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 16.0
+offset_right = 167.0
+offset_bottom = 47.0
+text = "Choose MIDI file"
+
+[node name="AudioEditor" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("set_audio_button", "lead_time_input_box", "file_dialog")]
 layout_mode = 1
 anchors_preset = 0
 offset_right = 224.0
@@ -599,8 +638,18 @@ offset_bottom = 187.0
 script = ExtResource("20_cbn6i")
 set_audio_button = NodePath("SetAudioButton")
 lead_time_input_box = NodePath("LeadTimeInputBox")
+file_dialog = NodePath("FileDialog")
+
+[node name="FileDialog" type="FileDialog" parent="CanvasLayer/Control/AudioEditor"]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(1000, 720)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
 
 [node name="SetAudioButton" type="Button" parent="CanvasLayer/Control/AudioEditor"]
+layout_mode = 0
 offset_left = 17.0
 offset_top = 19.0
 offset_right = 150.0
@@ -608,6 +657,7 @@ offset_bottom = 50.0
 text = "Set audio"
 
 [node name="LeadTimeLabel" type="Label" parent="CanvasLayer/Control/AudioEditor"]
+layout_mode = 0
 offset_left = 12.0
 offset_top = 55.0
 offset_right = 80.0
@@ -618,6 +668,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LeadTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/AudioEditor"]
+layout_mode = 0
 offset_left = 12.0
 offset_top = 75.0
 offset_right = 99.0

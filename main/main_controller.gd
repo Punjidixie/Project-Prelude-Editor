@@ -14,7 +14,10 @@ func _ready():
 	SignalManager.on_time_slider_drag_started.connect(pause)
 	SignalManager.on_audio_lead_time_set.connect(pause)
 	SignalManager.on_audio_set.connect(pause)
+	SignalManager.on_midi_set.connect(pause)
 	SignalManager.on_pause_button_pressed.connect(on_pause_button_pressed)
+	
+	
 	SignalManager.on_note_added.connect(on_note_added)
 
 	#spawn_notes()

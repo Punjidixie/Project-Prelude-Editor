@@ -23,6 +23,7 @@ var grid_time_offset: float = 0 # The time of the first beat (or any other beat 
 
 # MIDI
 var midi_speed: float = 60 # Play units per second
+var midi_file_path: String
 #var selected_midi: MidiNoteObject
 
 # Audio

@@ -31,6 +31,7 @@ signal on_midi_viewer_needs_update()
 
 # Midi
 signal on_midi_note_selected(midi_note: MidiNoteObject)
+signal on_midi_set()
 
 # Audio
 signal on_audio_set()

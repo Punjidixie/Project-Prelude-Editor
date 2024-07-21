@@ -14,6 +14,9 @@ class_name Note
 @export var appear_event : AppearEvent
 @export var end_event : EndEvent
 
+var always_visible: bool = true
+var is_visible: bool = true
+
 signal on_top_ui_needs_update()
 
 # Called when the node enters the scene tree for the first time.
@@ -25,7 +28,10 @@ func _ready():
 	
 	# All checkpoints would've been in place by now.
 	update()
-	go_regular_mode() # Technically not needed, but is here for consistency like in NoteCheckpoint.
+	
+	# Technically not needed, but is here for consistency like in NoteCheckpoint.
+	# Nvm it's needed, since "always_visible" needs to be set
+	go_regular_mode() 
 	
 func initialize_connections():
 	for checkpoint in get_note_checkpoints():
@@ -44,6 +50,15 @@ func connect_event(event: NoteEvent):
 	event.note = self
 
 func on_time_updated():
+	if not always_visible:
+		var is_time_out_of_range = GlobalManager.current_time < start_time or GlobalManager.current_time > start_time + end_event.start_time + 3
+		if is_time_out_of_range and is_visible: 
+			set_visibility(false)
+		elif not is_time_out_of_range and not is_visible:
+			set_visibility(true)
+	elif always_visible and not is_visible:
+		set_visibility(true)
+		
 	update()
 
 func update():
@@ -137,9 +152,11 @@ func name_all_checkpoints():
 ### CREATION ###
 func go_creation_mode():
 	note_body.go_creation_mode()
+	always_visible = true
 
 func go_regular_mode():
 	note_body.go_regular_mode()
+	always_visible = false
 	
 func on_creation_confirmed():
 	go_regular_mode()
@@ -159,14 +176,16 @@ func on_creation_cancelled():
 	queue_free()
 
 func on_creation_zone_exited():
-	for checkpoint in get_note_checkpoints(): checkpoint.visible = false
-	for event: NoteEvent in get_note_events(): event.set_visible(false)
-	note_body.visible = false
+	set_visibility(false)
 
 func on_creation_zone_entered():
-	for checkpoint in get_note_checkpoints(): checkpoint.visible = true
-	for event: NoteEvent in get_note_events(): event.set_visible(true)
-	note_body.visible = true
+	set_visibility(true)
+
+func set_visibility(visibility: bool):
+	is_visible = visibility
+	for checkpoint in get_note_checkpoints(): checkpoint.visible = visibility
+	for event: NoteEvent in get_note_events(): event.set_visible(visibility)
+	note_body.visible = visibility
 
 ### DELETION ###
 func delete(): queue_free()

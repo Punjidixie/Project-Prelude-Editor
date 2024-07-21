@@ -12,18 +12,24 @@ func _ready():
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
 	SignalManager.on_midi_viewer_needs_update.connect(update)
 	SignalManager.on_midi_note_selected.connect(on_midi_note_selected)
+	SignalManager.on_midi_set.connect(on_midi_set)
+
 	
-	spawn_midi_note_objects()
 	update()
 
 # Just spawn the notes into the tree. Positions aren't set yet.
-func spawn_midi_note_objects():
-	var raw_midi_notes = MidiUtils.process_midi("res://assets/midi/Four_Little_Kittens.mid")
+func spawn_midi_note_objects(path: String):
+	GodotUtils.delete_all_children(midi_note_origin)
+	var raw_midi_notes = MidiUtils.process_midi(path)
 	for raw_midi_note in raw_midi_notes:
 		var midi_note_object: MidiNoteObject = ScenePreloader.midi_note_object.instantiate()
 		midi_note_object.initialize_references(self, Vector2(88, 100))
 		midi_note_object.initialize_midi_info(raw_midi_note)
 		midi_note_origin.add_child(midi_note_object)
+
+func on_midi_set():
+	spawn_midi_note_objects(GlobalManager.midi_file_path)
+	update_midi_note_objects()
 
 func _process(_delta):
 	if Input.is_action_just_pressed("toggle_midi_viewer"):

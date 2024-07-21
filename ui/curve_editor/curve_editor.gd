@@ -17,8 +17,10 @@ func _ready():
 
 func on_move_event_selected(_move_event: MoveEvent):
 	GodotUtils.delete_all_children(path_point_container)
+	move_event = _move_event
+	
 	if is_instance_valid(_move_event):
-		populate_ui(_move_event)
+		populate_ui()
 	else:
 		front_label.show_unselected()
 		front_label.set_visible(true)
@@ -26,9 +28,7 @@ func on_move_event_selected(_move_event: MoveEvent):
 func on_note_selected(_note: Note):
 	on_move_event_selected(null)
 
-func populate_ui(_move_event: MoveEvent):
-	move_event = _move_event
-
+func populate_ui():
 	var path_point_info_boxes = move_event.get_path_point_info_boxes()
 	if path_point_info_boxes.is_empty(): 
 		front_label.show_no_points()
