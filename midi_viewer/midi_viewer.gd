@@ -3,11 +3,15 @@ extends Control
 class_name MidiViewer
 
 @export var midi_note_origin: CustomPlayAreaObject
+
+var selected_midi_note: MidiNoteObject
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	SignalManager.on_time_auto_updated.connect(on_time_updated)
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
 	SignalManager.on_midi_viewer_needs_update.connect(update)
+	SignalManager.on_midi_note_selected.connect(on_midi_note_selected)
 	
 	spawn_midi_note_objects()
 	update()
@@ -24,6 +28,9 @@ func spawn_midi_note_objects():
 func _process(_delta):
 	if Input.is_action_just_pressed("toggle_midi_viewer"):
 		visible = not visible
+	if Input.is_action_just_pressed("sync_midi_time"):
+		if is_instance_valid(GlobalManager.selected_note):
+			GlobalManager.selected_note.load_info_from_midi_note(selected_midi_note)
 
 func update():
 	update_midi_note_objects()
@@ -41,3 +48,8 @@ func update_midi_note_objects():
 func on_time_updated():
 	var delta_pos = GlobalManager.midi_speed * GlobalManager.current_time
 	midi_note_origin.set_play_position(Vector2(0, -100 - delta_pos))
+	
+func on_midi_note_selected(midi_note: MidiNoteObject):
+	if is_instance_valid(selected_midi_note):
+		selected_midi_note.unselect()
+	selected_midi_note = midi_note

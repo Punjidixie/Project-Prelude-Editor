@@ -63,14 +63,13 @@ func load_info_from_info_box(info_box : TopInfoBox) -> void:
 	# No need, eventually it will reach the event and will be picked up.
 
 func load_info_from_midi_note(midi_note: MidiNoteObject) -> void:
-	var time_gap = end_event.start_time - start_time
-	start_time = midi_note.midi_time - time_gap
-	SignalManager.on_top_ui_needs_update.emit()
+	start_time = midi_note.midi_time / 1000.0 - end_event.start_time
+	on_top_ui_needs_update.emit()
 	update()
 
 func on_event_updated(event: NoteEvent):
 	if event == end_event:
-		SignalManager.on_top_ui_needs_update.emit()
+		on_top_ui_needs_update.emit()
 	update()
 
 func on_checkpoint_clicked():

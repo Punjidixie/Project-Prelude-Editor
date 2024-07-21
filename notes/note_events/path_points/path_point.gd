@@ -18,6 +18,9 @@ func _ready():
 	left_click_drag_detector.on_dragged.connect(on_left_dragged)
 	right_click_drag_detector.on_dragged.connect(on_right_dragged)
 	right_click_drag_detector.on_released.connect(on_right_released)
+	
+	# Why connect them here instead of in events to kill all path point children?
+	# Well I don't want all events to get called at once.
 	SignalManager.on_move_event_selected.connect(on_move_event_selected)
 	SignalManager.on_note_selected.connect(on_note_selected)
 

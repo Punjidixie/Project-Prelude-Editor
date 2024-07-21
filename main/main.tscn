@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=23 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -19,6 +19,8 @@
 [ext_resource type="Script" path="res://ui/add_move_event_checkpoint.gd" id="17_8s8e5"]
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
 [ext_resource type="Script" path="res://ui/midi_viewer/midi_settings.gd" id="19_mb36r"]
+[ext_resource type="Script" path="res://main/audio_editor.gd" id="20_cbn6i"]
+[ext_resource type="Script" path="res://audio/music_player.gd" id="20_t2egl"]
 
 [sub_resource type="Curve2D" id="Curve2D_acccc"]
 _data = {
@@ -301,6 +303,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="OffsetLabel" type="Label" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 99.0
 offset_top = 70.0
 offset_right = 167.0
@@ -332,6 +335,7 @@ offset_right = 196.0
 offset_bottom = 70.0
 
 [node name="OffsetInputBox" type="LineEdit" parent="CanvasLayer/Control/MainEditor/GridController/HorizontalDynamic"]
+layout_mode = 0
 offset_left = 109.0
 offset_top = 89.0
 offset_right = 196.0
@@ -485,6 +489,7 @@ grow_vertical = 2
 text = "Add point"
 
 [node name="MidiViewer" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("midi_note_origin")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -510,7 +515,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color(0, 0, 0, 1)
+color = Color(0, 0, 0, 0.439216)
 
 [node name="MidiNoteOrigin" type="Node2D" parent="CanvasLayer/Control/MidiViewer/ScrollContainer" node_paths=PackedStringArray("reference_control")]
 script = ExtResource("16_y3680")
@@ -577,6 +582,50 @@ grow_vertical = 2
 text = "Speed"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="FileDialog" type="FileDialog" parent="CanvasLayer/Control"]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(392, 159)
+ok_button_text = "Open"
+file_mode = 0
+access = 1
+
+[node name="AudioEditor" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("set_audio_button", "lead_time_input_box")]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 224.0
+offset_bottom = 187.0
+script = ExtResource("20_cbn6i")
+set_audio_button = NodePath("SetAudioButton")
+lead_time_input_box = NodePath("LeadTimeInputBox")
+
+[node name="SetAudioButton" type="Button" parent="CanvasLayer/Control/AudioEditor"]
+offset_left = 17.0
+offset_top = 19.0
+offset_right = 150.0
+offset_bottom = 50.0
+text = "Set audio"
+
+[node name="LeadTimeLabel" type="Label" parent="CanvasLayer/Control/AudioEditor"]
+offset_left = 12.0
+offset_top = 55.0
+offset_right = 80.0
+offset_bottom = 78.0
+text = "Lead time"
+label_settings = ExtResource("9_hav3n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeadTimeInputBox" type="LineEdit" parent="CanvasLayer/Control/AudioEditor"]
+offset_left = 12.0
+offset_top = 75.0
+offset_right = 99.0
+offset_bottom = 106.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+script = ExtResource("20_t2egl")
+file = "res://assets/Four Little Kittens.OGG"
 
 [connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
 [connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]

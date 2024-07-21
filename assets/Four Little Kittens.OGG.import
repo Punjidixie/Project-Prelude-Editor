@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://du8pkaw807xd8"
+path="res://.godot/imported/Four Little Kittens.OGG-1f11f35c98ab28003f7d4379e24999b0.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/Four Little Kittens.OGG"
+dest_files=["res://.godot/imported/Four Little Kittens.OGG-1f11f35c98ab28003f7d4379e24999b0.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

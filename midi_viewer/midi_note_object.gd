@@ -24,8 +24,14 @@ func initialize_midi_info(raw_midi_note):
 	note_name = raw_midi_note.note_name
 	tooltip_label.text = "Note: %s\nTime: %.2f" % [note_name, midi_time / 1000.0]
 	
-
 func on_pressed():
 	info_tooltip.visible = true
+	SignalManager.on_midi_note_selected.emit(self)
+
+# Called from the viewer (if is the currently selected one)
+func unselect():
+	info_tooltip.visible = false
+
+
 	
 

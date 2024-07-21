@@ -9,7 +9,11 @@ var last_frame_time: float = 0
 func _ready():
 	GlobalManager.current_time = 0
 	GlobalManager.play_area = play_area
-	SignalManager.on_time_slider_drag_started.connect(on_time_slider_drag_started)
+	
+	# Control pausing
+	SignalManager.on_time_slider_drag_started.connect(pause)
+	SignalManager.on_audio_lead_time_set.connect(pause)
+	SignalManager.on_audio_set.connect(pause)
 	SignalManager.on_pause_button_pressed.connect(on_pause_button_pressed)
 	SignalManager.on_note_added.connect(on_note_added)
 
@@ -31,11 +35,13 @@ func auto_increment_time(delta):
 	GlobalManager.current_time = new_time
 	SignalManager.on_time_auto_updated.emit()
 
-func on_time_slider_drag_started():
+func pause():
 	GlobalManager.is_paused = true
+	SignalManager.on_pause_toggled.emit()
 
 func on_pause_button_pressed():
 	GlobalManager.is_paused = !GlobalManager.is_paused
+	SignalManager.on_pause_toggled.emit()
 
 func spawn_notes():
 	for i in range(1):
