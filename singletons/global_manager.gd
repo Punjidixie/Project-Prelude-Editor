@@ -12,7 +12,7 @@ var move_all : bool = false
 
 # Grid
 var bpm: float = 120 # Beats per minute
-var scroll_speed: float = 60 # Play units per second
+var scroll_speed: float = 240 # Play units per second
 var subdivisions: int = 2
 var horizontal_divisions: int = 4
 var vertical_divisions: int = 12

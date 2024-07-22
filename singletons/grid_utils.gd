@@ -1,7 +1,7 @@
 extends Node
 
-const lower_left_extension = Vector2(10, 10)
-const upper_right_extension = Vector2(10, 10)
+const lower_left_extension = Vector2(60, 60)
+const upper_right_extension = Vector2(60, 60)
 
 func get_lower_left_border() -> Vector2:
 	return -lower_left_extension

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=25 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://ui/midi_viewer/midi_settings.gd" id="19_mb36r"]
 [ext_resource type="Script" path="res://main/audio_editor.gd" id="20_cbn6i"]
 [ext_resource type="Script" path="res://audio/music_player.gd" id="20_t2egl"]
+[ext_resource type="Script" path="res://ui/fps_label.gd" id="22_edl1x"]
 
 [sub_resource type="Curve2D" id="Curve2D_acccc"]
 _data = {
@@ -673,6 +674,14 @@ offset_left = 12.0
 offset_top = 75.0
 offset_right = 99.0
 offset_bottom = 106.0
+
+[node name="FPSLabel" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 183.0
+offset_top = 23.0
+offset_right = 223.0
+offset_bottom = 46.0
+script = ExtResource("22_edl1x")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 script = ExtResource("20_t2egl")

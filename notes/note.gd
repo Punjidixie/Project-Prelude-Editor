@@ -3,7 +3,8 @@ extends Node
 
 class_name Note
 
-@export var start_time : float
+@export var start_time: float
+@export var note_size: float
 
 @export var note_body : NoteBody
 @export var checkpoints_container : Node
@@ -29,8 +30,10 @@ func _ready():
 	# All checkpoints would've been in place by now.
 	update()
 	
+	note_body.update_size()
+	
 	# Technically not needed, but is here for consistency like in NoteCheckpoint.
-	# Nvm it's needed, since "always_visible" needs to be set
+	# Nvm it's needed, since "always_visible" needs to be set to false.
 	go_regular_mode() 
 	
 func initialize_connections():
@@ -69,6 +72,7 @@ func update():
 	var play_position = event.get_notebody_play_position(time - start_time)
 	note_body.set_play_position(play_position)
 
+
 func load_info_from_info_box(info_box : TopInfoBox) -> void:
 	start_time = float(info_box.start_time_input_box.text)
 	var relative_end_time = float(info_box.end_time_input_box.text) - start_time
@@ -88,6 +92,9 @@ func on_event_updated(event: NoteEvent):
 	update()
 
 func on_checkpoint_clicked():
+	get_selected()
+
+func get_selected():
 	if GlobalManager.selected_note != self:
 		SignalManager.on_note_selected.emit(self) # Tell the UI manager to spawn UIs
 		GlobalManager.selected_note = self

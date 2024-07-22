@@ -19,6 +19,6 @@ event_name = "Move Event"
 
 [node name="WorldLine" type="Line2D" parent="."]
 width = 2.0
-default_color = Color(1, 1, 1, 0.713726)
+default_color = Color(0, 0, 0, 0.713726)
 
 [node name="PathPoints" type="Node" parent="."]

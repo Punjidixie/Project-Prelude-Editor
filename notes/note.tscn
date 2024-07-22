@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dtjal1ff4gyfe"]
+[gd_scene load_steps=13 format=3 uid="uid://dtjal1ff4gyfe"]
 
 [ext_resource type="Script" path="res://notes/note.gd" id="1_k3vvd"]
 [ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_nfqg4"]
@@ -7,19 +7,23 @@
 [ext_resource type="Script" path="res://notes/note_events/end_event.gd" id="5_2uktm"]
 [ext_resource type="Script" path="res://notes/note_body.gd" id="6_vy0we"]
 [ext_resource type="Texture2D" uid="uid://pc1xdwlau3fa" path="res://assets/star.png" id="7_lkkwb"]
+[ext_resource type="Texture2D" uid="uid://cauuo7bqb70og" path="res://assets/pencil_texture.png" id="8_05ie4"]
 [ext_resource type="Script" path="res://notes/mouse_follower.gd" id="8_fxr6v"]
+[ext_resource type="Script" path="res://notes/drag_detector.gd" id="9_n88os"]
+[ext_resource type="Texture2D" uid="uid://b5mbk6ohj7xw" path="res://assets/Circle.png" id="11_55t5n"]
 
 [sub_resource type="Curve2D" id="Curve2D_46q8g"]
 resource_local_to_scene = true
 bake_interval = 1.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 50, 110, 0, 0, 30, 10, 50, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 540, 0, 0, 30, 10, 0, 0)
 }
 point_count = 2
 
 [node name="Note" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "end_checkpoint", "appear_event", "end_event")]
 script = ExtResource("1_k3vvd")
 start_time = 0.5
+note_size = 60.0
 note_body = NodePath("NoteBody")
 checkpoints_container = NodePath("Checkpoints")
 note_events_container = NodePath("NoteEvents")
@@ -32,13 +36,12 @@ end_event = NodePath("NoteEvents/EndEvent")
 [node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_nfqg4")]
 checkpoint_name = "Start"
 is_essential = true
-play_position = Vector2(50, 110)
+play_position = Vector2(0, 540)
 
 [node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_nfqg4")]
 target_time = 3.0
 checkpoint_name = "End"
 is_essential = true
-play_position = Vector2(50, 0)
 
 [node name="NoteEvents" type="Node" parent="."]
 
@@ -57,14 +60,51 @@ script = ExtResource("5_2uktm")
 end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 event_name = "End Event"
 
-[node name="NoteBody" type="Node2D" parent="." node_paths=PackedStringArray("mouse_follower", "note")]
+[node name="NoteBody" type="Node2D" parent="." node_paths=PackedStringArray("mouse_follower", "note", "drag_detector", "body")]
 script = ExtResource("6_vy0we")
 mouse_follower = NodePath("MouseFollower")
 note = NodePath("..")
+drag_detector = NodePath("DragDetector")
+body = NodePath("NinePatchRect")
 
 [node name="Visual" type="Sprite2D" parent="NoteBody"]
-modulate = Color(1, 1, 1, 0.858824)
+visible = false
+modulate = Color(0.74978, 0.74978, 0.74978, 1)
+texture = ExtResource("7_lkkwb")
+
+[node name="Mask" type="Sprite2D" parent="NoteBody"]
+visible = false
+clip_children = 1
+texture = ExtResource("8_05ie4")
+
+[node name="Visual" type="Sprite2D" parent="NoteBody/Mask"]
+visible = false
+modulate = Color(0, 0, 0, 1)
 texture = ExtResource("7_lkkwb")
 
 [node name="MouseFollower" type="Node2D" parent="NoteBody"]
 script = ExtResource("8_fxr6v")
+
+[node name="DragDetector" type="Control" parent="NoteBody"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+script = ExtResource("9_n88os")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NoteBody"]
+modulate = Color(0, 0, 0, 1)
+offset_left = -45.0
+offset_top = -7.0
+offset_right = 1755.0
+offset_bottom = 297.0
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("11_55t5n")
+patch_margin_left = 152
+patch_margin_top = 152
+patch_margin_right = 152
+patch_margin_bottom = 152
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2

@@ -1,6 +1,6 @@
 extends Node
 
-const scale_factor = 100
+const scale_factor = 480
 
 ### DEFAULT CALCULATION ###
 func get_world_position(play_position: Vector2) -> Vector2:
