@@ -3,10 +3,13 @@ extends Node
 class_name NoteEvent
 
 
+enum EventType {APPEAR, MOVE, END}
 
 # Local time
 @export var start_time: float
 @export var event_name: String
+
+@export var event_type: EventType
 
 signal on_event_updated(e: NoteEvent)
 signal on_event_ui_needs_update()

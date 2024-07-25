@@ -6,13 +6,14 @@ var note: Note
 
 @export var name_label: Label
 @export var start_time_input_box: LineEdit
-
 @export var end_time_input_box: LineEdit
+@export var size_input_box: LineEdit
 @export var delete_button: Button
 
 func _ready():
-	start_time_input_box.text_submitted.connect(on_time_input_box_updated)
-	end_time_input_box.text_submitted.connect(on_time_input_box_updated)
+	start_time_input_box.text_submitted.connect(on_float_input_box_updated)
+	end_time_input_box.text_submitted.connect(on_float_input_box_updated)
+	size_input_box.text_submitted.connect(on_float_input_box_updated)
 	delete_button.pressed.connect(on_delete_button_pressed)
 	
 func initialize(_note: Note):
@@ -24,8 +25,9 @@ func update():
 	name_label.text = note.name
 	start_time_input_box.text = str(note.start_time)
 	end_time_input_box.text = str(note.start_time + note.end_event.start_time)
+	size_input_box.text = str(note.note_size)
 
-func on_time_input_box_updated(new_string: String):
+func on_float_input_box_updated(new_string: String):
 	if new_string.is_valid_float():
 		load_info_to_note()
 	else:

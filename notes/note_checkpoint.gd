@@ -124,6 +124,7 @@ func delete():
 	
 # Connected to the drag detector
 func on_clicked():
+	# not really needed anymore if checkpoints are invisible when its note isn't selected
 	note.on_checkpoint_clicked()
 
 func on_creation_confirmed():

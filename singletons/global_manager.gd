@@ -8,13 +8,15 @@ var play_area : Control
 
 var selected_note : Note
 
-var move_all : bool = false
+# Editor settings
+var move_all: bool = false
+var is_edit_mode: bool = true
 
 # Grid
 var bpm: float = 120 # Beats per minute
-var scroll_speed: float = 240 # Play units per second
+var scroll_speed: float = 360 # Play units per second
 var subdivisions: int = 2
-var horizontal_divisions: int = 4
+var horizontal_divisions: int = 8
 var vertical_divisions: int = 12
 var is_static_grid: bool = false
 var snap_vertical: bool = true

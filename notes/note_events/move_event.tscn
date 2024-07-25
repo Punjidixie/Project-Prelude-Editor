@@ -16,9 +16,11 @@ path = SubResource("Curve2D_meiol")
 visual_curve = NodePath("WorldLine")
 path_points = NodePath("PathPoints")
 event_name = "Move Event"
+event_type = 1
 
 [node name="WorldLine" type="Line2D" parent="."]
-width = 2.0
+width = 4.0
 default_color = Color(0, 0, 0, 0.713726)
+antialiased = true
 
 [node name="PathPoints" type="Node" parent="."]

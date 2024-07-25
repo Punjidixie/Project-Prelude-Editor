@@ -15,8 +15,9 @@ class_name Note
 @export var appear_event : AppearEvent
 @export var end_event : EndEvent
 
-var always_visible: bool = true
-var is_visible: bool = true
+var always_in_time: bool = true
+var is_in_time: bool = false
+var is_selected: bool = false
 
 signal on_top_ui_needs_update()
 
@@ -24,12 +25,13 @@ signal on_top_ui_needs_update()
 func _ready():
 	SignalManager.on_time_auto_updated.connect(on_time_updated)
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
+	SignalManager.on_note_selected.connect(on_note_selected)
 	
 	initialize_connections()
 	
 	# All checkpoints would've been in place by now.
 	update()
-	
+	update_visibility()
 	note_body.update_size()
 	
 	# Technically not needed, but is here for consistency like in NoteCheckpoint.
@@ -53,31 +55,35 @@ func connect_event(event: NoteEvent):
 	event.note = self
 
 func on_time_updated():
-	if not always_visible:
-		var is_time_out_of_range = GlobalManager.current_time < start_time or GlobalManager.current_time > start_time + end_event.start_time + 3
-		if is_time_out_of_range and is_visible: 
-			set_visibility(false)
-		elif not is_time_out_of_range and not is_visible:
-			set_visibility(true)
-	elif always_visible and not is_visible:
-		set_visibility(true)
-		
-	update()
+	update_visibility()
+	update() # position
 
 func update():
-
 	# Calculates note body position
 	var time = GlobalManager.current_time
 	var event = get_event_at_time(time)
 	var play_position = event.get_notebody_play_position(time - start_time)
 	note_body.set_play_position(play_position)
 
-
+func update_visibility():
+	if not always_in_time:
+		var is_time_out_of_range = GlobalManager.current_time < start_time or GlobalManager.current_time > start_time + end_event.start_time + 3
+		if is_time_out_of_range and is_in_time: 
+			is_in_time = false
+			set_visibility(false) # everything goes
+		elif not is_time_out_of_range and not is_in_time:
+			is_in_time = true
+			set_visibility(true) # either just note body or also with the editor stuffs
+	elif always_in_time and not is_in_time:
+		is_in_time = true
+		set_visibility(true)
+	
 func load_info_from_info_box(info_box : TopInfoBox) -> void:
 	start_time = float(info_box.start_time_input_box.text)
+	note_size = float(info_box.size_input_box.text)
 	var relative_end_time = float(info_box.end_time_input_box.text) - start_time
-	
 	end_checkpoint.load_time_from_note(relative_end_time)
+	note_body.update_size()
 	#update() 
 	# No need, eventually it will reach the event and will be picked up.
 
@@ -91,14 +97,22 @@ func on_event_updated(event: NoteEvent):
 		on_top_ui_needs_update.emit()
 	update()
 
+# maybe not needed anymore actually
 func on_checkpoint_clicked():
 	get_selected()
 
 func get_selected():
-	if GlobalManager.selected_note != self:
-		SignalManager.on_note_selected.emit(self) # Tell the UI manager to spawn UIs
+	if not is_selected:
+		is_selected = true
+		SignalManager.on_note_selected.emit(self) # To whom it may concern...
 		GlobalManager.selected_note = self
-
+		set_editor_visibility(true) # Will appear for sure, because is_selected is true
+		
+func on_note_selected(new_note: Note):
+	if new_note != self:
+		is_selected = false
+		set_editor_visibility(false)
+		
 # Called from a checkpoint when it moves. Amount = delta play position
 func move_all(amount: Vector2):
 	move_by(amount)
@@ -159,11 +173,11 @@ func name_all_checkpoints():
 ### CREATION ###
 func go_creation_mode():
 	note_body.go_creation_mode()
-	always_visible = true
+	always_in_time = true
 
 func go_regular_mode():
 	note_body.go_regular_mode()
-	always_visible = false
+	always_in_time = false
 	
 func on_creation_confirmed():
 	go_regular_mode()
@@ -188,10 +202,13 @@ func on_creation_zone_exited():
 func on_creation_zone_entered():
 	set_visibility(true)
 
+func set_editor_visibility(visibility: bool):
+	var actual_visibilty = is_selected and visibility
+	for checkpoint: NoteCheckpoint in get_note_checkpoints(): checkpoint.visible = actual_visibilty
+	for event: NoteEvent in get_note_events(): event.set_visible(actual_visibilty)
+
 func set_visibility(visibility: bool):
-	is_visible = visibility
-	for checkpoint in get_note_checkpoints(): checkpoint.visible = visibility
-	for event: NoteEvent in get_note_events(): event.set_visible(visibility)
+	set_editor_visibility(visibility)
 	note_body.visible = visibility
 
 ### DELETION ###
