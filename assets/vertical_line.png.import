@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coptmqrodx8ky"
-path="res://.godot/imported/note_lines.png-3b09e4667b04b803794d7ef369af17f4.ctex"
+uid="uid://r1ojl07mc2dq"
+path="res://.godot/imported/vertical_line.png-986d7a1a9862101b9954a1cd5a5ec27a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/note_lines.png"
-dest_files=["res://.godot/imported/note_lines.png-3b09e4667b04b803794d7ef369af17f4.ctex"]
+source_file="res://assets/vertical_line.png"
+dest_files=["res://.godot/imported/vertical_line.png-986d7a1a9862101b9954a1cd5a5ec27a.ctex"]
 
 [params]
 

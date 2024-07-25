@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coptmqrodx8ky"
-path="res://.godot/imported/note_lines.png-3b09e4667b04b803794d7ef369af17f4.ctex"
+uid="uid://b4didgde3vee7"
+path="res://.godot/imported/horizontal_line.png-94eac636c8304c4ff9986b88f2a8b140.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/note_lines.png"
-dest_files=["res://.godot/imported/note_lines.png-3b09e4667b04b803794d7ef369af17f4.ctex"]
+source_file="res://assets/horizontal_line.png"
+dest_files=["res://.godot/imported/horizontal_line.png-94eac636c8304c4ff9986b88f2a8b140.ctex"]
 
 [params]
 

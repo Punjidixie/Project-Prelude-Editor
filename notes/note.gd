@@ -1,6 +1,5 @@
 extends Node
 
-
 class_name Note
 
 @export var start_time: float

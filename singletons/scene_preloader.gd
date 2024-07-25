@@ -14,6 +14,6 @@ const note_checkpoint = preload("res://notes/note_checkpoint.tscn")
 const move_event = preload("res://notes/note_events/move_event.tscn")
 const path_point = preload("res://notes/note_events/path_points/path_point.tscn")
 
-const note = preload("res://notes/note.tscn")
+const note = preload("res://notes/hold_note.tscn")
 
 const midi_note_object = preload("res://midi_viewer/midi_note_object.tscn")

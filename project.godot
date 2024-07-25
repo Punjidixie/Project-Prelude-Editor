@@ -18,12 +18,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+ScenePreloader="*res://singletons/scene_preloader.gd"
 GlobalManager="*res://singletons/global_manager.gd"
 SignalManager="*res://singletons/signal_manager.gd"
 PlayAreaUtils="*res://singletons/play_area_utils.gd"
 SortingFunctions="*res://singletons/sorting_functions.gd"
 GodotUtils="*res://singletons/godot_utils.gd"
-ScenePreloader="*res://singletons/scene_preloader.gd"
 GridUtils="*res://singletons/grid_utils.gd"
 MidiUtils="*res://singletons/midi_utils.gd"
 

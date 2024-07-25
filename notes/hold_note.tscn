@@ -1,0 +1,274 @@
+[gd_scene load_steps=15 format=3 uid="uid://dfyh0inhcl2cr"]
+
+[ext_resource type="Script" path="res://notes/hold_note.gd" id="1_bxi1y"]
+[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_mg6t2"]
+[ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_06hw0"]
+[ext_resource type="PackedScene" uid="uid://diyjao2akicpk" path="res://notes/note_events/move_event.tscn" id="4_qgm13"]
+[ext_resource type="Script" path="res://notes/note_events/hold_end_event.gd" id="5_umplm"]
+[ext_resource type="Script" path="res://notes/note_body.gd" id="6_ccf6u"]
+[ext_resource type="Script" path="res://notes/mouse_follower.gd" id="7_pqf71"]
+[ext_resource type="Script" path="res://notes/drag_detector.gd" id="8_vjpbb"]
+[ext_resource type="Texture2D" uid="uid://coptmqrodx8ky" path="res://assets/note_lines.png" id="9_a6web"]
+[ext_resource type="Texture2D" uid="uid://dmrn2xun6ea65" path="res://assets/note_lid.png" id="10_dk61x"]
+[ext_resource type="Texture2D" uid="uid://r1ojl07mc2dq" path="res://assets/vertical_line.png" id="11_se47j"]
+[ext_resource type="Texture2D" uid="uid://b4didgde3vee7" path="res://assets/horizontal_line.png" id="12_0u03g"]
+
+[sub_resource type="Curve2D" id="Curve2D_46q8g"]
+resource_local_to_scene = true
+bake_interval = 1.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 540, 0, 0, 30, 10, 0, 0)
+}
+point_count = 2
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2haf3"]
+
+[node name="HoldNote" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "end_checkpoint", "appear_event", "end_event")]
+script = ExtResource("1_bxi1y")
+note_size = 60.0
+note_body = NodePath("NoteBody")
+checkpoints_container = NodePath("Checkpoints")
+note_events_container = NodePath("NoteEvents")
+end_checkpoint = NodePath("Checkpoints/EndCheckpoint")
+appear_event = NodePath("NoteEvents/AppearEvent")
+end_event = NodePath("NoteEvents/HoldEndEvent")
+
+[node name="Checkpoints" type="Node" parent="."]
+
+[node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_mg6t2")]
+checkpoint_name = "Start"
+is_essential = true
+play_position = Vector2(0, 540)
+
+[node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_mg6t2")]
+target_time = 3.0
+checkpoint_name = "End"
+is_essential = true
+
+[node name="NoteEvents" type="Node" parent="."]
+
+[node name="AppearEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint")]
+script = ExtResource("3_06hw0")
+start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
+event_name = "Appear Event"
+
+[node name="MoveEvent" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint") instance=ExtResource("4_qgm13")]
+path = SubResource("Curve2D_46q8g")
+start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
+destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
+
+[node name="HoldEndEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
+script = ExtResource("5_umplm")
+end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
+event_name = "Hold End Event"
+event_type = 2
+
+[node name="NoteBody" type="Node2D" parent="." node_paths=PackedStringArray("mouse_follower", "note", "drag_detector", "body")]
+script = ExtResource("6_ccf6u")
+mouse_follower = NodePath("MouseFollower")
+note = NodePath("..")
+drag_detector = NodePath("DragDetector")
+body = NodePath("Hitbox")
+
+[node name="MouseFollower" type="Node2D" parent="NoteBody"]
+script = ExtResource("7_pqf71")
+
+[node name="DragDetector" type="Control" parent="NoteBody"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+script = ExtResource("8_vjpbb")
+
+[node name="Archive" type="Node2D" parent="NoteBody"]
+visible = false
+
+[node name="Mask" type="TextureRect" parent="NoteBody/Archive"]
+visible = false
+clip_children = 1
+offset_left = -161.0
+offset_top = -149.0
+offset_right = 169.0
+offset_bottom = 164.0
+expand_mode = 1
+
+[node name="Body" type="TextureRect" parent="NoteBody/Archive"]
+modulate = Color(0, 0, 0, 1)
+offset_left = -26.0
+offset_top = -13.0
+offset_right = 78.0
+offset_bottom = 40.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = SubResource("CompressedTexture2D_2haf3")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="LeftLid" type="TextureRect" parent="NoteBody/Archive/Body"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+offset_left = -29.0
+offset_right = 29.0
+offset_bottom = 54.0
+
+[node name="RightLid" type="TextureRect" parent="NoteBody/Archive/Body"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 36.0
+offset_right = 94.0
+offset_bottom = 54.0
+grow_horizontal = 0
+scale = Vector2(-1, 1)
+
+[node name="Hitbox" type="ColorRect" parent="NoteBody/Archive/Body"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -52.0
+offset_right = 34.0
+offset_bottom = 51.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.431373)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NoteBody/Archive"]
+visible = false
+modulate = Color(0, 0, 0, 1)
+offset_left = -45.0
+offset_top = -7.0
+offset_right = 1755.0
+offset_bottom = 297.0
+scale = Vector2(0.05, 0.05)
+patch_margin_left = 152
+patch_margin_top = 152
+patch_margin_right = 152
+patch_margin_bottom = 152
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="Visual" type="Sprite2D" parent="NoteBody/Archive"]
+visible = false
+modulate = Color(0.74978, 0.74978, 0.74978, 1)
+
+[node name="Hitbox" type="Control" parent="NoteBody"]
+custom_minimum_size = Vector2(94, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_left = -41.0
+offset_top = -41.0
+offset_right = 207.0
+offset_bottom = 123.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+
+[node name="CenterLines" type="TextureRect" parent="NoteBody/Hitbox"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 42.0
+offset_top = -27.0
+offset_right = -48.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_a6web")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="RightLid" type="TextureRect" parent="NoteBody/Hitbox"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -27.0
+offset_right = 53.0
+offset_bottom = 27.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_dk61x")
+
+[node name="LeftLid" type="TextureRect" parent="NoteBody/Hitbox"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 2.0
+offset_top = -27.0
+offset_right = 55.0
+offset_bottom = 27.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(-1, 1)
+mouse_filter = 2
+texture = ExtResource("10_dk61x")
+
+[node name="HoldPart" type="Control" parent="NoteBody/Hitbox"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -206.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftLine" type="TextureRect" parent="NoteBody/Hitbox/HoldPart"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = 14.0
+offset_bottom = 18.0
+grow_vertical = 2
+texture = ExtResource("11_se47j")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="RightLine" type="TextureRect" parent="NoteBody/Hitbox/HoldPart"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 10.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(-1, 1)
+texture = ExtResource("11_se47j")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="TopLine" type="TextureRect" parent="NoteBody/Hitbox/HoldPart"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 6.0
+offset_top = -8.0
+offset_right = -4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+texture = ExtResource("12_0u03g")
+expand_mode = 1
+stretch_mode = 1
