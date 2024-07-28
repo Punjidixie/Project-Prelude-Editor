@@ -25,13 +25,14 @@ func _ready():
 	SignalManager.on_time_auto_updated.connect(on_time_updated)
 	SignalManager.on_time_manual_updated.connect(on_time_updated)
 	SignalManager.on_note_selected.connect(on_note_selected)
+	SignalManager.on_auto_play_set.connect(on_auto_play_set)
 	
 	initialize_connections()
 	
 	# All checkpoints would've been in place by now.
 	update()
 	update_visibility()
-	note_body.update_size()
+	note_body.update_size() # set size
 	
 	# Technically not needed, but is here for consistency like in NoteCheckpoint.
 	# Nvm it's needed, since "always_visible" needs to be set to false.
@@ -54,49 +55,63 @@ func connect_event(event: NoteEvent):
 	event.note = self
 
 func on_time_updated():
-	update_visibility()
+	update_visibility() # visibility / set is_in_time
+	update() # position
+
+func on_auto_play_set():
 	update() # position
 
 func update():
 	# Calculates note body position
-	var time = GlobalManager.current_time
-	var event = get_event_at_time(time)
-	var play_position = event.get_notebody_play_position(time - start_time)
-	note_body.set_play_position(play_position)
+	if is_in_time:
+		var time = GlobalManager.current_time
+		var event = get_event_at_time(time)
+		var play_position = event.get_notebody_play_position(time - start_time)
+		note_body.set_play_position(play_position)
+		note_body.update_appearance()
 
+# Should always be called if the start time or end time change.
 func update_visibility():
 	if not always_in_time:
-		var is_time_out_of_range = GlobalManager.current_time < start_time or GlobalManager.current_time > start_time + end_event.start_time + 3
+		var end_offset = end_event.get_ending_lifetime()
+		var time_lower_bound = start_time
+		var time_upper_bound = start_time + end_event.start_time + end_offset
+		var is_time_out_of_range = not GodotUtils.is_between(GlobalManager.current_time, time_lower_bound, time_upper_bound)
 		if is_time_out_of_range and is_in_time: 
 			is_in_time = false
 			set_visibility(false) # everything goes
 		elif not is_time_out_of_range and not is_in_time:
 			is_in_time = true
-			set_visibility(true) # either just note body or also with the editor stuffs
+			set_visibility(true) # either just the note body or also with the editor stuffs
 	elif always_in_time and not is_in_time:
 		is_in_time = true
 		set_visibility(true)
 	
 func load_info_from_info_box(info_box : TopInfoBox) -> void:
 	start_time = float(info_box.start_time_input_box.text)
+	
 	note_size = float(info_box.size_input_box.text)
+	note_body.update_size()
+	
 	var relative_end_time = float(info_box.end_time_input_box.text) - start_time
 	end_checkpoint.load_time_from_note(relative_end_time)
-	note_body.update_size()
+	#update_visibility()
 	#update() 
-	# No need, eventually it will reach the event and will be picked up.
+	# No need, eventually it will reach the event and both will be picked up.
 
 func load_info_from_midi_note(midi_note: MidiNoteObject) -> void:
 	start_time = midi_note.midi_time / 1000.0 - end_event.start_time
 	on_top_ui_needs_update.emit()
+	update_visibility()
 	update()
 
 func on_event_updated(event: NoteEvent):
 	if event == end_event:
 		on_top_ui_needs_update.emit()
+		update_visibility() # the end time might have changed
 	update()
 
-# maybe not needed anymore actually
+# maybe not be needed anymore actually
 func on_checkpoint_clicked():
 	get_selected()
 
@@ -106,6 +121,11 @@ func get_selected():
 		SignalManager.on_note_selected.emit(self) # To whom it may concern...
 		GlobalManager.selected_note = self
 		set_editor_visibility(true) # Will appear for sure, because is_selected is true
+		
+		# What if the selected note is SOMEHOW outside of the time range...
+		# This can really happen, like when confirming the note creation too low.
+		is_in_time = true
+		update_visibility()
 		
 func on_note_selected(new_note: Note):
 	if new_note != self:
@@ -187,10 +207,11 @@ func on_creation_confirmed():
 	
 	start_time = GlobalManager.current_time - time_difference
 
-	on_checkpoint_clicked() # As if the note gets selected
 	end_checkpoint.load_time_from_note(checkpoints[0].play_position.y / GlobalManager.scroll_speed)
-	# update()
+	# update_visibilty(), update()
 	# No need because the end_checkpoint will sort it out.
+	
+	get_selected()
 
 func on_creation_cancelled():
 	queue_free()
@@ -201,14 +222,14 @@ func on_creation_zone_exited():
 func on_creation_zone_entered():
 	set_visibility(true)
 
+func set_visibility(visibility: bool):
+	set_editor_visibility(visibility)
+	note_body.visible = visibility
+	
 func set_editor_visibility(visibility: bool):
 	var actual_visibilty = is_selected and visibility
 	for checkpoint: NoteCheckpoint in get_note_checkpoints(): checkpoint.visible = actual_visibilty
 	for event: NoteEvent in get_note_events(): event.set_visible(actual_visibilty)
-
-func set_visibility(visibility: bool):
-	set_editor_visibility(visibility)
-	note_body.visible = visibility
 
 ### DELETION ###
 func delete(): queue_free()

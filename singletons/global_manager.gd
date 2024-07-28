@@ -10,7 +10,7 @@ var selected_note : Note
 
 # Editor settings
 var move_all: bool = false
-var is_edit_mode: bool = true
+var is_auto_play: bool = false
 
 # Grid
 var bpm: float = 120 # Beats per minute

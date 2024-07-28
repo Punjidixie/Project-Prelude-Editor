@@ -2,27 +2,35 @@ extends NoteEvent
 
 class_name EndEvent
 
-@export var end_checkpoint : NoteCheckpoint
+@export var end_checkpoint: NoteCheckpoint
+@export var end_speed: float
 
 func _ready():
 	start_time = end_checkpoint.target_time
 	end_checkpoint.on_checkpoint_updated.connect(on_end_checkpoint_updated)
 
 func get_notebody_play_position(local_time: float):
-	return end_checkpoint.play_position
+	if GlobalManager.is_auto_play:
+		return end_checkpoint.play_position
+	
+	var time_diff = local_time - start_time
+	return end_checkpoint.play_position - Vector2(0, end_speed * time_diff)
 
 func get_and_initialize_info_box():
 	var info_box : EndEventInfoBox = ScenePreloader.end_event_info_box.instantiate()
 	info_box.initialize(self)
 	return info_box
 
-# Unused. EndEventInfoBox is not editable.
 func load_info_from_info_box(info_box: EventInfoBox):
 	var end_info_box := info_box as EndEventInfoBox
-	start_time = float(end_info_box.time_label.text)
+	#start_time = float(end_info_box.time_label.text)
+	end_speed = float(end_info_box.end_speed_input_box.text)
 	on_event_updated.emit(self)
 
 func on_end_checkpoint_updated():
 	start_time = end_checkpoint.target_time
 	on_event_updated.emit(self)
-	on_event_ui_needs_update.emit()
+	on_event_ui_needs_update.emit() 
+
+func get_ending_lifetime():
+	return (-GridUtils.get_lower_left_border().y) / end_speed

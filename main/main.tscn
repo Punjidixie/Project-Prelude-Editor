@@ -1,9 +1,11 @@
-[gd_scene load_steps=25 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=27 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
 [ext_resource type="Script" path="res://ui/grid/grid_drawer.gd" id="2_fs1ln"]
 [ext_resource type="Texture2D" uid="uid://c5bxbj6qgyfxw" path="res://assets/paper_texture.JPG" id="3_0ily2"]
+[ext_resource type="Script" path="res://main/auto_play_marker.gd" id="5_jkb80"]
+[ext_resource type="Script" path="res://ui/add_hold_note_button.gd" id="8_gq28u"]
 [ext_resource type="Script" path="res://ui/add_note_button.gd" id="8_ne3nl"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="9_hav3n"]
 [ext_resource type="Script" path="res://ui/pause_button.gd" id="10_64sur"]
@@ -20,7 +22,7 @@
 [ext_resource type="Script" path="res://ui/add_move_event_checkpoint.gd" id="17_8s8e5"]
 [ext_resource type="Script" path="res://ui/curve_editor/curve_editor.gd" id="18_ie2ek"]
 [ext_resource type="Script" path="res://ui/midi_viewer/midi_settings.gd" id="19_mb36r"]
-[ext_resource type="Script" path="res://main/audio_editor.gd" id="20_cbn6i"]
+[ext_resource type="Script" path="res://ui/audio_editor.gd" id="20_cbn6i"]
 [ext_resource type="Script" path="res://audio/music_player.gd" id="20_t2egl"]
 [ext_resource type="Script" path="res://ui/fps_label.gd" id="22_edl1x"]
 
@@ -192,6 +194,14 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="AutoPlayButton" type="CheckButton" parent="CanvasLayer/Control/MainEditor"]
+offset_left = 80.0
+offset_top = 90.0
+offset_right = 193.0
+offset_bottom = 121.0
+text = "Autoplay"
+script = ExtResource("5_jkb80")
+
 [node name="PauseButton" type="Button" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
 offset_left = 5.0
@@ -201,12 +211,12 @@ offset_bottom = 153.0
 text = ">"
 script = ExtResource("10_64sur")
 
-[node name="CheckButton" type="CheckButton" parent="CanvasLayer/Control/MainEditor"]
+[node name="MoveAllButton" type="CheckButton" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
-offset_left = 80.0
-offset_top = 90.0
-offset_right = 193.0
-offset_bottom = 121.0
+offset_left = 210.0
+offset_top = 89.0
+offset_right = 323.0
+offset_bottom = 120.0
 text = "Move all"
 script = ExtResource("15_3rhpp")
 
@@ -218,6 +228,15 @@ offset_right = 289.0
 offset_bottom = 36.0
 text = "New note"
 script = ExtResource("8_ne3nl")
+
+[node name="NewHoldNote" type="Button" parent="CanvasLayer/Control/MainEditor"]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 46.0
+offset_right = 289.0
+offset_bottom = 77.0
+text = "New hold note"
+script = ExtResource("8_gq28u")
 
 [node name="NewCheckpoint" type="Button" parent="CanvasLayer/Control/MainEditor"]
 layout_mode = 1
@@ -263,8 +282,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -564.0
-offset_bottom = 125.0
+offset_left = -621.0
+offset_top = 2.0
+offset_right = -89.0
+offset_bottom = 127.0
 grow_horizontal = 0
 color = Color(0.419608, 0.419608, 0.419608, 0.67451)
 script = ExtResource("15_vy3by")
@@ -687,8 +708,9 @@ script = ExtResource("22_edl1x")
 script = ExtResource("20_t2egl")
 file = "res://assets/Four Little Kittens.OGG"
 
+[connection signal="toggled" from="CanvasLayer/Control/MainEditor/AutoPlayButton" to="CanvasLayer/Control/MainEditor/AutoPlayButton" method="_on_toggled"]
 [connection signal="pressed" from="CanvasLayer/Control/MainEditor/PauseButton" to="CanvasLayer/Control/MainEditor/PauseButton" method="_on_pressed"]
-[connection signal="toggled" from="CanvasLayer/Control/MainEditor/CheckButton" to="CanvasLayer/Control/MainEditor/CheckButton" method="_on_toggled"]
+[connection signal="toggled" from="CanvasLayer/Control/MainEditor/MoveAllButton" to="CanvasLayer/Control/MainEditor/MoveAllButton" method="_on_toggled"]
 [connection signal="drag_ended" from="CanvasLayer/Control/MainEditor/TimeSlider" to="CanvasLayer/Control/MainEditor/TimeSlider" method="_on_drag_ended"]
 [connection signal="drag_started" from="CanvasLayer/Control/MainEditor/TimeSlider" to="CanvasLayer/Control/MainEditor/TimeSlider" method="_on_drag_started"]
 [connection signal="value_changed" from="CanvasLayer/Control/MainEditor/TimeSlider" to="CanvasLayer/Control/MainEditor/TimeSlider" method="_on_value_changed"]

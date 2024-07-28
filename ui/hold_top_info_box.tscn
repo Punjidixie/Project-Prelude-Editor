@@ -1,0 +1,121 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdm4oaqd8qjm2"]
+
+[ext_resource type="Script" path="res://ui/hold_top_info_box.gd" id="1_ymegl"]
+[ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_gnxm2"]
+
+[node name="HoldTopInfoBox" type="ColorRect" node_paths=PackedStringArray("hold_time_input_box", "name_label", "start_time_input_box", "end_time_input_box", "size_input_box", "delete_button")]
+custom_minimum_size = Vector2(2.08165e-12, 160)
+offset_right = 244.0
+offset_bottom = 110.0
+color = Color(0.321569, 0.321569, 0.321569, 0)
+script = ExtResource("1_ymegl")
+hold_time_input_box = NodePath("HoldTimeInputBox")
+name_label = NodePath("NameLabel")
+start_time_input_box = NodePath("StartTimeInputBox")
+end_time_input_box = NodePath("EndTimeInputBox")
+size_input_box = NodePath("SizeInputBox")
+delete_button = NodePath("DeleteButton")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.364711, 0.364711, 0.364711, 1)
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Note #1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartTimeLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 12.0
+offset_top = 36.0
+offset_right = 80.0
+offset_bottom = 59.0
+text = "Start time"
+label_settings = ExtResource("2_gnxm2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndTimeLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 98.0
+offset_right = 76.0
+offset_bottom = 121.0
+text = "End time"
+label_settings = ExtResource("2_gnxm2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartTimeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 64.0
+offset_right = 98.0
+offset_bottom = 95.0
+
+[node name="EndTimeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 122.0
+offset_right = 96.0
+offset_bottom = 153.0
+
+[node name="DeleteButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_top = 3.0
+offset_right = -5.0
+offset_bottom = 34.0
+grow_horizontal = 0
+text = "-"
+text_overrun_behavior = 3
+
+[node name="SizeLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 115.0
+offset_top = 35.0
+offset_right = 183.0
+offset_bottom = 58.0
+text = "Size"
+label_settings = ExtResource("2_gnxm2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SizeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 64.0
+offset_right = 218.0
+offset_bottom = 95.0
+
+[node name="HoldTimeLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 97.0
+offset_right = 200.0
+offset_bottom = 120.0
+text = "Hold time"
+label_settings = ExtResource("2_gnxm2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HoldTimeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 121.0
+offset_right = 218.0
+offset_bottom = 152.0

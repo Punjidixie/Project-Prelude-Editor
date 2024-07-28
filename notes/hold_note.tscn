@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_06hw0"]
 [ext_resource type="PackedScene" uid="uid://diyjao2akicpk" path="res://notes/note_events/move_event.tscn" id="4_qgm13"]
 [ext_resource type="Script" path="res://notes/note_events/hold_end_event.gd" id="5_umplm"]
-[ext_resource type="Script" path="res://notes/note_body.gd" id="6_ccf6u"]
+[ext_resource type="Script" path="res://notes/hold_note_body.gd" id="6_go3d2"]
 [ext_resource type="Script" path="res://notes/mouse_follower.gd" id="7_pqf71"]
 [ext_resource type="Script" path="res://notes/drag_detector.gd" id="8_vjpbb"]
 [ext_resource type="Texture2D" uid="uid://coptmqrodx8ky" path="res://assets/note_lines.png" id="9_a6web"]
@@ -25,8 +25,9 @@ point_count = 2
 
 [node name="HoldNote" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "end_checkpoint", "appear_event", "end_event")]
 script = ExtResource("1_bxi1y")
+hold_time = 0.5
 note_size = 60.0
-note_body = NodePath("NoteBody")
+note_body = NodePath("HoldNoteBody")
 checkpoints_container = NodePath("Checkpoints")
 note_events_container = NodePath("NoteEvents")
 end_checkpoint = NodePath("Checkpoints/EndCheckpoint")
@@ -63,17 +64,18 @@ end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 event_name = "Hold End Event"
 event_type = 2
 
-[node name="NoteBody" type="Node2D" parent="." node_paths=PackedStringArray("mouse_follower", "note", "drag_detector", "body")]
-script = ExtResource("6_ccf6u")
+[node name="HoldNoteBody" type="Node2D" parent="." node_paths=PackedStringArray("hold_body", "mouse_follower", "note", "drag_detector", "body")]
+script = ExtResource("6_go3d2")
+hold_body = NodePath("Hitbox/HoldPart")
 mouse_follower = NodePath("MouseFollower")
 note = NodePath("..")
 drag_detector = NodePath("DragDetector")
 body = NodePath("Hitbox")
 
-[node name="MouseFollower" type="Node2D" parent="NoteBody"]
+[node name="MouseFollower" type="Node2D" parent="HoldNoteBody"]
 script = ExtResource("7_pqf71")
 
-[node name="DragDetector" type="Control" parent="NoteBody"]
+[node name="DragDetector" type="Control" parent="HoldNoteBody"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -20.0
@@ -82,10 +84,10 @@ offset_right = 20.0
 offset_bottom = 20.0
 script = ExtResource("8_vjpbb")
 
-[node name="Archive" type="Node2D" parent="NoteBody"]
+[node name="Archive" type="Node2D" parent="HoldNoteBody"]
 visible = false
 
-[node name="Mask" type="TextureRect" parent="NoteBody/Archive"]
+[node name="Mask" type="TextureRect" parent="HoldNoteBody/Archive"]
 visible = false
 clip_children = 1
 offset_left = -161.0
@@ -94,7 +96,7 @@ offset_right = 169.0
 offset_bottom = 164.0
 expand_mode = 1
 
-[node name="Body" type="TextureRect" parent="NoteBody/Archive"]
+[node name="Body" type="TextureRect" parent="HoldNoteBody/Archive"]
 modulate = Color(0, 0, 0, 1)
 offset_left = -26.0
 offset_top = -13.0
@@ -106,14 +108,14 @@ texture = SubResource("CompressedTexture2D_2haf3")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="LeftLid" type="TextureRect" parent="NoteBody/Archive/Body"]
+[node name="LeftLid" type="TextureRect" parent="HoldNoteBody/Archive/Body"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 offset_left = -29.0
 offset_right = 29.0
 offset_bottom = 54.0
 
-[node name="RightLid" type="TextureRect" parent="NoteBody/Archive/Body"]
+[node name="RightLid" type="TextureRect" parent="HoldNoteBody/Archive/Body"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 1
@@ -125,7 +127,7 @@ offset_bottom = 54.0
 grow_horizontal = 0
 scale = Vector2(-1, 1)
 
-[node name="Hitbox" type="ColorRect" parent="NoteBody/Archive/Body"]
+[node name="Hitbox" type="ColorRect" parent="HoldNoteBody/Archive/Body"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -139,7 +141,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0.431373)
 
-[node name="NinePatchRect" type="NinePatchRect" parent="NoteBody/Archive"]
+[node name="NinePatchRect" type="NinePatchRect" parent="HoldNoteBody/Archive"]
 visible = false
 modulate = Color(0, 0, 0, 1)
 offset_left = -45.0
@@ -154,22 +156,22 @@ patch_margin_bottom = 152
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 
-[node name="Visual" type="Sprite2D" parent="NoteBody/Archive"]
+[node name="Visual" type="Sprite2D" parent="HoldNoteBody/Archive"]
 visible = false
 modulate = Color(0.74978, 0.74978, 0.74978, 1)
 
-[node name="Hitbox" type="Control" parent="NoteBody"]
+[node name="Hitbox" type="Control" parent="HoldNoteBody"]
 custom_minimum_size = Vector2(94, 0)
 layout_mode = 3
 anchors_preset = 0
-offset_left = -41.0
+offset_left = -49.0
 offset_top = -41.0
-offset_right = 207.0
+offset_right = 215.0
 offset_bottom = 123.0
 scale = Vector2(0.5, 0.5)
 mouse_filter = 2
 
-[node name="CenterLines" type="TextureRect" parent="NoteBody/Hitbox"]
+[node name="CenterLines" type="TextureRect" parent="HoldNoteBody/Hitbox"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 14
@@ -187,7 +189,7 @@ texture = ExtResource("9_a6web")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="RightLid" type="TextureRect" parent="NoteBody/Hitbox"]
+[node name="RightLid" type="TextureRect" parent="HoldNoteBody/Hitbox"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 4
@@ -200,7 +202,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("10_dk61x")
 
-[node name="LeftLid" type="TextureRect" parent="NoteBody/Hitbox"]
+[node name="LeftLid" type="TextureRect" parent="HoldNoteBody/Hitbox"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 6
@@ -218,31 +220,30 @@ scale = Vector2(-1, 1)
 mouse_filter = 2
 texture = ExtResource("10_dk61x")
 
-[node name="HoldPart" type="Control" parent="NoteBody/Hitbox"]
+[node name="HoldPart" type="Control" parent="HoldNoteBody/Hitbox"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -206.0
-offset_bottom = -20.0
+offset_top = -160.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LeftLine" type="TextureRect" parent="NoteBody/Hitbox/HoldPart"]
+[node name="LeftLine" type="TextureRect" parent="HoldNoteBody/Hitbox/HoldPart"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 4.0
 offset_right = 14.0
-offset_bottom = 18.0
+offset_bottom = -10.0
 grow_vertical = 2
 texture = ExtResource("11_se47j")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="RightLine" type="TextureRect" parent="NoteBody/Hitbox/HoldPart"]
+[node name="RightLine" type="TextureRect" parent="HoldNoteBody/Hitbox/HoldPart"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 11
@@ -251,7 +252,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -2.0
 offset_right = 10.0
-offset_bottom = 20.0
+offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(-1, 1)
@@ -259,7 +260,7 @@ texture = ExtResource("11_se47j")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="TopLine" type="TextureRect" parent="NoteBody/Hitbox/HoldPart"]
+[node name="TopLine" type="TextureRect" parent="HoldNoteBody/Hitbox/HoldPart"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 10

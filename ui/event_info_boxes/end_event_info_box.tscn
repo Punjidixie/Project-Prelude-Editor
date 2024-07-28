@@ -3,13 +3,14 @@
 [ext_resource type="Script" path="res://ui/event_info_boxes/end_event_info_box.gd" id="1_p2s52"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_3pnd2"]
 
-[node name="EndEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_label", "event_name_label")]
-custom_minimum_size = Vector2(0, 60)
+[node name="EndEventInfoBox" type="ColorRect" node_paths=PackedStringArray("time_label", "end_speed_input_box", "event_name_label")]
+custom_minimum_size = Vector2(0, 80)
 offset_right = 161.0
 offset_bottom = 60.0
 color = Color(0.321569, 0.321569, 0.321569, 0)
 script = ExtResource("1_p2s52")
 time_label = NodePath("TimeDisplay")
+end_speed_input_box = NodePath("EndSpeedInputBox")
 event_name_label = NodePath("EventName")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -37,11 +38,11 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
-text = "Appear"
+text = "End"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="time" type="Label" parent="."]
+[node name="TimeLabel" type="Label" parent="."]
 layout_mode = 1
 offset_left = 10.0
 offset_top = 29.0
@@ -61,3 +62,21 @@ offset_bottom = 52.0
 text = "0"
 label_settings = ExtResource("2_3pnd2")
 vertical_alignment = 1
+
+[node name="TimeLabel2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 54.0
+offset_right = 80.0
+offset_bottom = 77.0
+text = "End speed"
+label_settings = ExtResource("2_3pnd2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndSpeedInputBox" type="LineEdit" parent="."]
+layout_mode = 1
+offset_left = 87.0
+offset_top = 48.0
+offset_right = 154.062
+offset_bottom = 79.0

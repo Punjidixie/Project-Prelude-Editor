@@ -29,7 +29,11 @@ func _process(delta):
 	if (GlobalManager.is_paused == false):
 		auto_increment_time(delta)
 	
+# Note creation
 func on_note_added(note: Note):
+	# Set here, so the tail has the correct size when appearing for the first time.
+	note.end_event.end_speed = GlobalManager.scroll_speed
+	
 	notes.add_child(note)
 	note.go_creation_mode()
 	
