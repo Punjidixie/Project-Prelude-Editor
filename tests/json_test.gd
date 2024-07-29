@@ -6,9 +6,19 @@ class MockEvent:
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var m = MockEvent.new()
-	m.checkpoint = 2
-	m.type = "S"
-	print(inst_to_dict(m))
+	var d = {
+		amo = 1,
+		gus = "aaa",
+		v = Vector2(1,1)
+	}
+	print(d.h)
+	var json = JSON.new()
+	
+	var strd = JSON.stringify(d)
+	
+	print(strd)
+	var parsed = json.parse(strd)
+
+	
 	
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://b1s8vfy07xhsm"]
+[gd_scene load_steps=28 format=3 uid="uid://b1s8vfy07xhsm"]
 
 [ext_resource type="Script" path="res://main/main_controller.gd" id="1_pmpl2"]
 [ext_resource type="Script" path="res://ui/time_slider.gd" id="2_0fta8"]
+[ext_resource type="Script" path="res://main/save_system.gd" id="2_4ouq3"]
 [ext_resource type="Script" path="res://ui/grid/grid_drawer.gd" id="2_fs1ln"]
 [ext_resource type="Texture2D" uid="uid://c5bxbj6qgyfxw" path="res://assets/paper_texture.JPG" id="3_0ily2"]
 [ext_resource type="Script" path="res://main/auto_play_marker.gd" id="5_jkb80"]
@@ -25,12 +26,7 @@
 [ext_resource type="Script" path="res://ui/audio_editor.gd" id="20_cbn6i"]
 [ext_resource type="Script" path="res://audio/music_player.gd" id="20_t2egl"]
 [ext_resource type="Script" path="res://ui/fps_label.gd" id="22_edl1x"]
-
-[sub_resource type="Curve2D" id="Curve2D_acccc"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 423.192, 286.837, 0, 0, 0, 0, 222.229, 232.767, 0, 0, 0, 0, 247.458, 170.849, 0, 0, 0, 0, 397.093, 124.628)
-}
-point_count = 4
+[ext_resource type="Script" path="res://ui/save_controller.gd" id="25_b3mwb"]
 
 [node name="Main" type="Node2D" node_paths=PackedStringArray("notes", "play_area")]
 script = ExtResource("1_pmpl2")
@@ -39,11 +35,10 @@ play_area = NodePath("CanvasLayer/Control/PlayArea")
 
 [node name="Notes" type="Node" parent="."]
 
-[node name="Path2D" type="Path2D" parent="Notes"]
-visible = false
-position = Vector2(-29.4448, -34.9067)
-scale = Vector2(1.14947, 1.14667)
-curve = SubResource("Curve2D_acccc")
+[node name="SaveSystem" type="Node" parent="." node_paths=PackedStringArray("save_controller", "notes")]
+script = ExtResource("2_4ouq3")
+save_controller = NodePath("../CanvasLayer/Control/SaveController")
+notes = NodePath("../Notes")
 
 [node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines", "border_lines")]
 script = ExtResource("2_fs1ln")
@@ -195,6 +190,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="AutoPlayButton" type="CheckButton" parent="CanvasLayer/Control/MainEditor"]
+layout_mode = 0
 offset_left = 80.0
 offset_top = 90.0
 offset_right = 193.0
@@ -656,7 +652,7 @@ text = "Choose MIDI file"
 layout_mode = 1
 anchors_preset = 0
 offset_right = 224.0
-offset_bottom = 187.0
+offset_bottom = 120.0
 script = ExtResource("20_cbn6i")
 set_audio_button = NodePath("SetAudioButton")
 lead_time_input_box = NodePath("LeadTimeInputBox")
@@ -703,6 +699,48 @@ offset_top = 23.0
 offset_right = 223.0
 offset_bottom = 46.0
 script = ExtResource("22_edl1x")
+
+[node name="SaveController" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("save_button", "save_file_dialog", "open_button", "open_file_dialog")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 5.0
+offset_top = 124.0
+offset_right = 229.0
+offset_bottom = 244.0
+script = ExtResource("25_b3mwb")
+save_button = NodePath("SaveButton")
+save_file_dialog = NodePath("SaveFileDialog")
+open_button = NodePath("OpenButton")
+open_file_dialog = NodePath("OpenFileDialog")
+
+[node name="SaveFileDialog" type="FileDialog" parent="CanvasLayer/Control/SaveController"]
+initial_position = 2
+size = Vector2i(1000, 720)
+ok_button_text = "Save"
+access = 2
+
+[node name="SaveButton" type="Button" parent="CanvasLayer/Control/SaveController"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 19.0
+offset_right = 150.0
+offset_bottom = 50.0
+text = "Save chart"
+
+[node name="OpenFileDialog" type="FileDialog" parent="CanvasLayer/Control/SaveController"]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(1000, 720)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[node name="OpenButton" type="Button" parent="CanvasLayer/Control/SaveController"]
+offset_left = 17.0
+offset_top = 64.0
+offset_right = 150.0
+offset_bottom = 95.0
+text = "Open chart"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 script = ExtResource("20_t2egl")

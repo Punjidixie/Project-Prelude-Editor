@@ -18,13 +18,14 @@ signal on_checkpoint_clicked()
 signal on_checkpoint_renamed()
 
 signal on_checkpoint_deleted(checkpoint: NoteCheckpoint)
+enum CheckpointType {START, REGULAR, END}
 
 # Local time
 @export var target_time : float
 @export var checkpoint_name : String
 @export var drag_detector: DragDetector
 @export var mouse_follower: MouseFollower
-@export var is_essential: bool
+@export var checkpoint_type: CheckpointType
 
 var following_mouse = false
 var mouse_in = false # to be able to start following mouse

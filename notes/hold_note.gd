@@ -7,7 +7,9 @@ class_name HoldNote
 # DIFF: note body height needs to be calculated too
 func _ready():
 	super._ready()
-	(note_body as HoldNoteBody).update_height()
+	# In the case of auto play, if the initial time it too low, the height will look bad!
+	# That's why I passed in the "false" optional parameter to ignore auto play here.
+	(note_body as HoldNoteBody).update_height(false)
 
 # DIFF: a different top info box is needed
 func get_and_initialize_top_info_box() -> TopInfoBox:

@@ -2,6 +2,9 @@ extends Node
 
 class_name Note
 
+enum NoteType {CLICK, HOLD}
+
+@export var note_type: NoteType
 @export var start_time: float
 @export var note_size: float
 
@@ -9,6 +12,7 @@ class_name Note
 @export var checkpoints_container : Node
 @export var note_events_container : Node
 
+@export var start_checkpoint : NoteCheckpoint
 @export var end_checkpoint : NoteCheckpoint
 
 @export var appear_event : AppearEvent
@@ -30,12 +34,12 @@ func _ready():
 	initialize_connections()
 	
 	# All checkpoints would've been in place by now.
-	update()
 	update_visibility()
+	update()
 	note_body.update_size() # set size
 	
 	# Technically not needed, but is here for consistency like in NoteCheckpoint.
-	# Nvm it's needed, since "always_visible" needs to be set to false.
+	# Nvm it's needed, since "always_in_time" needs to be set to false.
 	go_regular_mode() 
 	
 func initialize_connections():
@@ -59,7 +63,7 @@ func on_time_updated():
 	update() # position
 
 func on_auto_play_set():
-	update() # position
+	update() # position (and appearance)
 
 func update():
 	# Calculates note body position
@@ -70,7 +74,7 @@ func update():
 		note_body.set_play_position(play_position)
 		note_body.update_appearance()
 
-# Should always be called if the start time or end time change.
+# Should always be called if the start time or end time change, or the time itself.
 func update_visibility():
 	if not always_in_time:
 		var end_offset = end_event.get_ending_lifetime()
@@ -144,7 +148,7 @@ func move_by(amount: Vector2):
 	for checkpoint: NoteCheckpoint in checkpoints: checkpoint.move_by(amount)
 	for event: NoteEvent in events: event.move_by(amount)
 
-# Called from the add checkpoint button. Provide a place for the checkpoint to rent.
+# Called from the add checkpoint button. Provide a place for the checkpoint to stay.
 func add_temporary_checkpoint(checkpoint: NoteCheckpoint):
 	connect_checkpoint(checkpoint)
 	

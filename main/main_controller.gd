@@ -5,6 +5,7 @@ extends Node
 
 var last_frame_time: float = 0
 
+var debug = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	GlobalManager.current_time = 0
@@ -28,6 +29,9 @@ func _ready():
 func _process(delta):
 	if (GlobalManager.is_paused == false):
 		auto_increment_time(delta)
+	
+	
+	
 	
 # Note creation
 func on_note_added(note: Note):

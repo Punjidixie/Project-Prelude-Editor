@@ -20,7 +20,8 @@ func initialize(_checkpoint : NoteCheckpoint):
 	checkpoint = _checkpoint
 	checkpoint.on_checkpoint_ui_needs_update.connect(update)
 	checkpoint.on_checkpoint_renamed.connect(rename)
-	if checkpoint.is_essential == true: delete_button.hide()
+	if checkpoint.checkpoint_type in [checkpoint.CheckpointType.START, checkpoint.CheckpointType.END]:
+		delete_button.hide()
 	update()
 
 func update():

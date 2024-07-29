@@ -35,7 +35,7 @@ func _process(_delta):
 	if Input.is_action_just_pressed("toggle_midi_viewer"):
 		visible = not visible
 	if Input.is_action_just_pressed("sync_midi_time"):
-		if is_instance_valid(GlobalManager.selected_note):
+		if is_instance_valid(GlobalManager.selected_note) and is_instance_valid(selected_midi_note):
 			GlobalManager.selected_note.load_info_from_midi_note(selected_midi_note)
 
 func update():

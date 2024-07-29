@@ -1,26 +1,17 @@
-[gd_scene load_steps=12 format=3 uid="uid://dtjal1ff4gyfe"]
+[gd_scene load_steps=10 format=3 uid="uid://bqw6yg161s4fa"]
 
-[ext_resource type="Script" path="res://notes/note.gd" id="1_k3vvd"]
-[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_nfqg4"]
-[ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_m0n3l"]
-[ext_resource type="PackedScene" uid="uid://diyjao2akicpk" path="res://notes/note_events/move_event.tscn" id="4_bex8r"]
-[ext_resource type="Script" path="res://notes/note_events/end_event.gd" id="5_2uktm"]
-[ext_resource type="Script" path="res://notes/note_body.gd" id="6_vy0we"]
-[ext_resource type="Script" path="res://notes/mouse_follower.gd" id="8_fxr6v"]
-[ext_resource type="Script" path="res://notes/drag_detector.gd" id="9_n88os"]
-[ext_resource type="Texture2D" uid="uid://coptmqrodx8ky" path="res://assets/note_lines.png" id="10_mww66"]
-[ext_resource type="Texture2D" uid="uid://dmrn2xun6ea65" path="res://assets/note_lid.png" id="13_xlp1m"]
-
-[sub_resource type="Curve2D" id="Curve2D_46q8g"]
-resource_local_to_scene = true
-bake_interval = 1.0
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 540, 0, 0, 30, 10, 0, 0)
-}
-point_count = 2
+[ext_resource type="Script" path="res://notes/note.gd" id="1_5a6u0"]
+[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_7aqxj"]
+[ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_yco1x"]
+[ext_resource type="Script" path="res://notes/note_events/end_event.gd" id="5_1f74m"]
+[ext_resource type="Script" path="res://notes/note_body.gd" id="6_2w27j"]
+[ext_resource type="Script" path="res://notes/mouse_follower.gd" id="7_1mkw7"]
+[ext_resource type="Script" path="res://notes/drag_detector.gd" id="8_odd0d"]
+[ext_resource type="Texture2D" uid="uid://coptmqrodx8ky" path="res://assets/note_lines.png" id="9_nn3go"]
+[ext_resource type="Texture2D" uid="uid://dmrn2xun6ea65" path="res://assets/note_lid.png" id="10_xyjq6"]
 
 [node name="Note" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "start_checkpoint", "end_checkpoint", "appear_event", "end_event")]
-script = ExtResource("1_k3vvd")
+script = ExtResource("1_5a6u0")
 start_time = 0.5
 note_size = 60.0
 note_body = NodePath("NoteBody")
@@ -33,12 +24,12 @@ end_event = NodePath("NoteEvents/EndEvent")
 
 [node name="Checkpoints" type="Node" parent="."]
 
-[node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_nfqg4")]
+[node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_7aqxj")]
 checkpoint_name = "Start"
 checkpoint_type = 0
 play_position = Vector2(0, 540)
 
-[node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_nfqg4")]
+[node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_7aqxj")]
 target_time = 3.0
 checkpoint_name = "End"
 checkpoint_type = 2
@@ -46,30 +37,25 @@ checkpoint_type = 2
 [node name="NoteEvents" type="Node" parent="."]
 
 [node name="AppearEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint")]
-script = ExtResource("3_m0n3l")
+script = ExtResource("3_yco1x")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 event_name = "Appear Event"
 
-[node name="MoveEvent" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint") instance=ExtResource("4_bex8r")]
-path = SubResource("Curve2D_46q8g")
-start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
-destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
-
 [node name="EndEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
-script = ExtResource("5_2uktm")
+script = ExtResource("5_1f74m")
 end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 event_name = "End Event"
 event_type = 2
 
 [node name="NoteBody" type="Node2D" parent="." node_paths=PackedStringArray("mouse_follower", "note", "drag_detector", "body")]
-script = ExtResource("6_vy0we")
+script = ExtResource("6_2w27j")
 mouse_follower = NodePath("MouseFollower")
 note = NodePath("..")
 drag_detector = NodePath("DragDetector")
 body = NodePath("Hitbox")
 
 [node name="MouseFollower" type="Node2D" parent="NoteBody"]
-script = ExtResource("8_fxr6v")
+script = ExtResource("7_1mkw7")
 
 [node name="DragDetector" type="Control" parent="NoteBody"]
 layout_mode = 3
@@ -78,7 +64,7 @@ offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
-script = ExtResource("9_n88os")
+script = ExtResource("8_odd0d")
 
 [node name="Hitbox" type="Control" parent="NoteBody"]
 custom_minimum_size = Vector2(94, 0)
@@ -105,7 +91,7 @@ offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("10_mww66")
+texture = ExtResource("9_nn3go")
 expand_mode = 1
 stretch_mode = 1
 
@@ -120,7 +106,7 @@ offset_right = 53.0
 offset_bottom = 27.0
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("13_xlp1m")
+texture = ExtResource("10_xyjq6")
 
 [node name="LeftLid" type="TextureRect" parent="NoteBody/Hitbox"]
 modulate = Color(0, 0, 0, 1)
@@ -138,4 +124,4 @@ grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(-1, 1)
 mouse_filter = 2
-texture = ExtResource("13_xlp1m")
+texture = ExtResource("10_xyjq6")

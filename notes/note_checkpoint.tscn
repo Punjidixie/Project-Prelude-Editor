@@ -9,6 +9,7 @@
 script = ExtResource("1_7kayq")
 drag_detector = NodePath("DragDetector")
 mouse_follower = NodePath("MouseFollower")
+checkpoint_type = 1
 
 [node name="Visual" type="Sprite2D" parent="."]
 modulate = Color(0.662745, 1, 1, 0.792157)

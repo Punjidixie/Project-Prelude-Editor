@@ -23,13 +23,15 @@ point_count = 2
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2haf3"]
 
-[node name="HoldNote" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "end_checkpoint", "appear_event", "end_event")]
+[node name="HoldNote" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "start_checkpoint", "end_checkpoint", "appear_event", "end_event")]
 script = ExtResource("1_bxi1y")
 hold_time = 0.5
+note_type = 1
 note_size = 60.0
 note_body = NodePath("HoldNoteBody")
 checkpoints_container = NodePath("Checkpoints")
 note_events_container = NodePath("NoteEvents")
+start_checkpoint = NodePath("Checkpoints/StartCheckpoint")
 end_checkpoint = NodePath("Checkpoints/EndCheckpoint")
 appear_event = NodePath("NoteEvents/AppearEvent")
 end_event = NodePath("NoteEvents/HoldEndEvent")
@@ -38,13 +40,13 @@ end_event = NodePath("NoteEvents/HoldEndEvent")
 
 [node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_mg6t2")]
 checkpoint_name = "Start"
-is_essential = true
+checkpoint_type = 0
 play_position = Vector2(0, 540)
 
 [node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_mg6t2")]
 target_time = 3.0
 checkpoint_name = "End"
-is_essential = true
+checkpoint_type = 2
 
 [node name="NoteEvents" type="Node" parent="."]
 

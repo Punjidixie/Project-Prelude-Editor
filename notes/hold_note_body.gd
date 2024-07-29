@@ -4,6 +4,10 @@ class_name HoldNoteBody
 
 @export var hold_body: Control
 
+func _ready():
+	super._ready()
+	get_tree().get_root().size_changed.connect(update_height)
+
 # Horizontal size changes if HoldNote.note_size changes.
 # That is super.update_size().
 
@@ -16,10 +20,10 @@ class_name HoldNoteBody
 # 2.4 HoldEndEvent.end_speed
 # 2.5 GlobalManager.is_auto_play
 # This should be called where those change.
-func update_height():
+func update_height(consider_auto_play: bool = true):
 	var hold_note := note as HoldNote
 	var remaining_hold_time = hold_note.hold_time
-	if GlobalManager.is_auto_play:
+	if GlobalManager.is_auto_play and consider_auto_play:
 		var relative_time = GlobalManager.current_time - hold_note.start_time
 		var time_since_end = relative_time - hold_note.end_event.start_time
 		remaining_hold_time = clampf(hold_note.hold_time - time_since_end, 0, hold_note.hold_time)

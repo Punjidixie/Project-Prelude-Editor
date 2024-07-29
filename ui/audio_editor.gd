@@ -15,7 +15,6 @@ func on_button_pressed():
 	file_dialog.visible = true
 
 func on_file_selected(path: String):
-	print(path)
 	GlobalManager.audio_stream = AudioStreamOggVorbis.load_from_file(path)
 	SignalManager.on_audio_set.emit() # Tell the stream player
 	
