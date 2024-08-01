@@ -32,6 +32,7 @@ func _ready():
 	SignalManager.on_auto_play_set.connect(on_auto_play_set)
 	
 	initialize_connections()
+	name_all_checkpoints()
 	
 	# All checkpoints would've been in place by now.
 	update_visibility()

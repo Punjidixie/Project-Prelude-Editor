@@ -21,5 +21,6 @@ const hold_note = preload("res://notes/hold_note.tscn")
 
 # Note loading
 const base_note = preload("res://notes/base_note.tscn")
+const base_hold_note = preload("res://notes/base_hold_note.tscn")
 
 const midi_note_object = preload("res://midi_viewer/midi_note_object.tscn")

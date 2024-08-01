@@ -1,30 +1,21 @@
-[gd_scene load_steps=15 format=3 uid="uid://c1e6ql5k1vkej"]
+[gd_scene load_steps=13 format=3 uid="uid://dgaiug2awyot7"]
 
-[ext_resource type="Script" path="res://notes/hold_note.gd" id="1_bxi1y"]
-[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_mg6t2"]
-[ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_06hw0"]
-[ext_resource type="PackedScene" uid="uid://diyjao2akicpk" path="res://notes/note_events/move_event.tscn" id="4_qgm13"]
-[ext_resource type="Script" path="res://notes/note_events/hold_end_event.gd" id="5_umplm"]
-[ext_resource type="Script" path="res://notes/hold_note_body.gd" id="6_go3d2"]
-[ext_resource type="Script" path="res://notes/mouse_follower.gd" id="7_pqf71"]
-[ext_resource type="Script" path="res://notes/drag_detector.gd" id="8_vjpbb"]
-[ext_resource type="Texture2D" uid="uid://coptmqrodx8ky" path="res://assets/note_lines.png" id="9_a6web"]
-[ext_resource type="Texture2D" uid="uid://dmrn2xun6ea65" path="res://assets/note_lid.png" id="10_dk61x"]
-[ext_resource type="Texture2D" uid="uid://r1ojl07mc2dq" path="res://assets/vertical_line.png" id="11_se47j"]
-[ext_resource type="Texture2D" uid="uid://b4didgde3vee7" path="res://assets/horizontal_line.png" id="12_0u03g"]
-
-[sub_resource type="Curve2D" id="Curve2D_46q8g"]
-resource_local_to_scene = true
-bake_interval = 1.0
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 540, 0, 0, 30, 10, 0, 0)
-}
-point_count = 2
+[ext_resource type="Script" path="res://notes/hold_note.gd" id="1_kc7nx"]
+[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_2rm6y"]
+[ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_5ro5a"]
+[ext_resource type="Script" path="res://notes/note_events/hold_end_event.gd" id="5_nkawc"]
+[ext_resource type="Script" path="res://notes/hold_note_body.gd" id="6_niigx"]
+[ext_resource type="Script" path="res://notes/mouse_follower.gd" id="7_xqxsy"]
+[ext_resource type="Script" path="res://notes/drag_detector.gd" id="8_17ayn"]
+[ext_resource type="Texture2D" uid="uid://coptmqrodx8ky" path="res://assets/note_lines.png" id="9_5so3n"]
+[ext_resource type="Texture2D" uid="uid://dmrn2xun6ea65" path="res://assets/note_lid.png" id="10_tbp71"]
+[ext_resource type="Texture2D" uid="uid://r1ojl07mc2dq" path="res://assets/vertical_line.png" id="11_ddajl"]
+[ext_resource type="Texture2D" uid="uid://b4didgde3vee7" path="res://assets/horizontal_line.png" id="12_xf8k5"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2haf3"]
 
 [node name="HoldNote" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "start_checkpoint", "end_checkpoint", "appear_event", "end_event")]
-script = ExtResource("1_bxi1y")
+script = ExtResource("1_kc7nx")
 hold_time = 0.5
 note_type = 1
 note_size = 60.0
@@ -38,12 +29,12 @@ end_event = NodePath("NoteEvents/HoldEndEvent")
 
 [node name="Checkpoints" type="Node" parent="."]
 
-[node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_mg6t2")]
+[node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_2rm6y")]
 checkpoint_name = "Start"
 checkpoint_type = 0
 play_position = Vector2(0, 540)
 
-[node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_mg6t2")]
+[node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_2rm6y")]
 target_time = 3.0
 checkpoint_name = "End"
 checkpoint_type = 2
@@ -51,23 +42,18 @@ checkpoint_type = 2
 [node name="NoteEvents" type="Node" parent="."]
 
 [node name="AppearEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint")]
-script = ExtResource("3_06hw0")
+script = ExtResource("3_5ro5a")
 start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
 event_name = "Appear Event"
 
-[node name="MoveEvent" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint", "destination_checkpoint") instance=ExtResource("4_qgm13")]
-path = SubResource("Curve2D_46q8g")
-start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
-destination_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
-
 [node name="HoldEndEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
-script = ExtResource("5_umplm")
+script = ExtResource("5_nkawc")
 end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
 event_name = "Hold End Event"
 event_type = 2
 
 [node name="HoldNoteBody" type="Node2D" parent="." node_paths=PackedStringArray("hold_body", "mouse_follower", "note", "drag_detector", "body")]
-script = ExtResource("6_go3d2")
+script = ExtResource("6_niigx")
 hold_body = NodePath("Hitbox/HoldPart")
 mouse_follower = NodePath("MouseFollower")
 note = NodePath("..")
@@ -75,7 +61,7 @@ drag_detector = NodePath("DragDetector")
 body = NodePath("Hitbox")
 
 [node name="MouseFollower" type="Node2D" parent="HoldNoteBody"]
-script = ExtResource("7_pqf71")
+script = ExtResource("7_xqxsy")
 
 [node name="DragDetector" type="Control" parent="HoldNoteBody"]
 layout_mode = 3
@@ -84,7 +70,7 @@ offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
-script = ExtResource("8_vjpbb")
+script = ExtResource("8_17ayn")
 
 [node name="Archive" type="Node2D" parent="HoldNoteBody"]
 visible = false
@@ -187,7 +173,7 @@ offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("9_a6web")
+texture = ExtResource("9_5so3n")
 expand_mode = 1
 stretch_mode = 1
 
@@ -202,7 +188,7 @@ offset_right = 53.0
 offset_bottom = 27.0
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("10_dk61x")
+texture = ExtResource("10_tbp71")
 
 [node name="LeftLid" type="TextureRect" parent="HoldNoteBody/Hitbox"]
 modulate = Color(0, 0, 0, 1)
@@ -220,7 +206,7 @@ grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(-1, 1)
 mouse_filter = 2
-texture = ExtResource("10_dk61x")
+texture = ExtResource("10_tbp71")
 
 [node name="HoldPart" type="Control" parent="HoldNoteBody/Hitbox"]
 layout_mode = 1
@@ -241,7 +227,7 @@ offset_left = 4.0
 offset_right = 14.0
 offset_bottom = -10.0
 grow_vertical = 2
-texture = ExtResource("11_se47j")
+texture = ExtResource("11_ddajl")
 expand_mode = 1
 stretch_mode = 1
 
@@ -258,7 +244,7 @@ offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(-1, 1)
-texture = ExtResource("11_se47j")
+texture = ExtResource("11_ddajl")
 expand_mode = 1
 stretch_mode = 1
 
@@ -272,6 +258,6 @@ offset_top = -8.0
 offset_right = -4.0
 offset_bottom = 4.0
 grow_horizontal = 2
-texture = ExtResource("12_0u03g")
+texture = ExtResource("12_xf8k5")
 expand_mode = 1
 stretch_mode = 1

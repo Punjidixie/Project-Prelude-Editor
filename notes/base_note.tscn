@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bqw6yg161s4fa"]
+[gd_scene load_steps=10 format=3 uid="uid://c1tubarhqakyo"]
 
 [ext_resource type="Script" path="res://notes/note.gd" id="1_5a6u0"]
 [ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_7aqxj"]

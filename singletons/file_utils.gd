@@ -1,11 +1,11 @@
 extends Node
 
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func save_file(path: String, content: String):
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(content)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func load_file(path: String):
+	var file = FileAccess.open(path, FileAccess.READ)
+	var content = file.get_as_text()
+	return content

@@ -84,6 +84,7 @@ text = "-"
 text_overrun_behavior = 3
 
 [node name="SizeLabel" type="Label" parent="."]
+layout_mode = 0
 offset_left = 115.0
 offset_top = 35.0
 offset_right = 183.0
@@ -94,6 +95,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SizeInputBox" type="LineEdit" parent="."]
+layout_mode = 0
 offset_left = 131.0
 offset_top = 64.0
 offset_right = 218.0

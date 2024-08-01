@@ -35,10 +35,10 @@ play_area = NodePath("CanvasLayer/Control/PlayArea")
 
 [node name="Notes" type="Node" parent="."]
 
-[node name="SaveSystem" type="Node" parent="." node_paths=PackedStringArray("save_controller", "notes")]
+[node name="SaveSystem" type="Node" parent="." node_paths=PackedStringArray("save_controller", "notes_container")]
 script = ExtResource("2_4ouq3")
 save_controller = NodePath("../CanvasLayer/Control/SaveController")
-notes = NodePath("../Notes")
+notes_container = NodePath("../Notes")
 
 [node name="GridDrawer" type="Node" parent="." node_paths=PackedStringArray("horizontal_lines", "vertical_lines", "border_lines")]
 script = ExtResource("2_fs1ln")
@@ -736,6 +736,7 @@ file_mode = 0
 access = 2
 
 [node name="OpenButton" type="Button" parent="CanvasLayer/Control/SaveController"]
+layout_mode = 0
 offset_left = 17.0
 offset_top = 64.0
 offset_right = 150.0
