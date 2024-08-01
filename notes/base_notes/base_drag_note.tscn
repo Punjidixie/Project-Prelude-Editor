@@ -1,0 +1,128 @@
+[gd_scene load_steps=10 format=3 uid="uid://dxwtcf7ggx0j3"]
+
+[ext_resource type="Script" path="res://notes/note.gd" id="1_a6rvu"]
+[ext_resource type="PackedScene" uid="uid://6xa2kl78865d" path="res://notes/note_checkpoint.tscn" id="2_c1e60"]
+[ext_resource type="Script" path="res://notes/note_events/appear_event.gd" id="3_6se5j"]
+[ext_resource type="Script" path="res://notes/note_events/end_event.gd" id="4_2lvm2"]
+[ext_resource type="Script" path="res://notes/note_body.gd" id="5_wvprd"]
+[ext_resource type="Script" path="res://notes/mouse_follower.gd" id="6_l8jv3"]
+[ext_resource type="Script" path="res://notes/drag_detector.gd" id="7_3itpf"]
+[ext_resource type="Texture2D" uid="uid://coptmqrodx8ky" path="res://assets/note_lines.png" id="8_6un6k"]
+[ext_resource type="Texture2D" uid="uid://dmrn2xun6ea65" path="res://assets/note_lid.png" id="9_j5gmt"]
+
+[node name="Note" type="Node" node_paths=PackedStringArray("note_body", "checkpoints_container", "note_events_container", "start_checkpoint", "end_checkpoint", "appear_event", "end_event")]
+script = ExtResource("1_a6rvu")
+note_type = 2
+start_time = 0.5
+note_size = 60.0
+note_body = NodePath("DragNoteBody")
+checkpoints_container = NodePath("Checkpoints")
+note_events_container = NodePath("NoteEvents")
+start_checkpoint = NodePath("Checkpoints/StartCheckpoint")
+end_checkpoint = NodePath("Checkpoints/EndCheckpoint")
+appear_event = NodePath("NoteEvents/AppearEvent")
+end_event = NodePath("NoteEvents/EndEvent")
+
+[node name="Checkpoints" type="Node" parent="."]
+
+[node name="StartCheckpoint" parent="Checkpoints" instance=ExtResource("2_c1e60")]
+checkpoint_name = "Start"
+checkpoint_type = 0
+play_position = Vector2(0, 540)
+
+[node name="EndCheckpoint" parent="Checkpoints" instance=ExtResource("2_c1e60")]
+target_time = 3.0
+checkpoint_name = "End"
+checkpoint_type = 2
+
+[node name="NoteEvents" type="Node" parent="."]
+
+[node name="AppearEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("start_checkpoint")]
+script = ExtResource("3_6se5j")
+start_checkpoint = NodePath("../../Checkpoints/StartCheckpoint")
+event_name = "Appear Event"
+
+[node name="EndEvent" type="Node" parent="NoteEvents" node_paths=PackedStringArray("end_checkpoint")]
+script = ExtResource("4_2lvm2")
+end_checkpoint = NodePath("../../Checkpoints/EndCheckpoint")
+event_name = "End Event"
+event_type = 2
+
+[node name="DragNoteBody" type="Node2D" parent="." node_paths=PackedStringArray("mouse_follower", "note", "drag_detector", "body")]
+script = ExtResource("5_wvprd")
+mouse_follower = NodePath("MouseFollower")
+note = NodePath("..")
+drag_detector = NodePath("DragDetector")
+body = NodePath("Hitbox")
+
+[node name="MouseFollower" type="Node2D" parent="DragNoteBody"]
+script = ExtResource("6_l8jv3")
+
+[node name="DragDetector" type="Control" parent="DragNoteBody"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+script = ExtResource("7_3itpf")
+
+[node name="Hitbox" type="Control" parent="DragNoteBody"]
+custom_minimum_size = Vector2(94, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_left = -41.0
+offset_top = -41.0
+offset_right = 123.0
+offset_bottom = 123.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="DragNoteBody/Hitbox"]
+modulate = Color(0.994527, 0.783574, 1.54018e-06, 1)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 42.0
+offset_top = -27.0
+offset_right = -48.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("8_6un6k")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="RightLid" type="TextureRect" parent="DragNoteBody/Hitbox"]
+modulate = Color(0.994527, 0.783574, 1.54018e-06, 1)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -27.0
+offset_right = 53.0
+offset_bottom = 27.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_j5gmt")
+
+[node name="LeftLid" type="TextureRect" parent="DragNoteBody/Hitbox"]
+modulate = Color(0.994527, 0.783574, 1.54018e-06, 1)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 2.0
+offset_top = -27.0
+offset_right = 55.0
+offset_bottom = 27.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(-1, 1)
+mouse_filter = 2
+texture = ExtResource("9_j5gmt")

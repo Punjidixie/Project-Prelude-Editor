@@ -37,5 +37,11 @@ func set_visible(visible: bool):
 func move_by(delta_position: Vector2) -> void:
 	pass
 
+# Called from note's scale_time_by
+func scale_time_by(factor: float):
+	start_time *= factor
+	on_event_ui_needs_update.emit()
+	#on_event_updated.emit() # No need. Update will eventually be called.
+
 
 

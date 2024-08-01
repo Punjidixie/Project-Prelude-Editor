@@ -27,6 +27,12 @@ func load_info_from_info_box(info_box: EventInfoBox):
 	end_speed = float(end_info_box.end_speed_input_box.text)
 	on_event_updated.emit(self)
 
+func scale_time_by(factor: float):
+	start_time *= factor
+	end_speed /= factor
+	on_event_ui_needs_update.emit()
+	#on_event_updated.emit() # No need. Update will eventually be called.
+
 func on_end_checkpoint_updated():
 	start_time = end_checkpoint.target_time
 	on_event_updated.emit(self)

@@ -2,7 +2,7 @@ extends Node
 
 class_name Note
 
-enum NoteType {CLICK, HOLD}
+enum NoteType {CLICK, HOLD, DRAG, FLICK}
 
 @export var note_type: NoteType
 @export var start_time: float
@@ -24,6 +24,10 @@ var is_selected: bool = false
 
 signal on_top_ui_needs_update()
 
+func _process(delta):
+	if Input.is_action_just_pressed("debug_1"):
+		scale_time_by(2)
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	SignalManager.on_time_auto_updated.connect(on_time_updated)
@@ -103,12 +107,6 @@ func load_info_from_info_box(info_box : TopInfoBox) -> void:
 	#update_visibility()
 	#update() 
 	# No need, eventually it will reach the event and both will be picked up.
-
-func load_info_from_midi_note(midi_note: MidiNoteObject) -> void:
-	start_time = midi_note.midi_time / 1000.0 - end_event.start_time
-	on_top_ui_needs_update.emit()
-	update_visibility()
-	update()
 
 func on_event_updated(event: NoteEvent):
 	if event == end_event:
@@ -227,6 +225,10 @@ func on_creation_zone_exited():
 func on_creation_zone_entered():
 	set_visibility(true)
 
+### DELETION ###
+func delete(): queue_free()
+
+### VISIBILITY ###
 func set_visibility(visibility: bool):
 	set_editor_visibility(visibility)
 	note_body.visible = visibility
@@ -235,12 +237,28 @@ func set_editor_visibility(visibility: bool):
 	var actual_visibilty = is_selected and visibility
 	for checkpoint: NoteCheckpoint in get_note_checkpoints(): checkpoint.visible = actual_visibilty
 	for event: NoteEvent in get_note_events(): event.set_visible(actual_visibilty)
+	
+### TIME AND SPEED ###
+func scale_time_by(factor: float):
+	for checkpoint: NoteCheckpoint in get_note_checkpoints():
+		checkpoint.scale_time_by(factor)
+	for event: NoteEvent in get_note_events():
+		event.scale_time_by(factor)
+	update_visibility()
+	update()
+	on_top_ui_needs_update.emit()
 
-### DELETION ###
-func delete(): queue_free()
+func set_speed(speed: float):
+	var time_factor: float = end_event.end_speed / speed # is 1 / speed factor
+	scale_time_by(time_factor)
+
+func load_info_from_midi_note(midi_note: MidiNoteObject) -> void:
+	start_time = midi_note.midi_time / 1000.0 - end_event.start_time
+	update_visibility()
+	update()
+	on_top_ui_needs_update.emit()
 
 ### UTILITY FUNCTIONS BELOW ###
-
 func get_event_at_time(time: float):
 	var local_time = time - start_time
 	var note_events = get_note_events()

@@ -59,3 +59,11 @@ func on_midi_note_selected(midi_note: MidiNoteObject):
 	if is_instance_valid(selected_midi_note):
 		selected_midi_note.unselect()
 	selected_midi_note = midi_note
+
+func get_note_from_midi(midi_note_object: MidiNoteObject) -> Note:
+	var note = ScenePreloader.note.instantiate()
+	note.set_speed(GlobalManager.scroll_speed)
+	note.note_body.x = (midi_note_object.play_position.x / 88.0) * PlayAreaUtils.scale_factor
+	note.load_info_from_midi_note(midi_note_object)
+	return note
+		

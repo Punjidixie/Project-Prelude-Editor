@@ -1,0 +1,6 @@
+- scroll timing
+- note type changing
+- midi note auto placer
+- note speed changing
+- default note size
+

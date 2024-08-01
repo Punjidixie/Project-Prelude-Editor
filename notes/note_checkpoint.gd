@@ -108,6 +108,12 @@ func load_time_from_note(new_time: float) -> void:
 func waiting_move_by(amount: Vector2) -> void:
 	set_world_position(position + amount)
 
+# Change 6 : Called from the note time scaler.
+func scale_time_by(factor: float):
+	target_time *= factor
+	on_checkpoint_ui_needs_update.emit()
+	#on_checkpoint_updated.emit() # No need. Eventually update() will be called.
+
 func rename(new_name: String) -> void:
 	checkpoint_name = new_name
 	on_checkpoint_renamed.emit()

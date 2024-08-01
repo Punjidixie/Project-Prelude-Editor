@@ -18,9 +18,13 @@ const path_point = preload("res://notes/note_events/path_points/path_point.tscn"
 # Note creation
 const note = preload("res://notes/note.tscn")
 const hold_note = preload("res://notes/hold_note.tscn")
+const drag_note = preload("res://notes/drag_note.tscn")
+const flick_note = preload("res://notes/flick_note.tscn")
 
 # Note loading
-const base_note = preload("res://notes/base_note.tscn")
-const base_hold_note = preload("res://notes/base_hold_note.tscn")
+const base_note = preload("res://notes/base_notes/base_note.tscn")
+const base_hold_note = preload("res://notes/base_notes/base_hold_note.tscn")
+const base_drag_note = preload("res://notes/base_notes/base_drag_note.tscn")
+const base_flick_note = preload("res://notes/base_notes/base_drag_note.tscn")
 
 const midi_note_object = preload("res://midi_viewer/midi_note_object.tscn")

@@ -17,6 +17,10 @@ func serialize_note(note: Note):
 			return serialize_note_base(note)
 		Note.NoteType.HOLD:
 			return serialize_hold_note(note)
+		Note.NoteType.DRAG:
+			return serialize_note_base(note)
+		Note.NoteType.FLICK:
+			return serialize_note_base(note)
 		_:
 			return serialize_note_base(note)
 	
@@ -118,6 +122,12 @@ func deserialize_note(note_dict: Dictionary):
 		Note.NoteType.HOLD:
 			note = ScenePreloader.base_hold_note.instantiate()
 			load_info_to_hold_note(note_dict, note)
+		Note.NoteType.DRAG:
+			note = ScenePreloader.base_drag_note.instantiate()
+			load_info_to_note_base(note_dict, note)
+		Note.NoteType.FLICK:
+			note = ScenePreloader.base_flick_note.instantiate()
+			load_info_to_hold_note(note_dict, note)
 		_:
 			note = ScenePreloader.base_note.instantiate()
 			load_info_to_note_base(note_dict, note)
@@ -149,7 +159,7 @@ func load_info_to_note_base(note_dict: Dictionary, note: Note):
 		
 func load_info_to_hold_note(note_dict: Dictionary, hold_note: Note):
 	load_info_to_note_base(note_dict, hold_note)
-	hold_note.hold_time = note_dict.hold_t		
+	hold_note.hold_time = note_dict.hold_t	
 
 # Why just load? Because the checkpoint might have already existed (like end checkpoints).		
 func load_info_to_checkpoint(checkpoint_dict: Dictionary, checkpoint: NoteCheckpoint):

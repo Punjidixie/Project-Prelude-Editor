@@ -8,6 +8,7 @@ func _ready():
 	save_controller.on_save_requested.connect(save_chart)
 
 func load_chart(path: String):
+	GodotUtils.delete_all_children(notes_container)
 	var stringified_chart = FileUtils.load_file(path)
 	var chart_dict = JSON.parse_string(stringified_chart)
 	var note_dicts = chart_dict.notes
