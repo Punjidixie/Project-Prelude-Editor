@@ -3,6 +3,8 @@ extends Control
 class_name MidiViewer
 
 @export var midi_note_origin: CustomPlayAreaObject
+@export var notes_container: Node
+@export var midi_ui: MidiSettings
 
 var selected_midi_note: MidiNoteObject
 
@@ -13,7 +15,7 @@ func _ready():
 	SignalManager.on_midi_viewer_needs_update.connect(update)
 	SignalManager.on_midi_note_selected.connect(on_midi_note_selected)
 	SignalManager.on_midi_set.connect(on_midi_set)
-
+	midi_ui.on_generate_notes_requested.connect(spawn_notes_from_midi)
 	
 	update()
 
@@ -36,7 +38,7 @@ func _process(_delta):
 		visible = not visible
 	if Input.is_action_just_pressed("sync_midi_time"):
 		if is_instance_valid(GlobalManager.selected_note) and is_instance_valid(selected_midi_note):
-			GlobalManager.selected_note.load_info_from_midi_note(selected_midi_note)
+			GlobalManager.selected_note.load_time_from_midi_note(selected_midi_note)
 
 func update():
 	update_midi_note_objects()
@@ -60,10 +62,15 @@ func on_midi_note_selected(midi_note: MidiNoteObject):
 		selected_midi_note.unselect()
 	selected_midi_note = midi_note
 
-func get_note_from_midi(midi_note_object: MidiNoteObject) -> Note:
-	var note = ScenePreloader.note.instantiate()
-	note.set_speed(GlobalManager.scroll_speed)
-	note.note_body.x = (midi_note_object.play_position.x / 88.0) * PlayAreaUtils.scale_factor
-	note.load_info_from_midi_note(midi_note_object)
-	return note
+func spawn_notes_from_midi():
+	for midi_note_object in midi_note_origin.get_children():
+		var note = ScenePreloader.note.instantiate()
+		notes_container.add_child(note)
+		
+		# Calculate and set the speed of the note template first.
+		note.end_event.end_speed = (note.start_checkpoint.play_position.y - note.end_checkpoint.play_position.y) / note.end_checkpoint.target_time
+		# Then we can change the speed to the desired speed.
+		note.set_speed(GlobalManager.default_note_speed)
+		note.load_everything_from_midi_note(midi_note_object)
+		
 		

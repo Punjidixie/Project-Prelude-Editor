@@ -18,15 +18,16 @@ enum NoteType {CLICK, HOLD, DRAG, FLICK}
 @export var appear_event : AppearEvent
 @export var end_event : EndEvent
 
-var always_in_time: bool = true
-var is_in_time: bool = false
+# Initial state is visible, as seen in the saved scenes.
+var always_in_time: bool = false
+var is_in_time: bool = true
 var is_selected: bool = false
 
 signal on_top_ui_needs_update()
 
 func _process(delta):
 	if Input.is_action_just_pressed("debug_1"):
-		scale_time_by(2)
+		get_replaced(NoteType.HOLD)
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,14 +38,17 @@ func _ready():
 	
 	initialize_connections()
 	name_all_checkpoints()
+		
+	# This will hide checkpoints / lines but leave the body visible.
+	set_visibility(true) 
 	
-	# All checkpoints would've been in place by now.
+	# If the time is not out of range, this won't do anything.
+	# Else, it'll hide the note body as well.
 	update_visibility()
 	update()
 	note_body.update_size() # set size
 	
 	# Technically not needed, but is here for consistency like in NoteCheckpoint.
-	# Nvm it's needed, since "always_in_time" needs to be set to false.
 	go_regular_mode() 
 	
 func initialize_connections():
@@ -195,7 +199,10 @@ func name_all_checkpoints():
 ### CREATION ###
 func go_creation_mode():
 	note_body.go_creation_mode()
+	# The time has not been set yet.
+	# The note might be born invisible. Let's fix that.
 	always_in_time = true
+	update_visibility()
 
 func go_regular_mode():
 	note_body.go_regular_mode()
@@ -206,11 +213,11 @@ func on_creation_confirmed():
 	var checkpoints = get_note_checkpoints()
 
 	var note_distance = checkpoints[0].play_position.y - note_body.play_position.y
-	var time_difference = note_distance / GlobalManager.scroll_speed
+	var time_difference = note_distance / GlobalManager.default_note_speed
 	
 	start_time = GlobalManager.current_time - time_difference
 
-	end_checkpoint.load_time_from_note(checkpoints[0].play_position.y / GlobalManager.scroll_speed)
+	end_checkpoint.load_time_from_note(checkpoints[0].play_position.y / GlobalManager.default_note_speed)
 	# update_visibilty(), update()
 	# No need because the end_checkpoint will sort it out.
 	
@@ -228,6 +235,14 @@ func on_creation_zone_entered():
 ### DELETION ###
 func delete(): queue_free()
 
+func get_replaced(note_type: NoteType):
+	var serialized = SerializationUtils.serialize_note(self)
+	serialized.type = note_type
+	var new_note: Note = SerializationUtils.deserialize_note(serialized)
+	get_parent().add_child(new_note)
+	new_note.get_selected()
+	delete()
+
 ### VISIBILITY ###
 func set_visibility(visibility: bool):
 	set_editor_visibility(visibility)
@@ -239,11 +254,20 @@ func set_editor_visibility(visibility: bool):
 	for event: NoteEvent in get_note_events(): event.set_visible(actual_visibilty)
 	
 ### TIME AND SPEED ###
+func load_default_note_parameters():
+	set_speed(GlobalManager.default_note_speed)
+	note_size = GlobalManager.default_note_size
+	note_body.update_size()
+
 func scale_time_by(factor: float):
+	var old_end_time = start_time + end_event.start_time
+	
 	for checkpoint: NoteCheckpoint in get_note_checkpoints():
 		checkpoint.scale_time_by(factor)
 	for event: NoteEvent in get_note_events():
 		event.scale_time_by(factor)
+	
+	start_time = old_end_time - end_event.start_time
 	update_visibility()
 	update()
 	on_top_ui_needs_update.emit()
@@ -252,11 +276,18 @@ func set_speed(speed: float):
 	var time_factor: float = end_event.end_speed / speed # is 1 / speed factor
 	scale_time_by(time_factor)
 
-func load_info_from_midi_note(midi_note: MidiNoteObject) -> void:
+# Midi time syncing
+func load_time_from_midi_note(midi_note: MidiNoteObject) -> void:
 	start_time = midi_note.midi_time / 1000.0 - end_event.start_time
 	update_visibility()
 	update()
 	on_top_ui_needs_update.emit()
+
+# Called from midi viewer after generation.
+func load_everything_from_midi_note(midi_note_object: MidiNoteObject):
+	var x_position = midi_note_object.play_position.x / 88.0 * PlayAreaUtils.scale_factor
+	move_by(Vector2(1, 0) * x_position)
+	load_time_from_midi_note(midi_note_object)
 
 ### UTILITY FUNCTIONS BELOW ###
 func get_event_at_time(time: float):

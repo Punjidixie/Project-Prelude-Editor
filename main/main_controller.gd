@@ -18,10 +18,8 @@ func _ready():
 	SignalManager.on_midi_set.connect(pause)
 	SignalManager.on_pause_button_pressed.connect(on_pause_button_pressed)
 	
-	
 	SignalManager.on_note_added.connect(on_note_added)
 
-	#spawn_notes()
 	SignalManager.on_time_auto_updated.emit()
 	get_tree().get_root().size_changed.emit()
 	
@@ -34,7 +32,8 @@ func _process(delta):
 # Note creation
 func on_note_added(note: Note):
 	# Set here, so the tail has the correct size when appearing for the first time.
-	note.end_event.end_speed = GlobalManager.scroll_speed
+	note.end_event.end_speed = GlobalManager.default_note_speed
+	note.note_size = GlobalManager.default_note_size
 	
 	notes.add_child(note)
 	note.go_creation_mode()
@@ -52,10 +51,6 @@ func on_pause_button_pressed():
 	GlobalManager.is_paused = !GlobalManager.is_paused
 	SignalManager.on_pause_toggled.emit()
 
-func spawn_notes():
-	for i in range(1):
-		var note : Note = ScenePreloader.note.instantiate()
-		notes.add_child(note)
 
 	
 	

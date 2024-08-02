@@ -12,6 +12,10 @@ var selected_note : Note
 var move_all: bool = false
 var is_auto_play: bool = false
 
+# Note defaults
+var default_note_size: float = 60
+var default_note_speed: float = 400
+
 # Grid
 var bpm: float = 120 # Beats per minute
 var scroll_speed: float = 360 # Play units per second

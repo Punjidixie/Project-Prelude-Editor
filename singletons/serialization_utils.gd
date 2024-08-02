@@ -159,7 +159,8 @@ func load_info_to_note_base(note_dict: Dictionary, note: Note):
 		
 func load_info_to_hold_note(note_dict: Dictionary, hold_note: Note):
 	load_info_to_note_base(note_dict, hold_note)
-	hold_note.hold_time = note_dict.hold_t	
+	if "hold_time" in note_dict:
+		hold_note.hold_time = note_dict.hold_t	
 
 # Why just load? Because the checkpoint might have already existed (like end checkpoints).		
 func load_info_to_checkpoint(checkpoint_dict: Dictionary, checkpoint: NoteCheckpoint):
