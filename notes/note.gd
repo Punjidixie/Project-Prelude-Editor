@@ -26,8 +26,7 @@ var is_selected: bool = false
 signal on_top_ui_needs_update()
 
 func _process(delta):
-	if Input.is_action_just_pressed("debug_1"):
-		get_replaced(NoteType.HOLD)
+	pass
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():

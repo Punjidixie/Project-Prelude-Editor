@@ -231,6 +231,7 @@ anchor_bottom = 0.5
 offset_top = -160.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="LeftLine" type="TextureRect" parent="HoldNoteBody/Hitbox/HoldPart"]
 modulate = Color(0, 0, 0, 1)

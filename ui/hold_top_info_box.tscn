@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://ui/hold_top_info_box.gd" id="1_ymegl"]
 [ext_resource type="LabelSettings" uid="uid://bxw6tca3riwts" path="res://text_resources/infobox_text.tres" id="2_gnxm2"]
 
-[node name="HoldTopInfoBox" type="ColorRect" node_paths=PackedStringArray("hold_time_input_box", "name_label", "start_time_input_box", "end_time_input_box", "size_input_box", "delete_button")]
+[node name="HoldTopInfoBox" type="ColorRect" node_paths=PackedStringArray("hold_time_input_box", "name_label", "start_time_input_box", "end_time_input_box", "size_input_box", "delete_button", "type_dropdown")]
 custom_minimum_size = Vector2(2.08165e-12, 160)
 offset_right = 244.0
 offset_bottom = 110.0
@@ -15,6 +15,7 @@ start_time_input_box = NodePath("StartTimeInputBox")
 end_time_input_box = NodePath("EndTimeInputBox")
 size_input_box = NodePath("SizeInputBox")
 delete_button = NodePath("DeleteButton")
+type_dropdown = NodePath("TypeDropdown")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -29,6 +30,7 @@ color = Color(0.364711, 0.364711, 0.364711, 1)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_right = -182.0
 offset_bottom = 23.0
 grow_horizontal = 2
 text = "Note #1"
@@ -119,3 +121,10 @@ offset_left = 131.0
 offset_top = 121.0
 offset_right = 218.0
 offset_bottom = 152.0
+
+[node name="TypeDropdown" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 119.0
+offset_top = 5.0
+offset_right = 192.0
+offset_bottom = 32.0

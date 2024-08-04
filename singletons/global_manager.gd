@@ -14,12 +14,12 @@ var is_auto_play: bool = false
 
 # Note defaults
 var default_note_size: float = 60
-var default_note_speed: float = 400
+var default_note_speed: float = 600
 
 # Grid
 var bpm: float = 120 # Beats per minute
-var scroll_speed: float = 360 # Play units per second
-var subdivisions: int = 2
+var scroll_speed: float = 600 # Play units per second
+var subdivisions: int = 4
 var horizontal_divisions: int = 8
 var vertical_divisions: int = 12
 var is_static_grid: bool = false
